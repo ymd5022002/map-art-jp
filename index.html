@@ -42,15 +42,14 @@
      
     <h3>カスタム配色URL作成ツール(試作版)</h3>
         お好みの標高と色周期と色階調で干渉色標高図のリンクを生成するツールです。<br>
-        「色周期」は配色が１巡する標高差、「色階調」は配色が１巡する間の色の数のことです。
-        標高等の正確性は保証対象外ですので「地図アート」のツールとしてお使いください。<br>
-        （開発中のお試し版ですので、バグ等ありましたら、ご連絡いただければ幸いです。）<br>
+        （試作版ですので、バグ等ありましたら、ご連絡いただければ幸いです。）<br>
         <br>
         <form id="form1" action="#"　>
             最小標高 : <input id="minHeight" value="-15">m</br>
             最大標高 : <input id="maxHeight" value="4000">m</br>
             色周期　 : <input id="cycleHeight" value="200">m</br>
             色階調 　: <input id="cycleTone" value="100">階調</br>
+            「色周期」は配色が１巡する標高差、「色階調」は配色が１巡する間の色の数です<br>
             <!--色シフト : <input id="colorShift" value="0"></br>-->
             <input type="button" onclick="func1()" value="地図リンク生成">
             <br>
@@ -60,7 +59,7 @@
         <div >　※1300程度までTinyURLで短縮可、<br>
               2100程度まで地理院地図で表示可、<br>
               それ以上は表示されません。<br></div>
-        <div id="output_message"    ><br>作成した値(プログラム動作 確認用)</div>
+        <div id="output_message"    ><br>作成した値(プログラム動作 確認用:試作版のみ)</div>
         <div id="output_minHeight"  >　最小標高　　:</div>
         <div id="output_maxHeight"  >　最大標高　　:</div>
         <div id="output_cycleHeight">　色周期　　　:</div>
@@ -70,8 +69,9 @@
         <div id="output_maxDeg"     >　最大次数　　:</div>
         <div id="output_startSubdeg">　最小時副次数:</div>
         <div id="output_endSubdeg"  >　最大時副次数:</div>
- 
-    <h2>アートギャラリー</h2>
+        <br>
+        標高等の正確性は保証対象外ですので「地図アート」のツールとしてお使いください。<br>
+            <h2>アートギャラリー</h2>
         <p>地図を使ったアート作品(習作・失敗作含む)や、地図アートに関する研究開発の成果(途中経過含む)について掲載しております。現在、SNS(FacebookやTwitter,Instagramなど)に「#地理院地図アート」で投稿された作品、当研究所のFacebookページにご投稿いただいた作品を主に扱っております。各SNSのアカウント名で掲載しておりますが、こちらのページには匿名掲載も可能ですので御相談ください。</p>
     	<table border="1" bgcolor="#fff2e6">
             <tr><th>作品番号</th><th>タイトル</th><th>ジャンル</th><th>作品</th><th>投稿者</th></tr>
