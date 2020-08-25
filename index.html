@@ -41,8 +41,8 @@
     <br>
     <br>
     <br>
-    <h3>干渉色標高図URL作成ツール(試作版)</h3>
-    <p>お好みの標高とピッチで干渉色標高図のURLリンクを生成するツールです。</p>
+    <h3>干渉色標高図作成ツール(ベータ版)</h3>
+    <p>お好みの標高とピッチで干渉色標高図を作成するツールです</p>
 
     <form id="form1" action="#"　>
         <span>最小標高 　　: <input id="minHeight" value="-15"  >ｍ　</span></br>
@@ -51,13 +51,13 @@
         <span style = "font-size:small"> ※配色１巡の標高差</span></br>
         <span>色階調　　　 : <input id="cycleTone" value="50"  >階調</span>
         <span style = "font-size:small"> ※配色１巡の色の数</span><br>
-        <span>倍率緯度経度 : <input id="zoomPosition" value="#8/35.715298/139.840851"></span></br>
+        <span>倍率緯度経度 : <input id="zoomPosition" value="#8/35.715298/139.840851"></span>
+        <input type="button" onclick="func1()" value="地図作成"></br>
         <!--色シフト : <input id="colorShift" value="0"></br>-->
         <span>総色階調(※) : </span><span id="output_totalTone1">計算値がここに出ます</span></br>
-        <span style = "font-size:small">※1300程度までTinyURLで短縮可、2100程度まで地図で表示可、それ以上は表示されません。</span><br>
+        <span style = "font-size:small">※1300程度までTinyURLで短縮可、2100程度まで地図で表示可、それ以上は打切られます</span><br>
         <p>        
             <span>
-                <input type="button" onclick="func1()" value="地図リンク生成">
                 <a href="javascript:void(0);" onclick="jump();" id="url">●ここにリンクが生成されます●<br></a>
             </span>
         </p>
@@ -77,13 +77,13 @@
     </div>
     <iframe id="mapFrame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" width="480" height="270" src="https://maps.gsi.go.jp/?hc=hic#8/35.715370/139.840268/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2-16GCCCCCCG0GCCCCCCGGCCCCCC"></iframe>
     <br>
-    <span style = "font-size:small ; vertical-align:top;">出典:<a style = "font-size:small ; vertical-align:top;" href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院ウェブ</a>／干渉色標高図URL作成ツール:みんなの地図アート研究所</span><br>
+    <span style = "font-size:small ; vertical-align:top;">出典:<a style = "font-size:small ; vertical-align:top;" href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院ウェブ</a>／干渉色標高図作成ツール:みんなの地図アート研究所</span><br>
 
         <p style = "font-size:small">
-            −地図を移動しても緯度経度の設定値は変わりません<br>
-            −標高等の正確性は保証対象外ですので「地図アート」のツールとしてお使いください。<br>
-            −通信状況などにより動作が重くなる場合があります。予めご了承くださいませ<br>
-            −バグがありましたら、お知らせくださいませ<br>
+            −地図を動かしても倍率緯度経度の設定値は変わりません<br>
+            −標高設定の正確性は保証対象外ですので「地図アート」のツールとしてお使いください<br>
+            −通信状況などにより動作が重くなる場合がございます、予めご了承ください<br>
+            −バグがございましたら、お知らせいただけると幸いです<br>
         </p>
 
     <h2>アートギャラリー</h2>
@@ -334,7 +334,7 @@
                 }
             }
 
-            document.getElementById("url").innerHTML = "●地理院地図で見る●　その" + String(n) + "<br>";
+            document.getElementById("url").innerHTML = "●大きな地図へ移動●　その" + String(n) + "<br>";
             document.getElementById("output_minHeight").innerHTML     = str_minHeightModefied; 
             document.getElementById("output_maxHeight").innerHTML     = str_maxHeightModefied; 
             document.getElementById("output_cycleHeight").innerHTML   = str_cycleHeight; 
