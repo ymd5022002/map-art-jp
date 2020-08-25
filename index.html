@@ -31,9 +31,8 @@
     <br>
     <br>
     <h3>干渉色標高図URL作成ツール(試作版)</h3>
-    <span>お好みの標高とピッチで干渉色標高図のURLリンクを生成するツールです。<br></span>
-    <span style = "font-size:small">※バグがありましたら、お知らせくださいませ<br></span>
-    <br>
+    <p>お好みの標高とピッチで干渉色標高図のURLリンクを生成するツールです。</p>
+
     <form id="form1" action="#"　>
         <span>最小標高 　　: <input id="minHeight" value="-15"  >ｍ　</span></br>
         <span>最大標高 　　: <input id="maxHeight" value="4000 ">ｍ　</span></br>
@@ -43,17 +42,15 @@
         <span style = "font-size:small"> ※配色１巡の色の数</span><br>
         <span>倍率緯度経度 : <input id="zoomPosition" value="#8/35.715298/139.840851"></span></br>
         <!--色シフト : <input id="colorShift" value="0"></br>-->
-        <span>総色階調　　 : </span><span id="output_totalTone1">計算値がここに出ます</span></br>
+        <span>総色階調(※) : </span><span id="output_totalTone1">計算値がここに出ます</span></br>
         <span style = "font-size:small">※1300程度までTinyURLで短縮可、2100程度まで地図で表示可、それ以上は表示されません。</span><br>
-        <p>
+        <p>        
             <span>
                 <input type="button" onclick="func1()" value="地図リンク生成">
                 <a href="javascript:void(0);" onclick="jump();" id="url">●ここにリンクが生成されます●<br></a>
             </span>
         </p>
     </form>
-
-    <span style ="font-size:small">※地図を移動しても緯度経度の設定値は変わりません</span><br>
     <div style="font-size: small;">
         <span>プレビュー／小:</span><span id="output_minHeight">___</span>
         <span>,大:</span><span id="output_maxHeight">___</span>
@@ -72,8 +69,10 @@
     <span style = "font-size:small ; vertical-align:top;">出典:<a style = "font-size:small ; vertical-align:top;" href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院ウェブ</a>／干渉色標高図URL作成ツール:みんなの地図アート研究所</span><br>
 
         <p style = "font-size:small">
-            ※標高等の正確性は保証対象外ですので「地図アート」のツールとしてお使いください。<br>
-            ※通信状況などにより動作が重くなる場合があります。予めご了承くださいませ<br>
+            −地図を移動しても緯度経度の設定値は変わりません<br>
+            −標高等の正確性は保証対象外ですので「地図アート」のツールとしてお使いください。<br>
+            −通信状況などにより動作が重くなる場合があります。予めご了承くださいませ<br>
+            −バグがありましたら、お知らせくださいませ<br>
         </p>
 
     <h2>アートギャラリー</h2>
