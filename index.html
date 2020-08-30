@@ -44,29 +44,35 @@
     <br>
       
     <h3>干渉色標高図作成ツール(ベータ版)</h3>
-    <p>お好みの標高とピッチで干渉色標高図を作成するツールです<br>
-      試しに「地図作成」と「拡大地図を表示」を順に押してみてください</p>
-
+    <p>宝石箱のような虹色の配色の地図を作るツールです。<br>
+      まずはデフォルト値のまま「地図描画」と「拡大地図を表示」を<br>
+      順に押してみてください。美しい虹色の地図が開くと思います。<br>
+      <span style="font-size: small;">
+         あとは自由に数値を変えてお好みの設定を見つけてみてください。<br>
+        　(ヒント:富士山3776m、エベレスト山:8848m)
+      </span>
+    </p>
+      
     <form id="form1" action="#"　>
-        <span>最小標高　　　<input id="minHeight" value="-16"  >ｍ　</span><br>
-        <span>最大標高　　　<input id="maxHeight" value="4000">ｍ　</span><br>
-        <span>色周期　　　　<input id="cycleHeight" value="100">ｍ　</span>
-        <span style = "font-size:small"> ※配色１巡の標高差</span><br>
-        <span>色階調　　　　<input id="cycleTone" value="25"  >階調</span>
-        <span style = "font-size:small"> ※配色１巡の色の数</span><br>
-        <span>色基準高　　　<input id="originHeight" value="0">ｍ　</span>
-        <span style = "font-size:small"> ※配色のずらし量</span><br>
-        <span>倍率緯度経度　<input id="zoomPosition" value="#8/35.715370/139.840268"><br></span>
-        <span>URL（空欄可）<input id="mapsURL" ></span><input type="button" onclick="zoomPositionPaste();" value="倍率緯度経度に変換"><br>
+        <span>最小標高　　<input id="minHeight" value="-16"  >ｍ　</span><br>
+        <span>最大標高　　<input id="maxHeight" value="4000">ｍ　</span><br>
+        <span>色周期　　　<input id="cycleHeight" value="100">ｍ　</span>
+        <span style = "font-size:small">配色１周高度</span><br>
+        <span>色階調　　　<input id="cycleTone" value="25"  >階調</span>
+        <span style = "font-size:small">配色１周色数</span><br>
+        <span>色基準高　　<input id="originHeight" value="0">ｍ　</span>
+        <span style = "font-size:small">配色ずらし</span><br>
+        <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268">&lt;┐<br></span>
+        <span>└変換入力用<input id="mapsURL" placeholder="地理院/Google地図URLを入力"></span><input type="button" onclick="zoomPositionPaste();" value="変換"><br>
 
-        <span>　　　　　　　</span>
+        <span>　　　　　　</span>
         <input type="button" onclick="mapDrawing();" value="地図作成">
         <input type="button" onclick="jumpToGSIMap();" id="url" value="拡大地図を表示"><br>
     </form>
 
     <p>
-        <span>総色階調(※)　</span><span id="output_totalTone1">計算値がここに出ます</span><br>
-        <span style = "font-size:small">※1300程度までTinyURLで短縮可、2100程度まで地図で表示可、それ以上は打切られます</span><br>
+        <span>総色階調(※)　</span><span id="output_totalTone1">____</span><br>
+        <span style = "font-size:small">※約1300階調までTinyURLで短縮可、約2100階調まで表示可です。</span><br>
     </p>
     <div style="font-size: small;">   
         <span>設定／小:</span><span id="output_minHeight">___</span>
@@ -76,14 +82,12 @@
         <span>,基:</span><span id="output_originHeight">___</span>
         <span>,緯:</span><span id="output_zoomPosition">___</span>
         <span>,総:</span><span id="output_totalTone2">___</span><br>       
-        <span>出典:<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院ウェブ</a>　干渉色標高図作成ツール:みんなの地図アート研究所</span><br>
+        <span>出典:<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院ウェブ</a>　干渉色標高図配色ツール:みんなの地図アート研究所</span><br>
     </div>
 
     <iframe id="mapFrame1" frameborder="3" scrolling="yes" marginheight="0" marginwidth="100" width="500" height="500" src="https://maps.gsi.go.jp/?hc=hic#8/35.715370/139.840268/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2-16GCCCCCCG0GCCCCCCGGCCCCCC"></iframe>
-    <iframe id="mapFrame2" src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1056058.7378106923!2d139.840851!3d35.715298000000004!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sja!2sjp!4v1598550150171!5m2!1sja!2sjp" width="500" height="500" frameborder="3" style="border:1;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+     <iframe id="mapFrame2" src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1056058.7378106923!2d139.840851!3d35.715298000000004!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sja!2sjp!4v1598550150171!5m2!1sja!2sjp" width="500" height="500" frameborder="3" style="border:1;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
     <br>
-
- 
         <p style = "font-size:small">
             −2つの地図と倍率緯度経度の設定値は連動しません<br>
             　−−＞連動方法をご存知の方、教えていただけると嬉しいです<br>
@@ -407,9 +411,12 @@
             //地理院地図の場合の倍率緯度経度の抽出        
             if( data.substring( 0 , 23 ) == "https://maps.gsi.go.jp/"){
                 str_zoomPosition = data;
-                var index1 = str_zoomPosition.indexOf('#');
-                var index2 = str_zoomPosition.indexOf('&');            
-                str_zoomPosition = str_zoomPosition.substring( index1 , index2-1 );
+                var index = str_zoomPosition.indexOf('#');
+                console.log(index);//str_zoomPosition)
+
+                str_zoomPosition = str_zoomPosition.substr( index );
+                index = str_zoomPosition.indexOf('&');            
+                str_zoomPosition = str_zoomPosition.substring( 0 , index-1 );
             }
 
             //google マップの場合の倍率緯度経度の抽出          
