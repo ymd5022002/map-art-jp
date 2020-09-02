@@ -42,6 +42,7 @@
     <br>
     <br>
     <br>
+
       
     <h3>干渉色標高図作成ツール(ベータ版)</h3>
     <p>宝石箱のような虹色の配色の地図を作るツールです<br>
@@ -69,14 +70,15 @@
         <span>色基準高(ｍ)</span>
         <input id="originHeight" value="0" type="text" size="4" onkeyup="this.nextSibling.value = this.value"/><input type="range" value="0" min="-500" max="3500" step="1" oninput="this.previousSibling.value = this.value" />
         <span style = "font-size:small">配色ずらし</span><br>
-        <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268">&lt;┐<br></span>
-        <span>└変換入力用<input id="mapsURL" placeholder="地理院/Google地図URLを入力"></span><input type="button" onclick="zoomPositionPaste();" value="変換"><br>
-
-        <span>　　　　　　</span>
-        <input type="button" onclick="mapDrawing();" value="地図作成">
-        <input type="button" onclick="jumpToGSIMap();" id="url" value="拡大地図を表示"><br>
-
-
+        <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268"><br></span>
+        <span>└ <input type="button" onclick="zoomPositionPaste();" value="変換貼付"> <input id="mapsURL" placeholder="地理院/Google地図URLを入力"></span>
+        <br>
+        <p>
+        <span>　</span>
+        <input type="button" style="border:3px double" onclick="mapDrawing();" value="  地図作成  ">
+        <input type="button" onclick="jumpToGSIMap();" id="url" value="拡大地図">
+        <span></span><input type="button" onclick="jumpToTinyURL();" id="tinyURL" value="短縮URL"><br>
+        </p>
     <p>
         <span>総色階調(※)　</span><span id="output_totalTone1">____</span><br>
         <span style = "font-size:small">※約1300階調までTinyURLで短縮可、約2100階調まで表示可です。</span><br>
@@ -101,8 +103,6 @@
             −標高設定の正確性は検証できておりません、「地図アート」のツールとしてお使いください<br>
             −通信状況などにより動作が重くなる場合がございます、予めご了承ください<br>
             −バグがございましたら、お知らせいただけると幸いです<br>
-            −Internet explorerでは正常に動作しないとの報告を頂いております。
-          　　(英語版Chromebook上のGoogleChromeで確認確認を行っております）
         </p>
 
     <h2>アートギャラリー</h2>
