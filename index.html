@@ -1,15 +1,62 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>みんなの地図アート研究所</title>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="ja">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--ブラウザのアイコンの設定
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/android-chrome-256x256.png">
+    -->
+    <title>地図アート研究所</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+<script>
+  /* ピッチインピッチアウトによる拡大縮小を禁止 */
+  document.documentElement.addEventListener('touchstart', function (e) {
+  if (e.touches.length >= 2) {e.preventDefault();}
+  }, {passive: false});
+ </script>
+
+	<style>
+
+	html,body{
+		touch-action: pan-Y;
+	}
+
+  @media screen and (max-width: 768px) {
+	/* [iframe]を囲む要素 */
+	.iframe-window
+	{
+		width: 95% ;
+		max-width: 480px ;			/* 最大の横幅 */
+		height: 0 ;					/* 高さは0にする */
+		padding-bottom: 130% ;	/* 横幅に対する縦幅の比率 */
+		position: relative ;
+		top: 0 ;
+		left: 0 ;
+	}
+	/* [ifram] */
+	.iframe-window iframe
+	{
+		width: 100% ;		/* 親要素の余白いっぱい */
+		height: 100% ;		/* 親要素の余白いっぱい */
+		margin: 0 ;			/* 余白 */
+		padding: 0 ;		/* スペース */
+		position: absolute ;
+		top: 0 ;
+		left: 0 ;
+	}
+  }
+
+	</style>
   </head>
   <body>
     <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
     <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
     
-    <h1>みんなの地図アート研究所</h1>
+    <h1>地図アート研究所</h1>
     <h2>干渉色標高図｜地理院地図</h2>
 
     <h3>標準配色：短　(URL短縮可能)</h3>
@@ -46,8 +93,8 @@
       
     <h3>干渉色標高図作成ツール(ベータ版)</h3>
     <p>宝石箱のような虹色の配色の地図を作るツールです<br>
-    　　はじめに「地図作成」を押してみてください<br>
-    　　美しい虹色の地図ができると思います<br>
+    　はじめに「地図作成」を押してみてください<br>
+    　美しい虹色の地図ができると思います<br>
     <span style="font-size: small;">
         あとは自由に数値を変えてお好みの設定を見つけてみてください。<br>
         　(ヒント:富士山3776m、エベレスト山:8848m)
@@ -93,9 +140,12 @@
         <span>,総:</span><span id="output_totalTone2">___</span><br>       
         <span>出典:<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">国土地理院ウェブ</a>　干渉色標高図配色ツール:みんなの地図アート研究所</span><br>
     </div>
-
-    <iframe id="mapFrame1" frameborder="3" scrolling="yes" marginheight="0" marginwidth="100" width="500" height="500" src="https://maps.gsi.go.jp/?hc=hic#8/35.715370/139.840268/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2-16GCCCCCCG0GCCCCCCGGCCCCCC"></iframe>
+    <div class="iframe-window">
+    <iframe id="mapFrame1" frameborder="3" scrolling="yes" marginheight="0" marginwidth="100" Width="500" height="500" src="https://maps.gsi.go.jp/?hc=hic#8/35.715370/139.840268/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2-16GCCCCCCG0GCCCCCCGGCCCCCC"></iframe>
+    </div>
+    <div class="iframe-window">
     <iframe id="mapFrame2" src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d1056058.7378106923!2d139.840851!3d35.715298000000004!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sja!2sjp!4v1598550150171!5m2!1sja!2sjp" width="500" height="500" frameborder="3" style="border:1;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div>
     <br>
         <p style = "font-size:small">
             −2つの地図と倍率緯度経度の設定値は連動しません<br>
