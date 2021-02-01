@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja">
+<body>
+    <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
+        <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
+    <h2>干渉色標高図を地理院タイルから即時描画するテスト</h2>
+    by<a href ="https://ymd5022002.github.io/map-art-jp/"> 地図アート研究所</a><br>
+
+    地理院の標高タイル(右の青い地図)は色が標高データになって<br>
+    いますので、その標高値をもとに干渉色配色を計算してプロット<br>
+    しています。色周期を変えると配色が変わり、楽しいです。<br>
+    <a href="https://maps.gsi.go.jp/development/demtile.html">地理院標高タイル仕様</a><br>
+    <br>
+    <span>色周期　(ｍ)</span>
+    <input id="cycleHeight" value="80" type="text" size="4" />
+    <span style = "font-size:small">配色１周高度</span><br>    
+    <span>倍率<input id="zoom" value="8"></span><span style = "font-size:small">1(縮小)～14(拡大)</span><br>
+    <span>緯度<input id="lat" value="35.715370"></span><span style = "font-size:small">-90～90</span><br>
+    <span>経度<input id="lng" value="139.840268"></span><span style = "font-size:small">-180～180</span><br>
+    <span>●干渉色標高図　　　　　　＜－－●地理院標高タイル</span><br>
+    <canvas id="canvas2" width="256" height="256"></canvas>
+    <canvas id="canvas1" width="256" height="256"></canvas><br>
+    <span style = "font-size:small">
+    〔出典〕<br>
+    　右図：地理院標高タイル(10mメッシュ)<br>
+　    　https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png<br>
+  　  　z : ズームレベル<br>
+    　　x = 【 2^(7+z)*(緯度/180+1)/256 】<br>
+    　　y = 【 2^(7+z)/π*(atanh(sin(π/180*経度))+atanh(sin(π/180*85.05112878)))/256 】<br>
+    　　ただし【　】は、【　】内の小数以下を切り捨てた値<br>
+    　　<a href = "https://www.trail-note.net/tech/coordinate/">計算方法はこちらより</a><br>
+    　左図：地理院標高タイルを元に干渉色配色(地図アート研究所)にて標高段彩<br>
+    <br>
+    〔コメント〕<br>
+    標高データは0.01mの桁までありますので、現在の<br>
+    地図アート研究所の干渉色標高図作成ツールに比べ、<br>
+    高さ解像度が100倍になっています(測量精度はさておき)。<br>
+    <br>
+    ※1. 5mメッシュタイルを使いたいのですが、dem5aは歯抜けが多く<br>
+    　　　dem5bで歯抜けを埋めないといけないので、まだプログラムが<br>
+    　　　できていません。とりあえず10mメッシュでテストです。<br>
+    ※2. 今は256×256のタイル1枚ですが、複数枚タイルに出来たらと思ってます。<br>
+    <br>
+    ※3. 将来的には、マウスやスワイプによる、ズームや移動機能が搭載できたら<br>
+    　　　と思っています。色周期(m)もシームレスに変更したいです。<br>
+</span>
+
+</body>
+<script>
+    function drawMap () {
+        //各入力値(文字列)を取得
+        var str_zoom = document.getElementById( "zoom" ).value;
+        var str_lat = document.getElementById( "lat" ).value;
+        var str_lng = document.getElementById( "lng" ).value;
+        var str_cycleHeight = document.getElementById( "cycleHeight" ).value;
+
+        //文字列を数値に変換
+        var zoom  = Number(str_zoom);
+        var lat  = Number(str_lat);
+        var lng  = Number(str_lng);
+        var cycleHeight = Number(str_cycleHeight);
+
+        //地理院タイルURLの/{z}/{x}/{y}の部分の算出
+        var x = Math.floor( 2 ** ( 7.0 + zoom ) * ( lng / 180.0 + 1.0 ) / 256 );
+        var y = Math.floor( 2 ** ( 7.0 + zoom ) / Math.PI * ( -Math.atanh ( Math.sin ( Math.PI / 180.0 * lat ) ) + Math.atanh ( Math.sin ( Math.PI / 180 * 85.05112878 ) ) ) / 256 );
+        var str_x = String(x);
+        var str_y = String(y);
+
+        // 地理院DEMタイルのcanvas準備
+        var canvas1 = document.getElementById('canvas1');
+        var context1 = canvas1.getContext('2d');
+
+        // 画像読み込み
+        const img_dem = new Image();
+        img_dem.crossOrigin = 'anonymous';
+        img_dem.src = "https://cyberjapandata.gsi.go.jp/xyz/dem_png/" + str_zoom + "/" + str_x + "/" + str_y + ".png";  // 画像のURLを指定
+
+        //ページを読み込んだ時の処理
+        img_dem.onload = () => {
+            context1.drawImage(img_dem, 0, 0);
+
+            //干渉色のcanvasの準備
+            var canvas2 = document.getElementById('canvas2');
+            var context2 = canvas2.getContext('2d');
+
+            // キャンバス全体のピクセル情報を取得
+            var imageData_iceMap = context2.getImageData(0, 0, canvas2.width, canvas2.height);
+            var width_iceMap = imageData_iceMap.width, height_iceMap = imageData_iceMap.height;
+            var pixels_iceMap = imageData_iceMap.data;  // ピクセル配列：RGBA4要素で1ピクセル
+
+            //フィッテイングパラメータ (R,G,Bそれぞれの値)
+            var rgb_iC  = [ 0.0 , 0.0 , 0.0 ];           //色の値
+            //干渉色
+            var t_iC = [ 0.64 , 0.35 , 0.355];     //振幅　amplitude
+            var c_iC = [ 0.5 , 0.5 , 0.5];         //中心値
+            var u_iC = [ 0.5 , 0.52 , 0.5];        //位相率
+            var k_iC = [ 2.98 , 3.71 , 4.35];         //波数
+            var s_iC = [ 0.105 , 0 , 0];           //波長増加率
+            var alpha_iC = [ 0.2 , 0.53 , 0.5];    //包絡振幅
+            var delta_iC = [ 0.5 , 0.1 , 0.042];   //包絡位相率
+            var beta_iC  = [ 0.7 , 0.45 , 0.35];   //包絡波数
+            var n_iC = 0;                          //色一周期の何番目か
+            var Num_iC = cycleHeight;              //色１周期で何メートルか
+            var r_iC = 0.15; //0.15;               //不使用階調率
+            var dots = 1;                       　　//干渉色の描画時のドット数
+
+            //標高読込み用
+            var
+                r, g, b, xx, h,
+                u = 0.01, // 標高分解能0.01m
+                canvas = document.createElement('canvas'),
+                context = canvas.getContext( '2d' );
+                canvas.width = canvas1.width;
+                canvas.height = canvas1.height;  
+                context.drawImage( canvas1, 0, 0 );
+                data = context.getImageData( 0, 0, 256, 256 ).data;
+
+            /////////干渉色標高図の描画///
+            // ピクセル単位操作
+            for (var y = 0; y < height_iceMap; ++y) {
+                for (var x = 0; x < width_iceMap; x = x + dots ) {
+                    var base = (y * width_iceMap + x) * 4;
+                    for (let i = 0; i < 3; i++ ) {
+
+                        //地理院DEMタイルから標高値の読み出し
+                        if ( data[ base + 3 ] == 0 )  {
+                            r = 0;
+                            g = 0;
+                            b = 0;
+                            console.log( '無効値' );
+                            h = 0; //とりあえず無効値の場合は標高0mとした。後日必要に応じ別の値に。。
+
+                        } else {
+                            r = data[ base + 0 ];
+                            g = data[ base + 1 ];
+                            b = data[ base + 2 ];
+                            xx = 2**16 * r + 2**8 * g + b;
+                            h = ( xx <  2**23 ) ? xx * u: ( x - 2 ** 24 ) * u ;
+                            ////////////　↑↑↑↑↑↑　あとで　==2*23の時の処理を追加すること
+                        }
+
+                        n_iC = h  % Num_iC ;
+
+                        //干渉色計算（cos近似式)
+                        rgb_iC[i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) )
+                                * Math.cos ( 2 * Math.PI * ( 1 + s_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) ) * k_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * u_iC[i] );
+
+                        if ( rgb_iC[i] > 0.0031308 ) {
+                            rgb_iC[i] = 1.055 * ( rgb_iC[i] ** (1/2.4) ) - 0.055;
+                        }
+                        else{
+                            rgb_iC[i] = 12.92 * rgb_iC[i];
+                        }
+                        rgb_iC[i] = Math.round(255 * Math.max( 0 , Math.min(1, rgb_iC[i]) ) ) ;
+
+                        // なんかピクセルに書き込む
+                        for ( let j = 0 ; j < dots + 1 ; j++){
+                            pixels_iceMap[base + 0 + j*4 ] = rgb_iC[0];  // Red
+                            pixels_iceMap[base + 1 + j*4 ] = rgb_iC[1];  // Green
+                            pixels_iceMap[base + 2 + j*4 ] = rgb_iC[2];  // Blue
+                            pixels_iceMap[base + 3 + j*4 ] = 255;  // Alpha
+                        }
+                    }
+                }
+            }
+            // 変更した内容をキャンバスに書き戻す
+            context2.putImageData(imageData_iceMap, 0, 0); 
+        };
+    };
+    window.onload = ()=>{
+        //設定値入力時の地図再描画待受け
+        const inputElem1 = document.getElementById('zoom');
+        inputElem1.addEventListener('input', drawMap); 
+        const inputElem2 = document.getElementById('lng');
+        inputElem2.addEventListener('input', drawMap); 
+        const inputElem3 = document.getElementById('lat');
+        inputElem3.addEventListener('input', drawMap); 
+        const inputElem4 = document.getElementById('cycleHeight');
+        inputElem4.addEventListener('input', drawMap); 
+        drawMap();
+    };
+</script>
