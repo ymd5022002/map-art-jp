@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja">
+<body>
+    <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
+        <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
+    <h3>干渉色アートのテスト</h3>
+    by<a href ="https://ymd5022002.github.io/map-art-jp/">地図アート研究所</a> 
+    数字を変えると干渉色アートの表情が変わります<br>
+    Z = cos(X^
+    <input id="aa" value="2" style="width: 20px;">
+    * Y^
+    <input id="bb" value="2" style="width: 20px;">
+    ) * cos(
+    <input id="cc" value="0.12" style="width: 30px;">
+    *Y^2) + sin (Y^
+    <input id="dd" value="2" style="width: 20px;">
+    )<br>
+    <span>色繰返し<input id="cycle" value="1" type="text" style="width: 20px;" />回　</span>
+    <span>X：<input id="Xmin" value="-5" style="width: 20px;"></span>
+    <span>～<input id="Xmax" value="5" style="width: 20px;"></span>
+    <span>　Y：<input id="Ymin" value="-5" style="width: 20px;"></span>
+    <span>～<input id="Ymax" value="5" style="width: 20px;"></span><br>
+    <canvas id="canvas2" width="512" height="512"></canvas><br>
+</span>
+
+</body>
+<script>
+    function face(X,Y,a,b,c,d,e,f,g){　//曲線の関数を定義
+        var Z =  Math.cos(X**a * Y**b) * Math.cos(c*Y**2) - Math.sin(Y **d);  
+        return Z;
+    }
+    function drawMap () {
+        //干渉色のcanvasの準備
+        var canvas2 = document.getElementById('canvas2');
+        var context2 = canvas2.getContext('2d');
+
+        // キャンバス全体のピクセル情報を取得
+        var imageData_iceMap = context2.getImageData(0, 0, canvas2.width, canvas2.height);
+        var width_iceMap = imageData_iceMap.width, height_iceMap = imageData_iceMap.height;
+        var pixels_iceMap = imageData_iceMap.data;  // ピクセル配列：RGBA4要素で1ピクセル
+
+        //各入力値(文字列)を取得
+        var str_aa = document.getElementById( "aa" ).value;
+        var str_bb = document.getElementById( "bb" ).value;
+        var str_cc = document.getElementById( "cc" ).value;
+        var str_dd = document.getElementById( "dd" ).value;        
+        var str_cycleHeight = document.getElementById( "cycle" ).value;
+        var str_Xmin = document.getElementById( "Xmin" ).value;
+        var str_Xmax = document.getElementById( "Xmax" ).value;
+        var str_Ymin = document.getElementById( "Ymin" ).value;
+        var str_Ymax = document.getElementById( "Ymax" ).value;
+
+        //文字列を数値に変換
+        var aa  = Number(str_aa);
+        var bb  = Number(str_bb);
+        var cc  = Number(str_cc);
+        var dd  = Number(str_dd);
+        var cycle  = Number(str_cycleHeight); 
+        var Xmin = Number(str_Xmin);         
+        var Xmax  = Number(str_Xmax);        
+        var Ymin  = Number(str_Ymin);        
+        var Ymax  = Number(str_Ymax);        
+
+        //フィッテイングパラメータ (R,G,Bそれぞれの値)
+        var rgb_iC  = [ 0.0 , 0.0 , 0.0 ];           //色の値
+        //干渉色
+        var t_iC = [ 0.64 , 0.35 , 0.355];     //振幅　amplitude
+        var c_iC = [ 0.5 , 0.5 , 0.5];         //中心値
+        var u_iC = [ 0.5 , 0.52 , 0.5];        //位相率
+        var k_iC = [ 2.98 , 3.71 , 4.35];         //波数
+        var s_iC = [ 0.105 , 0 , 0];           //波長増加率
+        var alpha_iC = [ 0.2 , 0.53 , 0.5];    //包絡振幅
+        var delta_iC = [ 0.5 , 0.1 , 0.042];   //包絡位相率
+        var beta_iC  = [ 0.7 , 0.45 , 0.35];   //包絡波数
+        var n_iC = 0;                          //色一周期の何番目か
+        var Num_iC = 1/cycle*1000;              //色１周期で何メートルか
+        var r_iC = 0.15; //0.15;               //不使用階調率
+        var dots = 1; 
+        var h = 0;                      　　//干渉色の描画時のドット数
+        var hmin = 0;
+        var hmax = 0;
+        var scale = 1;
+        var Y = 0;
+        var X = 0;
+
+        for (var y = 0; y < canvas2.height ; ++y) {         //最大値を見る時は一番端の「canvas2.height」も含める
+            for (var x = 0; x < canvas2.width ; ++x) {　　　 //最大値を見る時は一番端の「canvas2.width」も含める
+
+                X = Xmin + ( x / canvas2.width  ) * ( Xmax - Xmin ) 
+                Y = Ymax - ( y / canvas2.height ) * ( Ymax - Ymin )
+                h =  face(X,Y,aa,bb,cc,dd)
+
+                //h =  Math.sin(Y ** dd ) + Math.cos((Y ** aa) * (X **bb)) * Math.cos(cc*(Y**2))  ;  //曲線
+                if (( x == 0 ) * ( y == 0 )){
+                    hmin = h;
+                    hmax = h;
+                    }
+                if (h > hmax ) hmax = h ;
+                if (h < hmin ) hmin = h ;
+            }
+        }
+        scale  = 1000 / (hmax - hmin) ; //hの幅を1000に規格化する係数 
+        var Num_iC = 1000 / cycle  ; 
+        console.log(hmax, hmin ,scale , Num_iC);             //色１周期で何メートルか
+
+        for (var y = 0; y < canvas2.height; ++y) {
+            for (var x = 0; x < canvas2.width; ++x) {
+                X = Xmin + ( x / canvas2.width  ) * ( Xmax - Xmin )  
+                Y = Ymax - ( y / canvas2.height ) * ( Ymax - Ymin )
+                h =  face(X,Y,aa,bb,cc,dd)
+                h =  ( h - hmin ) * scale
+                //h = Math.floor(( ( Math.sin(Y ** dd ) + Math.cos((Y ** aa) * (X **bb)) * Math.cos(cc*(Y**2)) - hmin ) / (hmax - hmin) )* 1000) ;  //曲線
+                var base = (y * canvas2.width + x) * 4;
+                    for (let i = 0; i < 3; i++ ) {
+                        n_iC = h  % Num_iC ;
+                        //console.log(h,Num_iC,n_iC);
+                        //干渉色計算（cos近似式)
+                        rgb_iC[i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) )
+                                * Math.cos ( 2 * Math.PI * ( 1 + s_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) ) * k_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * u_iC[i] );
+                        if ( rgb_iC[i] > 0.0031308 ) {
+                            rgb_iC[i] = 1.055 * ( rgb_iC[i] ** (1/2.4) ) - 0.055;
+                        }
+                        else{
+                            rgb_iC[i] = 12.92 * rgb_iC[i];
+                        }
+                        rgb_iC[i] = Math.round(255 * Math.max( 0 , Math.min(1, rgb_iC[i]) ) ) ;
+                    }
+                    // なんかピクセルに書き込む
+                for ( let j = 0 ; j < dots + 1 ; j++){
+                    pixels_iceMap[base + 0 + j*4 ] = rgb_iC[0];  // Red
+                    pixels_iceMap[base + 1 + j*4 ] = rgb_iC[1];  // Green
+                    pixels_iceMap[base + 2 + j*4 ] = rgb_iC[2];  // Blue
+                    pixels_iceMap[base + 3 + j*4 ] = 255;  // Alpha
+                }
+            }
+        }
+        // 変更した内容をキャンバスに書き戻す
+        context2.putImageData(imageData_iceMap, 0, 0); 
+    };
+    window.onload = ()=>{
+        //設定値入力時の地図再描画待受け
+        const inputElem0 = document.getElementById('dd');
+        inputElem0.addEventListener('input', drawMap);
+        const inputElem1 = document.getElementById('aa');
+        inputElem1.addEventListener('input', drawMap); 
+        const inputElem2 = document.getElementById('bb');
+        inputElem2.addEventListener('input', drawMap); 
+        const inputElem3 = document.getElementById('cc');
+        inputElem3.addEventListener('input', drawMap); 
+        const inputElem4 = document.getElementById('cycle');
+        inputElem4.addEventListener('input', drawMap); 
+        const inputElem5 = document.getElementById('Xmin');
+        inputElem5.addEventListener('input', drawMap); 
+        const inputElem6 = document.getElementById('Xmax');
+        inputElem6.addEventListener('input', drawMap); 
+        const inputElem7 = document.getElementById('Ymin');
+        inputElem7.addEventListener('input', drawMap); 
+        const inputElem8 = document.getElementById('Ymax');
+        inputElem8.addEventListener('input', drawMap); 
+        drawMap();
+    };
+</script>
