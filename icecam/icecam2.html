@@ -27,8 +27,8 @@
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: false,
                 video: {
-                    width: 1280,
-                    height: 960,
+                    //width: 1280,  ----- 1280x960にしたら激重なので一旦外しておく。。高速化処理後に有効化予定
+                    //height: 960,
                     // facingMode: "user"   // フロントカメラを利用する
                     facingMode: { exact: "environment" }  // リアカメラを利用する場合
                 }
