@@ -30,8 +30,8 @@
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: false,
                 video: {
-                    width: 640,
-                    height: 480,
+                    width: 10024,
+                    height: 768,
                     facingMode: "user"   // フロントカメラを利用する
                     // facingMode: { exact: "environment" }  // リアカメラを利用する場合
                 }
@@ -48,6 +48,45 @@
 
                 tick();
             };
+
+            //グレースケールを干渉色に変換するルックアップテーブルを作成する処理            
+            function makeLUTable(){
+                
+                let LUTable = [];
+                //////干渉色パラメータ
+                t_iC = [0.64 , 0.35 , 0.355];    //振幅　amplitude
+                c_iC = [ 0.5 , 0.5 , 0.5];       //中心値
+                u_iC = [ 0.5 , 0.52 , 0.5];      //位相率
+                k_iC = [ 2.98 , 3.71 , 4.35];    //波数
+                s_iC = [ 0.105 , 0. , 0.];       //波長増加率
+                alpha_iC = [ 0.2 , 0.53 , 0.5];  //包絡振幅
+                delta_iC = [ 0.5 , 0.1 , 0.042]; //包絡位相率
+                beta_iC  = [ 0.7 , 0.45 , 0.35]; //包絡波数
+
+                cycle = 1.                       //色繰返し回数
+                fullscale = 255.;                //画像輝度の最大値(最大は何メートルか)
+                Num_iC = fullscale / cycle;      //色１周期で輝度幾つか(色１周期で何メートルか）
+                scale  = 1000. / fullscale;      //画像輝度値の幅を1000に規格化する係数
+                r_iC = 0.15;                     //不使用階調率(15%)
+
+                for (let Y = 0; Y < 256; Y +=1) {
+                    n_iC = Y % Num_iC;           //色一周期の何番目か
+                    for (let i = 0; i < 3; i +=1 ){
+                        LUTable[Y*3 + i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) ) * Math.cos ( 2 * Math.PI * ( 1 + s_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) ) * k_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * u_iC[i] );
+                        if ( LUTable[Y*3 + i] > 0.0031308 ){
+                            LUTable[Y*3 + i] = 1.055 * ( LUTable[Y*3 + i] ** (1/2.4) ) - 0.055;
+                        }else{
+                            LUTable[Y*3 + i] = 12.92 * LUTable[Y*3 + i];
+                        }
+                        LUTable[Y*3 + i] = Math.round(255. * Math.max( 0. , Math.min(1., LUTable[Y*3 + i]) ) );
+                    }
+                }
+                return LUTable;
+            }
+
+            //干渉色変換のルックアップテーブル生成
+            let LUTable;
+            LUTable = makeLUTable();
 
             // 1フレームごとに呼び出される処理
             function tick() {
@@ -73,50 +112,19 @@
                 // 画像処理を行う
                 for (let j = 0; j < imgr.length; j += 4) {
                     //グレースケール変換
-                    let Y = 0.299*imgr[j] + 0.587*imgr[j+1] + 0.114*imgr[j+2];
-                    //imgr[j]   = Y ;
-                    //imgr[j+1] = Y ;
-                    //imgr[j+2] = Y ;
-
-                    //グレースケールを干渉色に変換
-
-                    //////干渉色パラメータ
-                    t_iC = [0.64 , 0.35 , 0.355]     //振幅　amplitude
-                    c_iC = [ 0.5 , 0.5 , 0.5]        //中心値
-                    u_iC = [ 0.5 , 0.52 , 0.5]       //位相率
-                    k_iC = [ 2.98 , 3.71 , 4.35]     //波数
-                    s_iC = [ 0.105 , 0. , 0.]        //波長増加率
-                    alpha_iC = [ 0.2 , 0.53 , 0.5]   //包絡振幅
-                    delta_iC = [ 0.5 , 0.1 , 0.042]  //包絡位相率
-                    beta_iC  = [ 0.7 , 0.45 , 0.35]  //包絡波数
-
-                    cycle = 1.                       //色繰返し回数
-                    fullscale = 255.                 //画像輝度の最大値(最大は何メートルか)
-                    Num_iC = fullscale / cycle       //色１周期で輝度幾つか(色１周期で何メートルか）
-                    scale  = 1000. / fullscale       //画像輝度値の幅を1000に規格化する係数
-                    r_iC = 0.15                      //不使用階調率(15%)
-                    //////
-                    //////変数定義
-                    n_iC = Y % Num_iC               //色一周期の何番目か
-                    imcl=[]                          //変換後の配列は干渉色計算用に浮動小数点とする
-                    //////
-
-                    for (let i = 0; i < 3; i +=1 ){
-                        imcl[i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) ) * Math.cos ( 2 * Math.PI * ( 1 + s_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) ) * k_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * u_iC[i] );
-                        if ( imcl[i] > 0.0031308 ){
-                            imcl[i] = 1.055 * ( imcl[i] ** (1/2.4) ) - 0.055
-                        }else{
-                            imcl[i] = 12.92 * imcl[i]
-                        }
-                        imgr[j+i] = Math.round(255. * Math.max( 0. , Math.min(1., imcl[i]) ) )
-                    }
+                    let Y = Math.round ( 0.299*imgr[j] + 0.587*imgr[j+1] + 0.114*imgr[j+2] );
+                    //干渉色変換                    
+                    imgr[j]   = LUTable[Y*3];
+                    imgr[j+1] = LUTable[Y*3+1];
+                    imgr[j+2] = LUTable[Y*3+2];
                 }
             }
         }
+
         main();
         document.getElementById('save').addEventListener('click', function(){
             this.href = document.getElementById('canvas').toDataURL();
-            });
-    </script> 
+        });
+    </script>
 </body>
 </html>
