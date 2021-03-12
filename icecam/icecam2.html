@@ -7,10 +7,12 @@
     <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
     <div>
         <h2>干渉色カメラ(テスト)　#世界を干渉色に</h2>
-        カメラ使用許可-->干渉色表示。スマホ：外カメラ。PC:絵が出ません。iPhone：絵が動きません、ページ再読込で画像リフレッシュ<br>
-        <a href="https://ymd5022002.github.io/map-art-jp/icecam/icecam">内カメラに切替え</a><br>
+        画像が動かない場合「リフレッシュ」で画像が更新されます<br>
+        | <a href='#' download='icecam.jpg' id="save">撮影-保存</a> | 
+        <a href='https://ymd5022002.github.io/map-art-jp/icecam/icecam2'>リフレッシュ</a> |
+        <a href='https://ymd5022002.github.io/map-art-jp/icecam/icecam'>カメラ切替</a><br>
         <div>
-            <canvas id="canvas"></canvas>
+            <canvas id="canvas"></canvas><br>
         </div>
     </div>  
     <script>
@@ -27,8 +29,8 @@
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: false,
                 video: {
-                    //width: 1280,  ----- 1280x960にしたら激重なので一旦外しておく。。高速化処理後に有効化予定
-                    //height: 960,
+                    width: 640,
+                    height: 480,
                     // facingMode: "user"   // フロントカメラを利用する
                     facingMode: { exact: "environment" }  // リアカメラを利用する場合
                 }
@@ -111,6 +113,9 @@
             }
         }
         main();
+        document.getElementById('save').addEventListener('click', function(){
+            this.href = document.getElementById('canvas').toDataURL();
+            });
     </script> 
 </body>
 </html>
