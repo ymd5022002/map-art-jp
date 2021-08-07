@@ -82,7 +82,7 @@
         // 変更した内容をキャンバスに書き戻す
         context1.putImageData(imageData_caMap, 0, 0); 
     }
-    //window.onload = ()=>{
+    window.onload = ()=>{
         //設定値入力時の再描画待受け
         const inputElem1 = document.getElementById('originNum');
         inputElem1.addEventListener('input', drawMap); 
@@ -93,6 +93,6 @@
         const inputElem4 = document.getElementById('ruleNumSlider');
         inputElem4.addEventListener('change', drawMap);
         drawMap();
-    //}
+    }
 </script>
 </body></html>
