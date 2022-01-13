@@ -1,141 +1,148 @@
+
 <html lang ="ja">
-<head>
-    <title>干渉色変換ツール(お試し版)　#世界を干渉色に</title>
-</head>
-<body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
-    <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
-      <div>
-        <h2>干渉色変換ツール　#世界を干渉色に</h2>
-        お手持ちの画像を素敵な虹色の干渉色の画像に変換するツールです。<br>
-        <small>(サーバー側でデータは取得しませんので安心してご利用いただけます）</small><br><br>
-        【使いかた】<br>
-        　１．「干渉色繰り返し回数」を設定します(※)<br><br>
-                　　　<span><b>干渉色繰返し回数</b></span>
-        <input id="repeatTimes" value="1" type="text" size="4" onkeyup="this.nextSibling.value = this.value"/><input type="range" value="1" min="1" max="10" step="0.1" oninput="this.previousSibling.value = this.value" /><br> 
-        <span style = "font-size:small">                　　　(輝度0-255で干渉色を何周繰り返すか)</span><br>
-        <br>
-                　　<small>※「干渉色繰り返し回数」はファイルを選択する前に設定してください。<br>
-           　　　　表示されている画像の繰返し回数を変える場合は、一度別の画像を<br>
-           　　　　開いてから、繰り返し回数を変えてその画像を再度開いてください<br>                　　　　(別途、使い勝手を向上する予定です)</small><br><br>
-        
-        　２．ファイルを選択すると、干渉色画像と元画像を並べて表示します<br><br>
-        　　　        <input type="file" id="selectfile" accept='image/*'><br><br>
-        　３．｜　<a href='#' download='icepic.png' id="save">保存</a>　｜で干渉色画像を保存できます<br>
-        　　<small>(表示上は40%縮小ですが保存画像はオリジナルサイズです)</small><br>
-
-<!--        <div>
-        <canvas id="canvas"></canvas><br>
-       </div> -->
-
-        <div id="output" style="border: none; margin: 30px; background-color: #FCE3CD; min-height: 40px;">　
+  <head>
+      <title>干渉色変換ツール(お試し版)　#世界を干渉色に</title>
+  </head>
+  <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
+      <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
+        <div>
+          <h2>干渉色変換ツール　#世界を干渉色に</h2>
+          お手持ちの画像を素敵な虹色の干渉色の画像に変換するツールです。<br>
+          <small>(サーバー側でデータは取得しませんので安心してご利用いただけます）</small><br><br>
+          【使いかた】<br>
+          　１．「干渉色繰り返し回数」を設定します(※)<br><br>
+                  　　　<span><b>干渉色繰返し回数</b></span>
+          <input id="repeatTimes" value="1" type="text" size="4" onkeyup="this.nextSibling.value = this.value"/><input type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value" /><br> 
+          <span style = "font-size:small">                　　　(輝度0-255で干渉色を何周繰り返すか)</span><br>
+          <br>
+                  　　<small>※「干渉色繰り返し回数」はファイルを選択する前に設定してください。<br>
+             　　　　表示されている画像の繰返し回数を変える場合は、一度別の画像を<br>
+             　　　　開いてから、繰り返し回数を変えてその画像を再度開いてください<br>                　　　　(別途、使い勝手を向上する予定です)</small><br><br>
+          
+          　２．ファイルを選択すると、干渉色画像と元画像を並べて表示します<br><br>
+          　　　        <input type="file" id="selectfile" accept='image/*'><br><br>
+          　３．｜　<a href='#' download='icepic.png' id="save">保存</a>　｜で干渉色画像を保存できます<br>
+          　　<small>(表示上は40%縮小ですが保存画像はオリジナルサイズです)</small><br>
+  
+  <!--        <div>
+          <canvas id="canvas"></canvas><br>
+         </div> -->
+  
+          <div id="output" style="border: none; margin: 30px; background-color: #FCE3CD; min-height: 40px;">　
+          </div>
+  
         </div>
-
-      </div>
-  ©<a href="https://ymd5022002.github.io/map-art-jp/" target="_blank">地図アート研究所<a>  (MapArtResearch)<br>
-  <script>
-    //干渉色変換関数
-    var interferanceColorFilter = function(src, dst, width, height) {
-        //各入力値(文字列)を取得
-        str_repeatTimes = document.getElementById( "repeatTimes" ).value;
-        //文字列を数値に変換
-        repeatTimes = Number(str_repeatTimes);
-        //干渉色変換のルックアップテーブル生成
-      
-        let LUTable;
-        LUTable = makeLUTable(repeatTimes);
-
-        for (var i = 0; i < height; i++) {
-            for (var j = 0; j < width; j++) {
-                var idx = (j + i * width) * 4;
-                var gray = Math.round ( 0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2] );
-                          //=(src[idx] + src[idx + 1] + src[idx + 2]) / 3;      
-                dst[idx] = LUTable[ gray * 3 ];           // gray
-                dst[idx + 1] = LUTable[ gray * 3 + 1 ];   // gray;
-                dst[idx + 2] = LUTable[ gray * 3 + 2 ];   // gray;
-                dst[idx + 3] = src[idx + 3];
-            }
-        }
-    };
-    //グレースケールを干渉色に変換するルックアップテーブルを作成する処理            
-    function makeLUTable(repeatTimes){
-
-      let LUTable = [];
-      //////干渉色パラメータ
-      t_iC = [0.64 , 0.35 , 0.355];    //振幅　amplitude
-      c_iC = [ 0.5 , 0.5 , 0.5];       //中心値
-      u_iC = [ 0.5 , 0.52 , 0.5];      //位相率
-      k_iC = [ 2.98 , 3.71 , 4.35];    //波数
-      s_iC = [ 0.105 , 0. , 0.];       //波長増加率
-      alpha_iC = [ 0.2 , 0.53 , 0.5];  //包絡振幅
-      delta_iC = [ 0.5 , 0.1 , 0.042]; //包絡位相率
-      beta_iC  = [ 0.7 , 0.45 , 0.35]; //包絡波数
-
-      cycle = repeatTimes;             //色繰返し回数
-      fullscale = 255.;                //画像輝度の最大値(最大は何メートルか)
-      Num_iC = fullscale / cycle;      //色１周期で輝度幾つか(色１周期で何メートルか）
-      scale  = 1000. / fullscale;      //画像輝度値の幅を1000に規格化する係数
-      r_iC = 0.15;                     //不使用階調率(15%)
-
-      for (let Y = 0; Y < 256; Y +=1) {
-        n_iC = Y % Num_iC;           //色一周期の何番目か
-        for (let i = 0; i < 3; i +=1 ){
-          LUTable[Y*3 + i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) ) * Math.cos ( 2 * Math.PI * ( 1 + s_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) ) * k_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * u_iC[i] );
-          if ( LUTable[Y*3 + i] > 0.0031308 ){
-            LUTable[Y*3 + i] = 1.055 * ( LUTable[Y*3 + i] ** (1/2.4) ) - 0.055;
-          }else{
-            LUTable[Y*3 + i] = 12.92 * LUTable[Y*3 + i];
+    ©<a href="https://ymd5022002.github.io/map-art-jp/" target="_blank">地図アート研究所<a>  (MapArtResearch)<br>
+    <script>
+      //干渉色変換関数
+      var interferanceColorFilter = function(src, dst, width, height) {
+          //各入力値(文字列)を取得
+          str_repeatTimes = document.getElementById( "repeatTimes" ).value;
+          //文字列を数値に変換
+          repeatTimes = Number(str_repeatTimes);
+          //干渉色変換のルックアップテーブル生成
+        
+          let LUTable;
+          LUTable = makeLUTable(repeatTimes);
+  
+          for (var i = 0; i < height; i++) {
+              for (var j = 0; j < width; j++) {
+                  var idx = (j + i * width) * 4;
+                  var gray = Math.round ( 0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2] );
+                            //=(src[idx] + src[idx + 1] + src[idx + 2]) / 3;      
+                  dst[idx] = LUTable[ gray * 3 ];           // gray
+                  dst[idx + 1] = LUTable[ gray * 3 + 1 ];   // gray;
+                  dst[idx + 2] = LUTable[ gray * 3 + 2 ];   // gray;
+                  dst[idx + 3] = src[idx + 3];
+              }
           }
-          LUTable[Y*3 + i] = Math.round(255. * Math.max( 0. , Math.min(1., LUTable[Y*3 + i]) ) );
-        }
-      }
-      return LUTable;
-    }
-
-    window.addEventListener("DOMContentLoaded", function(){
-        //ファイルオープンの際のイベント
-        var ofd = document.getElementById("selectfile");
-        ofd.addEventListener("change", function(evt) {
-            var img = null;
-            var canvas = document.createElement("canvas");
-            //var canvas = document.getElementById('canvas');
-
-            var file = evt.target.files;
-            var reader = new FileReader();
-
-            //dataURL形式でファイルを読み込む
-            reader.readAsDataURL(file[0]);
-
-            //ファイルの読込が終了した時の処理
-            reader.onload = function(){
-                img = new Image();
-                img.onload = function(){
-                    //キャンバスに画像をセット
-                    var context = canvas.getContext('2d');
-                    var width = img.width;
-                    var height = img.height;
-                    canvas.width = width;
-                    canvas.height = height;
-                    context.drawImage(img, 0, 0);
-　　                var dataurl0 = canvas.toDataURL();
-
-                    //フィルター処理
-
-                    var srcData = context.getImageData(0, 0, width, height);
-                    var dstData = context.createImageData(width, height);
-                    var src = srcData.data;
-                    var dst = dstData.data;
-                    interferanceColorFilter(src, dst, width, height);
-                    context.putImageData(dstData, 0, 0);
-
-                    //画像タグに代入して表示
-                    var dataurl = canvas.toDataURL();
-                    document.getElementById("output").innerHTML = "<img src='" + dataurl + "' height ='40%' width ='40%' ><img src='" + dataurl0 + "' height ='40%' width ='40%' >";
-                  document.getElementById("save").href = dataurl;
-                }
-                img.src = reader.result;
+      };
+      //グレースケールを干渉色に変換するルックアップテーブルを作成する処理            
+      function makeLUTable(repeatTimes){
+  
+        let LUTable = [];
+        //////干渉色パラメータ
+        t_iC = [0.64 , 0.35 , 0.355];    //振幅　amplitude
+        c_iC = [ 0.5 , 0.5 , 0.5];       //中心値
+        u_iC = [ 0.5 , 0.52 , 0.5];      //位相率
+        k_iC = [ 2.98 , 3.71 , 4.35];    //波数
+        s_iC = [ 0.105 , 0. , 0.];       //波長増加率
+        alpha_iC = [ 0.2 , 0.53 , 0.5];  //包絡振幅
+        delta_iC = [ 0.5 , 0.1 , 0.042]; //包絡位相率
+        beta_iC  = [ 0.7 , 0.45 , 0.35]; //包絡波数
+  
+        cycle = repeatTimes;             //色繰返し回数
+        fullscale = 255.;                //画像輝度の最大値(最大は何メートルか)
+        Num_iC = fullscale / cycle;      //色１周期で輝度幾つか(色１周期で何メートルか）
+        scale  = 1000. / fullscale;      //画像輝度値の幅を1000に規格化する係数
+        r_iC = 0.15;                     //不使用階調率(15%)
+  
+        for (let Y = 0; Y < 256; Y +=1) {
+          n_iC = Y % Num_iC;           //色一周期の何番目か
+          for (let i = 0; i < 3; i +=1 ){
+            LUTable[Y*3 + i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) ) * Math.cos ( 2 * Math.PI * ( 1 + s_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) ) * k_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * u_iC[i] );
+            if ( LUTable[Y*3 + i] > 0.0031308 ){
+              LUTable[Y*3 + i] = 1.055 * ( LUTable[Y*3 + i] ** (1/2.4) ) - 0.055;
+            }else{
+              LUTable[Y*3 + i] = 12.92 * LUTable[Y*3 + i];
             }
-        }, false);
-    });  
-  </script>
-</body>
-</html>
+            LUTable[Y*3 + i] = Math.round(255. * Math.max( 0. , Math.min(1., LUTable[Y*3 + i]) ) );
+          }
+        }
+        return LUTable;
+      }
+  
+      window.addEventListener("DOMContentLoaded", function(){
+          //ファイルオープンの際のイベント
+          var ofd = document.getElementById("selectfile");
+          ofd.addEventListener("change", function(evt) {
+              var img = null;
+              var canvas = document.createElement("canvas");
+              //var canvas = document.getElementById('canvas');
+  
+              var file = evt.target.files;
+              var reader = new FileReader();
+  
+              //dataURL形式でファイルを読み込む
+              reader.readAsDataURL(file[0]);
+  
+              //ファイルの読込が終了した時の処理
+              reader.onload = function(){
+                  img = new Image();
+                  img.onload = function(){
+                      //キャンバスに画像をセット
+                      var context = canvas.getContext('2d');
+                      var width = img.width;
+                      var height = img.height;
+                      canvas.width = width;
+                      canvas.height = height;
+                      showWidth = String(Math.round(0.4 * width))
+                      showHeight = String(Math.round(0.4 * height))
+
+                      context.drawImage(img, 0, 0);
+  　　                var dataurl0 = canvas.toDataURL();
+  
+                      //フィルター処理
+  
+                      var srcData = context.getImageData(0, 0, width, height);
+                      var dstData = context.createImageData(width, height);
+                      var src = srcData.data;
+                      var dst = dstData.data;
+                      interferanceColorFilter(src, dst, width, height);
+                      context.putImageData(dstData, 0, 0);
+  
+                      //画像タグに代入して表示
+                      var dataurl = canvas.toDataURL();
+                      document.getElementById("output").innerHTML = 
+                      "<img src='" + dataurl + "' height = '" + showHeight + "' width = '" + showWidth + "'><img \
+                      src='" + dataurl0 + "' height = '" + showHeight + "' width = '" + showWidth + "'>";
+                    document.getElementById("save").href = dataurl;
+                  }
+                  img.src = reader.result;
+              }
+          }, false);
+      });  
+    </script>
+  </body>
+  </html>
+  
