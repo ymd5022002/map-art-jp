@@ -4,20 +4,20 @@
   <head>
       <title>干渉色変換ツール(お試し版)</title>
       <meta http-equiv="Content-Language" content="ja">
-      <meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS">
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
   </head>
   <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
       <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
         <div>
-          <h2>干渉色変換ツール　#世界を干渉色に</h2>
+          <h2 style="display:inline;">干渉色変換ツール</h2>　<b>#世界を干渉色に</b><h2 style="display:inline;"> </h2><br>
           画像を素敵な虹色の干渉色に変換するツールです<br><br>
 
           【使い方】<br>
           1.干渉色の繰返し回数の設定(※)<br>
 
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-          <span><b>　繰返し回数</b></span>
+          <span><b>繰返し回数</b></span>
           <input id="repeatTimes" value="1" type="text" style="width:60px;" onkeyup="this.nextSibling.value = this.value"/><input type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value" /><br> 
           <span style = "font-size:small">　(最小から最大輝度の間に干渉色を何周繰返すか)</span><br>
           <br>
@@ -30,23 +30,24 @@
           2.ファイルの選択<br>
 
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-          　<input type="file" id="selectfile" accept='image/*'><br>
+          <input type="file" id="selectfile" accept='image/*'><br>
           <small>　(tiff形式は対応しておりません)</small><br>
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
 
           3.｜　<a href='#' download='icepic.png' id="save">保存</a>　｜で干渉色画像を保存できます<br>
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-          　表示サイズ<input type="button" value ="＋" id="large" onclick="changeSize(ratio= 2**0.25)">
+          表示サイズ<input type="button" value ="＋" id="large" onclick="changeSize(ratio= 2**0.25)">
           <input type="button" value ="－" id="small" onclick="changeSize(ratio= 2**(-0.25))">
-          　位置<input type="button" value ="たて" id="tate" onclick="tate()">
+           位置<input type="button" value ="たて" id="tate" onclick="tate()">
           <input type="button" value ="よこ" id="yoko" onclick="yoko()">
-          　<input type="button" value ="⇔" id="swap" onclick="swap()">
+           <input type="button" value ="⇔" id="swap" onclick="swap()">
           <span id ="dislaySize">
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
           <span id="output"></span>
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
   
         </div>
+    <hr size="1">
     (C)<a href="https://ymd5022002.github.io/map-art-jp/" target="_blank">地図アート研究所<a>  (MapArtResearch)<br>
     <script>
       //干渉色変換関数
