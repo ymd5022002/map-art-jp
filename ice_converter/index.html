@@ -14,24 +14,27 @@
           画像を素敵な虹色の干渉色に変換するツールです<br><br>
 
           【使い方】<br>
-          1.干渉色の繰返し回数の設定(※)<br>
+          1.干渉色の繰返し回数・位相の設定(※)<br>
 
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
           <span><b>繰返し回数</b></span>
           <input id="repeatTimes" value="1" type="text" style="width:60px;" onkeyup="this.nextSibling.value = this.value"/><input type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value" /><br> 
           <span style = "font-size:small">　(最小から最大輝度の間に干渉色を何周繰返すか)</span><br>
+          <span><b>位相(%)</b></span>
+          <input id="phaseRate" value="0" type="text" style="width:60px;" onkeyup="this.nextSibling.value = this.value"/><input type="range" value="0" min="0" max="99" step="1" oninput="this.previousSibling.value = this.value" /><br> 
+          <span style = "font-size:small">　(干渉色の位相のずらし量:0-99%)</span><br>
           <br>
-          <small>※ファイル選択前に設定してください。<br>
-          画像表示後に変更したい場合、別の画像を一度開いて<br>
-          から、繰返し回数を変え、再度画像を開いてください<br>
-          (別途、使い勝手を向上する予定です)</small><br>
+          <small>※画像の表示後に繰返し回数・位相を変えたい場合、<br>
+          　「クリア」を押した後ファイルをもう一度選択してください
+          </small><br>
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
 
           2.ファイルの選択<br>
 
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-          <input type="file" id="selectfile" accept='image/*'><br>
+          <input type="file" id="selectfile" accept='image/*'><input type="button" id="btn1" value="クリア" onclick="fileReset();"><br>
           <small>　(tiff形式は対応しておりません)</small><br>
+          
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
 
           3.｜　<a href='#' download='icepic.png' id="save">保存</a>　｜で干渉色画像を保存できます<br>
@@ -54,8 +57,13 @@
       var interferanceColorFilter = function(src, dst, width, height) {
           //各入力値(文字列)を取得
           let str_repeatTimes = document.getElementById( "repeatTimes" ).value;
+          let str_phaseRate = document.getElementById( "phaseRate" ).value;
+          
           //文字列を数値に変換
           let repeatTimes = Number(str_repeatTimes);
+          let phaseRate = Number(str_phaseRate);
+          let phase = Math.round( 256./100. * phaseRate )
+
           //干渉色変換のルックアップテーブル生成
         
           let LUTable;
@@ -68,9 +76,9 @@
                     0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2]
                   );
                   //=(src[idx] + src[idx + 1] + src[idx + 2]) / 3;      
-                  dst[idx] = LUTable[ gray * 3 ];           // gray
-                  dst[idx + 1] = LUTable[ gray * 3 + 1 ];   // gray;
-                  dst[idx + 2] = LUTable[ gray * 3 + 2 ];   // gray;
+                  dst[idx] = LUTable[ ( gray + phase ) % 255 * 3 ];           // gray
+                  dst[idx + 1] = LUTable[ ( gray + phase ) % 255 * 3 + 1 ];   // gray;
+                  dst[idx + 2] = LUTable[ ( gray + phase ) % 255 * 3 + 2 ];   // gray;
                   dst[idx + 3] = src[idx + 3];
               }
           }
@@ -160,7 +168,11 @@
         }
         return LUTable;
       }
-  
+      function fileReset(){
+        var ofd = document.getElementById("selectfile");
+        ofd.value = "";
+      }
+
       window.addEventListener("DOMContentLoaded", function(){
           //ファイルオープンの際のイベント
           var ofd = document.getElementById("selectfile");
