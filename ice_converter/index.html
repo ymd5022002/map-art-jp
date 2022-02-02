@@ -243,7 +243,7 @@
               //■画像の読込完了時の処理■
               var width = img.width;
               var height = img.height;
-              var ratio = 0.5 / Math.floor( Math.max(width, height) / 512 );
+              var ratio = 0.5 / Math.floor( Math.max(512, Math.max(width, height)) / 512 );
               var dispWidth = Math.round(ratio * width);
               var dispHeight = Math.round(ratio * height);
               var srcCanvas = document.getElementById("srcCanvas");
