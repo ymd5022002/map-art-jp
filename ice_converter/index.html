@@ -134,6 +134,10 @@
         dstImgDoc.style.visibility='visible';
         //　保存用の画像にデータを保存
         document.getElementById("save").href = dataDstUrl;
+        // 保存ファイル名を自動生成
+        var selectFile = document.getElementById("selectfile").files[0];
+        var selectFileName = selectFile.name.match( /(.+)(\.[^.]+$)/ )[1]; // 拡張子を除くファイル名を抽出
+        document.getElementById("save").download = `${selectFileName}_ice.png`;
       }
 
       // 干渉色画像変換処理関数
