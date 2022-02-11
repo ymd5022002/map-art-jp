@@ -16,10 +16,12 @@
           <input type="file" id="selectfile" accept='image/*'><input type="button" id="btn1" value="クリア" onclick="fileReset();"><br>
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
           <span><b>繰返し回数</b></span>
-          <input id="repeatTimes" type="number" value="1" min="0" step="0.1" style="width:60px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" /><br> 
+          <input id="repeatTimes" type="number" value="1" min="0" step="0.1" style="width:60px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="repeatTimesSlider" type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
+          <input id="fineCheckBox1" type="checkbox" onchange="fineRepeatTimesStep();"><small>微調</small><br> 
           <span style = "font-size:small">　(最小から最大輝度の間に干渉色を何周繰返すか)</span><br>
           <span><b>位相(%)</b></span>
-          <input id="phaseRate" type="number" value="0" min="0" step="1"style="width:60px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input type="range" value="0" min="0" max="100" step="1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" /><br> 
+          <input id="phaseRate" type="number" value="0" min="0" step="1"style="width:60px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="phaseRateSlider" type="range" value="0" min="0" max="100" step="1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
+          <input id="fineCheckBox2" type="checkbox" onchange="finePhaseRateStep();"><small>微調</small><br>
           <span style = "font-size:small">　(干渉色の位相のずらし量:0-99%)</span><br>
           <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
           表示サイズ<input type="button" value ="＋" id="large" onclick="changeSize(ratio= 2**0.25)"><input type="button" value ="－" id="small" onclick="changeSize(ratio= 2**(-0.25))">
@@ -230,6 +232,24 @@
         dstContext.clearRect(0, 0, width, height);        
       }
       
+      function fineRepeatTimesStep(){
+        var valueStep = 0.1;
+        if (document.getElementById("fineCheckBox1").checked) {
+          var valueStep = 0.01; 
+        }
+        document.getElementById("repeatTimes").step = valueStep;
+        document.getElementById("repeatTimesSlider").step = valueStep;
+      }
+
+      function finePhaseRateStep(){
+        var valueStep = 1;
+        if (document.getElementById("fineCheckBox2").checked) {
+          var valueStep = 0.1; 
+        }
+        document.getElementById("phaseRate").step = valueStep;
+        document.getElementById("phaseRateSlider").step = valueStep;
+      }
+
       window.addEventListener("DOMContentLoaded", function(){
         //■HTML読込完了時の処理■
         var ofd = document.getElementById("selectfile");
