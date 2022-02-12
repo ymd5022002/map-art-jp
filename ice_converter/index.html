@@ -1,296 +1,574 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang ="ja">
-  <head>
-      <title>干渉色変換ツール(お試し版)</title>
-      <meta http-equiv="Content-Language" content="ja">
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-  </head>
-  <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
-      <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
-        <div>
-          <h2 style="display:inline;">干渉色変換ツール</h2>　<b>#世界を干渉色に</b><h2 style="display:inline;"> </h2><br>
-          画像を素敵な虹色の干渉色に変換するツールです<br><br>
+<head>
+    <title>干渉色変換ツール(お試し版)</title>
+    <meta http-equiv="Content-Language" content="ja">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+</head>
+<body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
+<!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
+<div>
+<h2 style="display:inline;">干渉色変換ツール</h2>　
+<b>#世界を干渉色に</b><h2 style="display:inline;"> </h2>
+<br>
+画像を素敵な虹色の干渉色に変換するツールです
+<br>
+<br>
+<!-- 画像入力 -->
+<span><b>変換したい画像</b></span><small>　(tiff形式は対応しておりません)</small>
+<br>
+<input type="file" id="selectfile" accept='image/*'><input type="button" id="btn1" value="クリア" onclick="fileReset();">
+<!-- ネガ -->
+ <input id="negativeCheckBox1" type="checkbox" onchange="negativeImage();"><small>ネガ</small>
+<br>
+<!-- 仕切り -->
+<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
+<!-- 繰返し回数 -->
+<span><b>繰返し回数</b></span> 
+<input id="repeatTimes" type="number" value="1" min="0" step="0.1" style="width:45px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="repeatTimesSlider" type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
+<input id="fineCheckBox1" type="checkbox" onchange="fineRepeatTimesStep();"><small>微調</small>
+<br> 
+<span style = "font-size:small">　(最小から最大輝度の間に干渉色を何周繰返すか)</span>
+<br>
+<!-- 位相 -->
+<span><b>位相(%)</b></span>
+<input id="phaseRate" type="number" value="0" min="0" step="1"style="width:45px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="phaseRateSlider" type="range" value="0" min="0" max="100" step="1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
+<input id="fineCheckBox2" type="checkbox" onchange="finePhaseRateStep();"><small>微調</small>
+<br>
+<span style = "font-size:small">　(干渉色の位相のずらし量:0-99%)</span>
+<br>
+<!-- 仕切り -->
+<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
 
-          <span><b>変換したい画像</b></span><small>　(tiff形式は対応しておりません)</small><br>
-          <input type="file" id="selectfile" accept='image/*'><input type="button" id="btn1" value="クリア" onclick="fileReset();"><br>
-          <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-          <span><b>繰返し回数</b></span>
-          <input id="repeatTimes" type="number" value="1" min="0" step="0.1" style="width:60px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="repeatTimesSlider" type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
-          <input id="fineCheckBox1" type="checkbox" onchange="fineRepeatTimesStep();"><small>微調</small><br> 
-          <span style = "font-size:small">　(最小から最大輝度の間に干渉色を何周繰返すか)</span><br>
-          <span><b>位相(%)</b></span>
-          <input id="phaseRate" type="number" value="0" min="0" step="1"style="width:60px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="phaseRateSlider" type="range" value="0" min="0" max="100" step="1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
-          <input id="fineCheckBox2" type="checkbox" onchange="finePhaseRateStep();"><small>微調</small><br>
-          <span style = "font-size:small">　(干渉色の位相のずらし量:0-99%)</span><br>
-          <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-          表示サイズ<input type="button" value ="＋" id="large" onclick="changeSize(ratio= 2**0.25)"><input type="button" value ="－" id="small" onclick="changeSize(ratio= 2**(-0.25))">
-          　位置<input type="button" value ="たて" id="alignVertical" onclick="alignVertical()"><input type="button" value ="よこ" id="alignHorizontal" onclick="alignHorizontal()">
-           <input type="button" value ="⇔" id="swap" onclick="swap()">
-          <span id ="dislaySize">
-          <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-          <span><b>画像変換結果｜　<a href='#' download='#' id="save">保存</a>　｜</b></span><br>
-          <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-          <canvas id="dstCanvas" hidden="hidden"></canvas>
-          <canvas id="srcCanvas" hidden="hidden"></canvas>
-          <span id="output">
-          <img style='vertical-align:middle;' id='dstImg'><span id="newLine"></span><img style='vertical-align:middle;' id='srcImg'>
-          </span>          
-          <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-  
-        </div>
-    <hr size="1">
-    (C)<a href="https://ymd5022002.github.io/map-art-jp/" target="_blank">地図アート研究所<a>  (MapArtResearch)<br>
+<!-- 表示サイズ -->
+表示サイズ<input type="button" value ="＋" id="large" onclick="changeSize(ratio= 2**0.25)"><input type="button" value ="－" id="small" onclick="changeSize(ratio= 2**(-0.25))">
+　位置<input type="button" value ="たて" id="alignVertical" onclick="alignVertical()"><input type="button" value ="よこ" id="alignHorizontal" onclick="alignHorizontal()">
+<input type="button" value ="⇔" id="swap" onclick="swap()">
+<br>
+<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
+<span id="output">
+<span><b>画像変換結果｜　<a href='#' download='#' id="save">保存</a>　｜</b></span><br>
 
-    <script>
+<!-- 仕切り -->
+<hr size="1">
+<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
 
-      //グレースケールを干渉色に変換するルックアップテーブルを作成する関数            
-      function makeLUTable(repeatTimes, phaseRate){  
-        let LUTable = [];
-        //////干渉色パラメータ
-        let t_iC = [0.64 , 0.35 , 0.355];    //振幅　amplitude
-        let c_iC = [ 0.5 , 0.5 , 0.5];       //中心値
-        let u_iC = [ 0.5 , 0.52 , 0.5];      //位相率
-        let k_iC = [ 2.98 , 3.71 , 4.35];    //波数
-        let s_iC = [ 0.105 , 0. , 0.];       //波長増加率
-        let alpha_iC = [ 0.2 , 0.53 , 0.5];  //包絡振幅
-        let delta_iC = [ 0.5 , 0.1 , 0.042]; //包絡位相率
-        let beta_iC  = [ 0.7 , 0.45 , 0.35]; //包絡波数
-        let cycle = repeatTimes;             //色繰返し回数
-        let fullscale = 255.;                //画像輝度の最大値(最大は何メートルか)
-        let Num_iC = fullscale / cycle;      //色１周期で輝度幾つか(色１周期で何メートルか）
-        let scale  = 1000. / fullscale;      //画像輝度値の幅を1000に規格化する係数
-        let r_iC = 0.15;                     //不使用階調率(15%)
+<!-- 合成 blend-->
+<small>
+<b>合成</b> 
+<input type="radio" name="blend_type" value="none" checked onchange ="interferanceColorFilter();">無
+<input type="radio" name="blend_type" value="multiple" onchange ="interferanceColorFilter();">乗算
+<input type="radio" name="blend_type" value="pinLight1" onchange ="interferanceColorFilter();">pin1
+<input type="radio" name="blend_type" value="pinLight2" onchange ="interferanceColorFilter();">pin2
+<input type="radio" name="blend_type" value="dark" onchange ="interferanceColorFilter();">暗<small>優先</small>
+<input type="radio" name="blend_type" value="blight" onchange ="interferanceColorFilter();">明<small>優先</small>
+<br>
+　　 <input type="radio" name="blend_type" value="alphaBlend" onchange ="interferanceColorFilter();">α合成
+(<input id="blend_rate" type="number" value="65" min="0" max="100" step="1" style="width:40px;"
+  onkeyup="this.nextSibling.value = this.value; "
+  onchange ="interferanceColorFilter();"/><input id="blendRateSlider" type="range"
+  value="65" min="0" max="100" step="5" oninput="this.previousSibling.value = this.value; "
+  onchange ="interferanceColorFilter();" />) 
+</small>
+<br>
 
-        for (let Y = 0; Y < 255; Y++) {
-          let n_iC = (Y + (phaseRate / 100. * 256.) / repeatTimes ) % Num_iC ;           //色一周期の何番目か
-          for (let i = 0; i < 3; i++ ){
-            LUTable[Y * 3 + i] =
-              c_iC[i] +
-              t_iC[i] *
-                (1 +
-                  alpha_iC[i] *
-                    Math.cos(
-                      (2 * Math.PI * beta_iC[i] * (n_iC / Num_iC + r_iC)) /
-                        (1 + r_iC) -
-                        2 * Math.PI * delta_iC[i]
-                    )) *
-                Math.cos(
-                  (2 *
-                    Math.PI *
-                    (1 + (s_iC[i] * (n_iC / Num_iC + r_iC)) / (1 + r_iC)) *
-                    k_iC[i] *
-                    (n_iC / Num_iC + r_iC)) /
-                    (1 + r_iC) -
-                    2 * Math.PI * u_iC[i]
-                );
-            if ( LUTable[Y*3 + i] > 0.0031308 ){
-              LUTable[Y*3 + i] = 1.055 * ( LUTable[Y*3 + i] ** (1/2.4) ) - 0.055;
-            }else{
-              LUTable[Y*3 + i] = 12.92 * LUTable[Y*3 + i];
+<!-- ボケ　Gaussian 【未実装】-->
+<!-- <small><b>ボケ</b></small>
+<input id="kernel_size" type="number" value="1" min="2" step="1"
+style="width:40px;" onkeyup="this.nextSibling.value = this.value; " 
+onchange ="interferanceColorFilter();"/><input id="kernel_size‗slider" 
+type="range" value="1" min="1" step="2" oninput="this.previousSibling.value = this.value; "
+onchange ="interferanceColorFilter();" style="width:50px;" />
+<br> -->
+
+<!-- 変換結果表示部 -->
+<img style='vertical-align:middle;' id='dstImg'><span id="newLine"></span><img style='vertical-align:middle;' id='srcImg'>
+</span> 
+<br>
+<!-- 計算用のCanvas(非表示) -->
+<canvas id="dstCanvas" hidden></canvas>
+<canvas id="srcCanvas" hidden></canvas>
+<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
+</div>
+<hr size="1">
+(C)<a href="https://ymd5022002.github.io/map-art-jp/" target="_blank">地図アート研究所<a>  (MapArtResearch)<br>
+
+<script>
+//グレースケールを干渉色に変換するルックアップテーブルを作成する関数            
+function makeLUTable(repeatTimes, phaseRate){  
+  let LUTable = [];
+  //////干渉色パラメータ
+  let t_iC = [0.64 , 0.35 , 0.355];    //振幅　amplitude
+  let c_iC = [ 0.5 , 0.5 , 0.5];       //中心値
+  let u_iC = [ 0.5 , 0.52 , 0.5];      //位相率
+  let k_iC = [ 2.98 , 3.71 , 4.35];    //波数
+  let s_iC = [ 0.105 , 0. , 0.];       //波長増加率
+  let alpha_iC = [ 0.2 , 0.53 , 0.5];  //包絡振幅
+  let delta_iC = [ 0.5 , 0.1 , 0.042]; //包絡位相率
+  let beta_iC  = [ 0.7 , 0.45 , 0.35]; //包絡波数
+  let cycle = repeatTimes;             //色繰返し回数
+  let fullscale = 255.;                //画像輝度の最大値(最大は何メートルか)
+  let Num_iC = fullscale / cycle;      //色１周期で輝度幾つか(色１周期で何メートルか）
+  let scale  = 1000. / fullscale;      //画像輝度値の幅を1000に規格化する係数
+  let r_iC = 0.15;                     //不使用階調率(15%)
+
+  for (let Y = 0; Y < 255; Y++) {
+    let n_iC = (Y + (phaseRate / 100. * 256.) / repeatTimes ) % Num_iC ;           //色一周期の何番目か
+    for (let i = 0; i < 3; i++ ){
+      LUTable[Y * 3 + i] =
+        c_iC[i] +
+        t_iC[i] *
+          (1 +
+            alpha_iC[i] *
+              Math.cos(
+                (2 * Math.PI * beta_iC[i] * (n_iC / Num_iC + r_iC)) /
+                  (1 + r_iC) -
+                  2 * Math.PI * delta_iC[i]
+              )) *
+          Math.cos(
+            (2 *
+              Math.PI *
+              (1 + (s_iC[i] * (n_iC / Num_iC + r_iC)) / (1 + r_iC)) *
+              k_iC[i] *
+              (n_iC / Num_iC + r_iC)) /
+              (1 + r_iC) -
+              2 * Math.PI * u_iC[i]
+          );
+      if ( LUTable[Y*3 + i] > 0.0031308 ){
+        LUTable[Y*3 + i] = 1.055 * ( LUTable[Y*3 + i] ** (1/2.4) ) - 0.055;
+      }else{
+        LUTable[Y*3 + i] = 12.92 * LUTable[Y*3 + i];
+      }
+      LUTable[Y*3 + i] = Math.round(
+        255. * Math.max( 0. , Math.min(1., LUTable[Y*3 + i]))
+      );
+    }
+  }
+  return LUTable;
+}
+
+//前処理１(元画像のメモリを準備する)関数
+function filterSrcPrep(theCanvasId, width, height){
+  // 処理後画像用キャンバス(非表示)を準備
+  var theCanvas = document.getElementById(theCanvasId);
+  var theContext = theCanvas.getContext('2d');
+  // メモリにキャンバス(非表示)の画像データを入れる
+  var theData = theContext.getImageData(0, 0, width, height);
+  return theData;
+}
+
+//前処理2(処理後画像のメモリを準備する)関数
+function filterDstPrep(theCanvasId, width, height){
+  // 処理後画像用キャンバス(非表示)を準備
+  var theCanvas = document.getElementById(theCanvasId);
+  var theContext = theCanvas.getContext('2d');
+  theCanvas.width = width;
+  theCanvas.height = height;          
+  //処理後画像用メモリを準備
+  var theData = theContext.createImageData(width, height);
+  theData = theContext.getImageData(0, 0, width, height);
+  return theData;
+}
+
+//後処理(処理後画像を描画する)関数
+function drawCanvasImg(theCanvasId, theData){
+  // 処理後画像をキャンバス(非表示)に描画
+  var theCanvas = document.getElementById(theCanvasId);
+  var theContext = theCanvas.getContext('2d');  
+  theContext.putImageData(theData, 0, 0);
+
+  // srcのときの描画処理
+  if(theCanvasId == "srcCanvas"){
+    var dataSrcUrl = theCanvas.toDataURL(); // 元画像のbase64データ(URL)をキャンバス(非表示)から取得
+    var srcImgDoc = document.getElementById("srcImg"); // 元画像用のimg要素にbase64データ(URL)データを入れて画像を表示
+    srcImgDoc.src = dataSrcUrl;
+    srcImgDoc.style.visibility='visible';
+  }
+  // dstのとき描画・保存処理
+  if(theCanvasId == "dstCanvas"){
+    // dstファイルの表示とダウンロード用の保存処理
+    // 処理後画像のbase64データ(URL)をキャンバス(非表示)から取得
+    var dataDstUrl = theCanvas.toDataURL();
+    // 処理後画像用のimg要素にbase64データ(URL)データを入れて画像を表示
+    var dstImgDoc = document.getElementById("dstImg");
+    dstImgDoc.src = dataDstUrl;
+    var srcImgDoc = document.getElementById("srcImg"); 
+    dstImgDoc.width = srcImgDoc.width;
+    dstImgDoc.height = srcImgDoc.height;
+    dstImgDoc.style.visibility='visible';
+    //　保存用の画像にデータを保存
+    document.getElementById("save").href = dataDstUrl;
+    // 保存ファイル名を自動生成
+    var selectFile = document.getElementById("selectfile").files[0];
+    var selectFileName = selectFile.name.match( /(.+)(\.[^.]+$)/ )[1]; // 拡張子を除くファイル名を抽出
+    document.getElementById("save").download = `${selectFileName}_ice.png`;
+  }
+}
+
+// 画像合成処理の関数の定義
+function blend(){
+  // 合成処理の種類の取得
+  var blendType = document.querySelector("input[name=blend_type]:checked").value;
+
+  //メモリの準備をする
+  var srcCanvasId = "srcCanvas";
+  var dstCanvasId = "dstCanvas";
+  var width = document.getElementById(srcCanvasId).width;
+  var height = document.getElementById(srcCanvasId).height;
+  var srcData = filterSrcPrep(srcCanvasId, width, height );   // srcキャンバスデータをsrcに書き込む
+  var dstData = filterSrcPrep(dstCanvasId, width, height );   // dstキャンバスデータをdstに書き込む
+  var tmp;
+
+  // 処理後画像用キャンバス(非表示)を準備
+  var srcCanvas = document.getElementById(srcCanvasId);
+  var srcContext = srcCanvas.getContext('2d');
+  // メモリにキャンバス(非表示)の画像データを入れる
+  var srcData = srcContext.getImageData(0, 0, width, height);  
+  var src = srcData.data;
+  var dst = dstData.data;
+
+  // 各画像処理のピクセル処理
+  switch (blendType) {
+    case 'multiple': //乗算合成処理
+      //ピクセル処理 入力:src 　メモリ：tmp　 出力:dst
+      for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) { 
+          var idx = (j + i * width) * 4;
+          for ( k = 0; k < 3; k++){
+            dst[idx + k] = Math.round( src[idx + k] * dst[idx + k] / 255 ); //乗算
+          }
+        }
+      }
+      break;
+      case 'pinLight1':  // ピンライト1　原画が合成色
+      //ピクセル処理 入力:src 　メモリ：tmp　 出力:dst
+      var idx;
+      var graySrc;
+      var grayDst;
+      for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) { 
+          idx = (j + i * width) * 4;
+          graySrc = 0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2];
+          grayDst = 0.299*dst[idx] + 0.587*dst[idx + 1] + 0.114*dst[idx + 2];
+          if ( graySrc > 127 ){  // 原画(合成色)が50%グレーより明るいとき
+            if ( grayDst > graySrc ){  // 原画(合成色)より明るいピクセルは、
+            dst[idx    ] = src[idx    ];  //R　　　　　　変更されない (srcに戻す)
+            dst[idx + 1] = src[idx + 1];  //G
+            dst[idx + 2] = src[idx + 2];  //B
+            }else{                  // 原画(合成色)が50%グレーより暗いとき
+              if( grayDst < graySrc ){  // 原画(合成色)より暗いピクセルは、
+              dst[idx    ] = src[idx    ];  //R　　　　　　変更されない (srcに戻す)
+              dst[idx + 1] = src[idx + 1];  //G
+              dst[idx + 2] = src[idx + 2];  //B            
+              }
             }
-            LUTable[Y*3 + i] = Math.round(
-              255. * Math.max( 0. , Math.min(1., LUTable[Y*3 + i]))
-            );
           }
         }
-        return LUTable;
       }
-
-      //前処理１(元画像のメモリを準備する)関数
-      function filterSrcPrep(srcCanvasId, width, height){
-        // 処理後画像用キャンバス(非表示)を準備
-        var srcCanvas = document.getElementById(srcCanvasId);
-        var srcContext = srcCanvas.getContext('2d');
-        // メモリに元画像データを入れる
-        var srcData = srcContext.getImageData(0, 0, width, height);
-        return srcData;
-      }
-
-      //前処理2(処理後画像のメモリを準備する)関数
-      function filterDstPrep(dstCanvasId, width, height){
-        // 処理後画像用キャンバス(非表示)を準備
-        var dstCanvas = document.getElementById(dstCanvasId);
-        var dstContext = dstCanvas.getContext('2d');
-        dstCanvas.width = width;
-        dstCanvas.height = height;          
-        //処理後画像用メモリを準備
-        var dstData = dstContext.createImageData(width, height);
-        return dstData
-      }
-
-      //後処理(処理後画像を描画する)関数
-      function drawDstImg(dstCanvasId, dstData){
-        // 処理後画像をキャンバス(非表示)に描画
-        var dstCanvas = document.getElementById(dstCanvasId);
-        var dstContext = dstCanvas.getContext('2d');  
-        dstContext.putImageData(dstData, 0, 0);
-        // 処理後画像のbase64データ(URL)をキャンバス(非表示)から取得
-        var dataDstUrl = dstCanvas.toDataURL();
-        // 処理後画像用のimg要素にbase64データ(URL)データを入れて画像を表示
-        var dstImgDoc = document.getElementById("dstImg");
-        dstImgDoc.src = dataDstUrl;
-        var srcImgDoc = document.getElementById("srcImg"); 
-        dstImgDoc.width = srcImgDoc.width;
-        dstImgDoc.height = srcImgDoc.height;
-        dstImgDoc.style.visibility='visible';
-        //　保存用の画像にデータを保存
-        document.getElementById("save").href = dataDstUrl;
-        // 保存ファイル名を自動生成
-        var selectFile = document.getElementById("selectfile").files[0];
-        var selectFileName = selectFile.name.match( /(.+)(\.[^.]+$)/ )[1]; // 拡張子を除くファイル名を抽出
-        document.getElementById("save").download = `${selectFileName}_ice.png`;
-      }
-
-      // 干渉色画像変換処理関数
-      function interferanceColorFilter(){
-
-        //メモリの準備をする
-        var srcCanvasId = "srcCanvas";
-        var dstCanvasId = "dstCanvas";
-        var width = document.getElementById(srcCanvasId).width;
-        var height = document.getElementById(srcCanvasId).height;
-        var srcData = filterSrcPrep(srcCanvasId, width, height );
-        var dstData = filterDstPrep(dstCanvasId, width, height );
-        var src = srcData.data;
-        var dst = dstData.data;
-
-        /////// ここから下に画像処理内容を記述 入力:src, 出力:dst　///////
-
-        //各入力値を取得
-        let repeatTimes = Number(document.getElementById( "repeatTimes" ).value);
-        let phaseRate = Number(document.getElementById( "phaseRate" ).value);
-        let phase = Math.round( 256./100. * phaseRate )
-
-        //干渉色変換のルックアップテーブル生成
-        let LUTable;
-        LUTable = makeLUTable(repeatTimes, phaseRate);        
-
-        for (var i = 0; i < height; i++) {
-          for (var j = 0; j < width; j++) {
-            var idx = (j + i * width) * 4;
-            var gray = Math.round (
-              0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2]
-            );
-            dst[idx] = LUTable[ ( gray ) % 255 * 3 ];         //Red-ch
-            dst[idx + 1] = LUTable[ ( gray ) % 255 * 3 + 1 ]; //Green-ch
-            dst[idx + 2] = LUTable[ ( gray ) % 255 * 3 + 2 ]; //Blue-ch
-            dst[idx + 3] = src[idx + 3];                              //Alpha-ch
+      break; 
+    case 'pinLight2': // ピンライト2　干渉色が合成色
+      var idx;
+      var graySrc;
+      var grayDst;
+      for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) { 
+          idx = (j + i * width) * 4;
+          graySrc = 0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2];
+          grayDst = 0.299*dst[idx] + 0.587*dst[idx + 1] + 0.114*dst[idx + 2];
+          if ( grayDst > 127 ){  // 干渉色(合成色)が50%グレーより明るいとき
+            if ( grayDst < graySrc ){  // 干渉色(合成色)より明るいピクセルは、
+            dst[idx    ] = src[idx    ];  //R　　　　　　変更されない (srcに戻す)
+            dst[idx + 1] = src[idx + 1];  //G
+            dst[idx + 2] = src[idx + 2];  //B
+            }else{                  // 干渉色(合成色)が50%グレーより暗いとき
+              if( grayDst > graySrc ){  // 干渉色(合成色)より暗いピクセルは、
+              dst[idx    ] = src[idx    ];  //R　　　　　　変更されない (srcに戻す)
+              dst[idx + 1] = src[idx + 1];  //G
+              dst[idx + 2] = src[idx + 2];  //B            
+              }
+            }
           }
         }
-
-        //////// 画像処理内容はここまで　///////
-        
-        //画像処理結果を描画する
-        drawDstImg(dstCanvasId, dstData);
       }
-
-      function alignVertical(){
-        document.getElementById("newLine").innerHTML = "<br>";
+      break;
+    case 'blight':  // 明ピクセル優先
+      //ピクセル処理 入力:src 　メモリ：tmp　 出力:dst
+      var idx;
+      var graySrc;
+      var grayDst;
+      for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) { 
+          idx = (j + i * width) * 4;
+          graySrc = 0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2];
+          grayDst = 0.299*dst[idx] + 0.587*dst[idx + 1] + 0.114*dst[idx + 2];
+          if ( graySrc > grayDst){  // 明るいピクセルを採用する処理
+            dst[idx    ] = src[idx    ];  //R
+            dst[idx + 1] = src[idx + 1];  //G
+            dst[idx + 2] = src[idx + 2];  //B
+          }
+        }
       }
-
-      function alignHorizontal(){
-          document.getElementById("newLine").innerHTML = "";
+      break;
+    case 'dark':
+      //ピクセル処理 入力:src 　メモリ：tmp　 出力:dst
+      var idx;
+      var graySrc;
+      var grayDst;
+      for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) { 
+          idx = (j + i * width) * 4;
+          graySrc = 0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2];
+          grayDst = 0.299*dst[idx] + 0.587*dst[idx + 1] + 0.114*dst[idx + 2];
+          if ( graySrc <= grayDst){  // 暗いピクセルを採用する処理
+            dst[idx    ] = src[idx    ];  //R
+            dst[idx + 1] = src[idx + 1];  //G
+            dst[idx + 2] = src[idx + 2];  //B
+          }
+        }
       }
-
-      function swap(){
-          var srcImgDoc = document.getElementById("srcImg")
-          var dstImgDoc = document.getElementById("dstImg")
-              dataSrcUrl = srcImgDoc.src;
-              dataDstUrl = dstImgDoc.src;
-              srcImgDoc.src = dataDstUrl;
-              dstImgDoc.src = dataSrcUrl;
-              srcImgDoc.id = "dstImg";
-              dstImgDoc.id = "srcImg";
+      break;
+    case 'none':        // 合成なしの処理　⇒alpha = 1の　透明度合成処理
+    case 'alphaBlend':  // 透明度合成(αブレンド)の処理
+      if ( blendType == 'alphaBlend'){
+        // ブレンド率の取得
+        var blendRate = Number(document.getElementById("blend_rate").value);
+        if ( blendRate < 0 || blendRate == "" || blendRate == 0 ) { // 取得した値が負とか""だったら0にする
+          blendRate = 0;
+          document.getElementById("blend_rate").value = blendRate;
+          // return;
+        }
+        if ( (blendRate > 100) || (blendRate == 100) ) { // 取得した値が100超えだったら100にする
+          blendRate = 100;
+          document.getElementById("blend_rate").value = blendRate;
+        }
+        var alpha = blendRate / 100. ;
+      }else{
+        var alpha = 0. ;
       }
-
-      function changeSize(ratio){
-        var srcImgDoc = document.getElementById("srcImg");
-        var dstImgDoc = document.getElementById("dstImg");
-        var dispWidth = srcImgDoc.width; 
-        var dispHeight = srcImgDoc.height;
-        if ( ( ratio < 1 ) && ( ( dispWidth < 200 ) && ( dispHeight < 200 ) ) ) { return; }
-        srcImgDoc.width  *= ratio;
-        srcImgDoc.height *= ratio;
-        dstImgDoc.width  *= ratio;
-        dstImgDoc.height *= ratio;
-        return;
+      //ピクセル処理 入力:src 　メモリ：tmp　 出力:dst
+      for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) { 
+          var idx = (j + i * width) * 4;
+          for ( k = 0; k < 3; k++){
+            dst[idx + k] = Math.round( alpha * src[idx + k] + ( 1 - alpha ) * dst[idx + k] ); //透明度合成(アルファブレンド)
+          }
+        }
       }
+      break;
+  }
+  //////// 処理内容はここまで
 
-      function fileReset(){
-        document.getElementById("selectfile").value = "";
-        document.getElementById("srcImg").style.visibility='hidden';
-        document.getElementById("dstImg").style.visibility='hidden';
-        document.getElementById("save").href = "";
-        var srcCanvas = document.getElementById("srcCanvas")
+  //画像処理結果を描画する
+  drawCanvasImg(dstCanvasId, dstData, width, height );
+}
+
+// 干渉色画像変換処理関数
+function interferanceColorFilter(){
+  //メモリの準備をする
+  var srcCanvasId = "srcCanvas";
+  var dstCanvasId = "dstCanvas";
+  var width = document.getElementById(srcCanvasId).width;
+  var height = document.getElementById(srcCanvasId).height;
+  var srcData = filterSrcPrep(srcCanvasId, width, height );   // srcキャンバスデータをsrcに書き込む
+  var dstData = filterDstPrep(dstCanvasId, width, height );   // dstは新たにdscCanvasの内容(空っぽ)を入れる
+  var src = srcData.data;
+  var dst = dstData.data;
+
+  /////// ここから下が干渉色処理 入力:src, 出力:dst　///////
+  //各入力値を取得
+  let repeatTimes = Number(document.getElementById( "repeatTimes" ).value);
+  let phaseRate = Number(document.getElementById( "phaseRate" ).value);
+  let phase = Math.round( 256./100. * phaseRate )
+
+  //干渉色変換のルックアップテーブル生成
+  let LUTable;
+  LUTable = makeLUTable(repeatTimes, phaseRate);        
+
+  // ピクセル処理
+  for (var i = 0; i < height; i++) {
+    for (var j = 0; j < width; j++) {
+      var idx = (j + i * width) * 4;
+      var gray = Math.round (
+        0.299*src[idx] + 0.587*src[idx + 1] + 0.114*src[idx + 2]
+      );
+      dst[idx] = LUTable[ ( gray ) % 255 * 3 ];         //R
+      dst[idx + 1] = LUTable[ ( gray ) % 255 * 3 + 1 ]; //G
+      dst[idx + 2] = LUTable[ ( gray ) % 255 * 3 + 2 ]; //B
+      dst[idx + 3] = src[idx + 3];                      //A
+    }
+  }
+  //////// 干渉色処理はここまで　///////
+  drawCanvasImg(dstCanvasId, dstData);
+
+  // 画像合成処理
+  let blendRate = Number(document.getElementById("blend_rate").value);
+  blend();
+}
+
+function negativeImage(){
+  //メモリの準備をする
+  var srcCanvasId = "srcCanvas";
+  var width = document.getElementById(srcCanvasId).width;
+  var height = document.getElementById(srcCanvasId).height;
+  var srcData = filterSrcPrep(srcCanvasId, width, height );  // srcはsrcCanvasの内容を入れる
+  var src = srcData.data;
+  /////// ここから下に画像処理内容を記述 入力:src, 出力:src　///////
+  for (var i = 0; i < height; i++) {
+    for (var j = 0; j < width; j++) {
+      for(var k = 0; k < 3; k++){
+        var idx = (j + i * width) * 4 + k;
+        src[idx] = 255 - src[idx]; // RGB
+                                    // Aチャンネルはsrcのまま
+      }
+    }
+  }
+  //////// 画像処理内容はここまで　///////
+  //画像処理結果を描画する
+  drawCanvasImg(srcCanvasId, srcData);   // srcCanvasに書き込む
+  interferanceColorFilter();
+}
+
+// ★★テンプレート★★ 〇〇画像処理関数の定義
+function templateFilter(){
+  //メモリの準備をする
+  var srcCanvasId = "srcCanvas";
+  var dstCanvasId = "dstCanvas";
+  var width = document.getElementById(srcCanvasId).width;
+  var height = document.getElementById(srcCanvasId).height;
+  var srcData = filterSrcPrep(srcCanvasId, width, height );  // srcはsrcCanvasの内容を入れる
+  var dstData = filterDstPrep(dstCanvasId, width, height );  // dstは新たにdscCanvasの内容(空っぽ)を入れる
+  var src = srcData.data;
+  var dst = dstData.data;
+  /////// ここから下に画像処理内容を記述 入力:src, 出力:dst　///////
+  for (var i = 0; i < height; i++) {
+    for (var j = 0; j < width; j++) {
+      //RGBAの処理が異なるとき
+      var idx = (j + i * width) * 4;              
+      dst[idx    ] = 255 ;//処理を書く;         //R
+      dst[idx + 1] = 255 ;//処理を書く;         //G
+      dst[idx + 2] = 255 ;//処理を書く;         //B
+      dst[idx + 3] = 255 ;//処理を書く;         //A 255は不透明、0は透明
+      // RGBAの処理が同じとき
+      // for(var k = 0; k < 4; k++){
+      //   var idx = (j + i * width) * 4 + k;
+      //   dst[idx] = 255 処理を書く;         //RGBA共通の処理
+      // }
+    }
+  }
+  //////// 画像処理内容はここまで　///////
+  //画像処理結果を描画する
+  //drawCanvasImg(srcCanvasId, srcData);   // srcCanvasに書き込むとき
+  drawCanvasImg(dstCanvasId, dstData);   // dstCanvasに書き込む
+}
+
+function alignVertical(){
+  document.getElementById("newLine").innerHTML = "<br>";
+}
+
+function alignHorizontal(){
+    document.getElementById("newLine").innerHTML = "";
+}
+
+function swap(){
+    var srcImgDoc = document.getElementById("srcImg")
+    var dstImgDoc = document.getElementById("dstImg")
+        dataSrcUrl = srcImgDoc.src;
+        dataDstUrl = dstImgDoc.src;
+        srcImgDoc.src = dataDstUrl;
+        dstImgDoc.src = dataSrcUrl;
+        srcImgDoc.id = "dstImg";
+        dstImgDoc.id = "srcImg";
+}
+
+function changeSize(ratio){
+  var srcImgDoc = document.getElementById("srcImg");
+  var dstImgDoc = document.getElementById("dstImg");
+  var dispWidth = srcImgDoc.width; 
+  var dispHeight = srcImgDoc.height;
+  if ( ( ratio < 1 ) && ( ( dispWidth < 200 ) && ( dispHeight < 200 ) ) ) { return; }
+  srcImgDoc.width  *= ratio;
+  srcImgDoc.height *= ratio;
+  dstImgDoc.width  *= ratio;
+  dstImgDoc.height *= ratio;
+  return;
+}
+
+function fileReset(){
+  document.getElementById("selectfile").value = "";
+  document.getElementById("srcImg").style.visibility='hidden';
+  document.getElementById("dstImg").style.visibility='hidden';
+  document.getElementById("save").href = "";
+  var srcCanvas = document.getElementById("srcCanvas")
+  var srcContext = srcCanvas.getContext('2d');
+  var width = srcCanvas.width
+  var height = srcCanvas.height
+  var dstCanvas = document.getElementById("dstCanvas");
+  var dstContext = dstCanvas.getContext('2d');
+  srcContext.clearRect(0, 0, width, height);
+  dstContext.clearRect(0, 0, width, height);        
+}
+
+function fineRepeatTimesStep(){
+  var valueStep = 0.1;
+  if (document.getElementById("fineCheckBox1").checked) {
+    var valueStep = 0.01; 
+  }
+  document.getElementById("repeatTimes").step = valueStep;
+  document.getElementById("repeatTimesSlider").step = valueStep;
+}
+
+function finePhaseRateStep(){
+  var valueStep = 1;
+  if (document.getElementById("fineCheckBox2").checked) {
+    var valueStep = 0.1; 
+  }
+  document.getElementById("phaseRate").step = valueStep;
+  document.getElementById("phaseRateSlider").step = valueStep;
+}
+
+window.addEventListener("DOMContentLoaded", function(){
+  //■HTML読込完了時の処理■
+  var ofd = document.getElementById("selectfile");
+  ofd.addEventListener("change",function(evt){
+    //■選択ファイル変更完了時の処理■
+    var img = null;
+    var file = evt.target.files;
+    var reader = new FileReader();
+    //dataURL形式でファイルを読み込む
+    reader.readAsDataURL(file[0]);
+    reader.onload = function(){
+      //■ファイルのロード完了時の処理■
+      img = new Image();
+      img.onload = function(){
+        //■画像の読込完了時の処理■
+        var width = img.width;
+        var height = img.height;
+        var ratio = 0.5 / Math.floor( Math.max(512, Math.max(width, height)) / 512 );
+        var dispWidth = Math.round(ratio * width);
+        var dispHeight = Math.round(ratio * height);
+        var srcCanvas = document.getElementById("srcCanvas");
         var srcContext = srcCanvas.getContext('2d');
-        var width = srcCanvas.width
-        var height = srcCanvas.height
-        var dstCanvas = document.getElementById("dstCanvas");
-        var dstContext = dstCanvas.getContext('2d');
-        srcContext.clearRect(0, 0, width, height);
-        dstContext.clearRect(0, 0, width, height);        
-      }
-      
-      function fineRepeatTimesStep(){
-        var valueStep = 0.1;
-        if (document.getElementById("fineCheckBox1").checked) {
-          var valueStep = 0.01; 
+        srcCanvas.width = width;
+        srcCanvas.height = height;
+        // 元画像の描画
+        srcContext.drawImage(img, 0, 0);  // 元画像をキャンバス(非表示)に描画
+        var dataSrcUrl = srcCanvas.toDataURL(); // 元画像のbase64データ(URL)をキャンバス(非表示)から取得
+        var srcImgDoc = document.getElementById("srcImg"); // 元画像用のimg要素にbase64データ(URL)データを入れて画像を表示
+        srcImgDoc.src = dataSrcUrl;
+        srcImgDoc.width = dispWidth;
+        srcImgDoc.height = dispHeight;
+        if (document.getElementById("negativeCheckBox1").checked){   //ネガが[チェック]のとき
+          negativeImage()
+        }else{                                                       //それ以外
+          srcImgDoc.style.visibility='visible';
+          interferanceColorFilter();//　干渉色処理と処理画像の描画
         }
-        document.getElementById("repeatTimes").step = valueStep;
-        document.getElementById("repeatTimesSlider").step = valueStep;
-      }
-
-      function finePhaseRateStep(){
-        var valueStep = 1;
-        if (document.getElementById("fineCheckBox2").checked) {
-          var valueStep = 0.1; 
-        }
-        document.getElementById("phaseRate").step = valueStep;
-        document.getElementById("phaseRateSlider").step = valueStep;
-      }
-
-      window.addEventListener("DOMContentLoaded", function(){
-        //■HTML読込完了時の処理■
-        var ofd = document.getElementById("selectfile");
-        ofd.addEventListener("change",function(evt){
-          //■選択ファイル変更完了時の処理■
-          var img = null;
-          var file = evt.target.files;
-          var reader = new FileReader();
-          //dataURL形式でファイルを読み込む
-          reader.readAsDataURL(file[0]);
-          reader.onload = function(){
-            //■ファイルのロード完了時の処理■
-            img = new Image();
-            img.onload = function(){
-              //■画像の読込完了時の処理■
-              var width = img.width;
-              var height = img.height;
-              var ratio = 0.5 / Math.floor( Math.max(512, Math.max(width, height)) / 512 );
-              var dispWidth = Math.round(ratio * width);
-              var dispHeight = Math.round(ratio * height);
-              var srcCanvas = document.getElementById("srcCanvas");
-              var srcContext = srcCanvas.getContext('2d');
-              srcCanvas.width = width;
-              srcCanvas.height = height; 
-
-              // 元画像の描画
-              srcContext.drawImage(img, 0, 0);  // 元画像をキャンバス(非表示)に描画
-              var dataSrcUrl = srcCanvas.toDataURL(); // 元画像のbase64データ(URL)をキャンバス(非表示)から取得
-              var srcImgDoc = document.getElementById("srcImg"); // 元画像用のimg要素にbase64データ(URL)データを入れて画像を表示
-              srcImgDoc.src = dataSrcUrl;
-              srcImgDoc.width = dispWidth;
-              srcImgDoc.height = dispHeight;
-              srcImgDoc.style.visibility='visible';
-
-              //　画像処理と処理画像の描画
-              interferanceColorFilter();
-            };
-            img.src = reader.result;
-          };
-        }, false);
-      });
-    </script>
-  </body>
-  </html>
+      };
+      img.src = reader.result;
+    };
+  }, false);
+});
+</script>
+</body>
+</html>
