@@ -19,11 +19,15 @@
 <span><b>変換したい画像</b></span><small>　(tiff形式は対応しておりません)</small>
 <br>
 <input type="file" id="selectfile" accept='image/*'><input type="button" id="btn1" value="クリア" onclick="fileReset();">
-<!-- ネガ -->
- <input id="negativeCheckBox1" type="checkbox" onchange="negativeImage();"><small>ネガ</small>
 <br>
+<!-- ネガ -->
+<input id="negativeCheckBox1" type="checkbox" onchange="negativeImage();"><small>ネガ</small>
+
+<!-- 縮小チェック -->
+<input type="checkbox" id="imgShrink" onclick="fileReset();" checked><small>縮小サイズ<sup>＊</sup></small>
+<small>(＊要再選択)</small><br>
 <!-- 仕切り -->
-<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
+<div id="separator" style="border: 5; margin: 2px; background-color: #FCE3CD; min-height: 1px;"></div>
 <!-- 繰返し回数 -->
 <span><b>繰返し回数</b></span> 
 <input id="repeatTimes" type="number" value="1" min="0" step="0.1" style="width:45px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="repeatTimesSlider" type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
@@ -42,7 +46,7 @@
 <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
 
 <!-- 表示サイズ -->
-表示サイズ<input type="button" value ="＋" id="large" onclick="changeSize(ratio= 2**0.25)"><input type="button" value ="－" id="small" onclick="changeSize(ratio= 2**(-0.25))">
+表示サイズ<input type="button" value ="＋" id="large" onclick="changeSize(dispRatio= 2**0.25)"><input type="button" value ="－" id="small" onclick="changeSize(dispRatio= 2**(-0.25))">
 　位置<input type="button" value ="たて" id="alignVertical" onclick="alignVertical()"><input type="button" value ="よこ" id="alignHorizontal" onclick="alignHorizontal()">
 <input type="button" value ="⇔" id="swap" onclick="swap()">
 <br>
@@ -483,16 +487,16 @@ function swap(){
         dstImgDoc.id = "srcImg";
 }
 
-function changeSize(ratio){
+function changeSize(dispRatio){
   var srcImgDoc = document.getElementById("srcImg");
   var dstImgDoc = document.getElementById("dstImg");
   var dispWidth = srcImgDoc.width; 
   var dispHeight = srcImgDoc.height;
-  if ( ( ratio < 1 ) && ( ( dispWidth < 200 ) && ( dispHeight < 200 ) ) ) { return; }
-  srcImgDoc.width  *= ratio;
-  srcImgDoc.height *= ratio;
-  dstImgDoc.width  *= ratio;
-  dstImgDoc.height *= ratio;
+  if ( ( dispRatio < 1 ) && ( ( dispWidth < 200 ) && ( dispHeight < 200 ) ) ) { return; }
+  srcImgDoc.width  *= dispRatio;
+  srcImgDoc.height *= dispRatio;
+  dstImgDoc.width  *= dispRatio;
+  dstImgDoc.height *= dispRatio;
   return;
 }
 
@@ -544,17 +548,29 @@ window.addEventListener("DOMContentLoaded", function(){
       img = new Image();
       img.onload = function(){
         //■画像の読込完了時の処理■
-        var width = img.width;
-        var height = img.height;
-        var ratio = 0.5 / Math.floor( Math.max(512, Math.max(width, height)) / 512 );
-        var dispWidth = Math.round(ratio * width);
-        var dispHeight = Math.round(ratio * height);
+        var originalWidth = img.width;
+        var originalHeight = img.height;
+        var width = originalWidth;
+        var height = originalHeight;
+
+        var imgShrinkPix = 1280;
+        if (document.getElementById("imgShrink").checked) {
+          if ( originalWidth > imgShrinkPix || originalHeight > imgShrinkPix){
+            var imgRatio =  imgShrinkPix / Math.max(originalWidth, originalHeight);
+            width = Math.round(imgRatio * width);
+            height = Math.round(imgRatio * height);
+          }
+        }
         var srcCanvas = document.getElementById("srcCanvas");
         var srcContext = srcCanvas.getContext('2d');
+
+        var dispRatio = 0.5 / Math.floor( Math.max(512, Math.max(width, height)) / 512 );
+        var dispWidth = Math.round(dispRatio * width);
+        var dispHeight = Math.round(dispRatio * height);
         srcCanvas.width = width;
         srcCanvas.height = height;
         // 元画像の描画
-        srcContext.drawImage(img, 0, 0);  // 元画像をキャンバス(非表示)に描画
+        srcContext.drawImage(img, 0, 0, originalWidth, originalHeight, 0, 0, width, height);  // 元画像をキャンバス(非表示)に描画
         var dataSrcUrl = srcCanvas.toDataURL(); // 元画像のbase64データ(URL)をキャンバス(非表示)から取得
         var srcImgDoc = document.getElementById("srcImg"); // 元画像用のimg要素にbase64データ(URL)データを入れて画像を表示
         srcImgDoc.src = dataSrcUrl;
