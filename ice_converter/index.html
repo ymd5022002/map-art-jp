@@ -121,7 +121,7 @@ function makeLUTable(repeatTimes, phaseRate){
   let scale  = 1000. / fullscale;      //画像輝度値の幅を1000に規格化する係数
   let r_iC = 0.15;                     //不使用階調率(15%)
 
-  for (let Y = 0; Y < 255; Y++) {
+  for (let Y = 0; Y < 256; Y++) {
     let n_iC = (Y + (phaseRate / 100. * 256.) / repeatTimes ) % Num_iC ;           //色一周期の何番目か
     for (let i = 0; i < 3; i++ ){
       LUTable[Y * 3 + i] =
