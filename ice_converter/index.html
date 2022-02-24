@@ -9,57 +9,37 @@
 <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5非推奨記載なので別途CSSに移行予定-->        
 <!-- link="リンク文字色 " alink="選択中リンク文字色" vlink="訪問済みリンク文字色"> -->
 <div>
-<h2 style="display:inline;">干渉色変換ツール</h2>　
+<h2 style="display:inline;">干渉色変換ツール</h2>
 <b>#世界を干渉色に</b><h2 style="display:inline;"> </h2>
 <br>
-画像を素敵な虹色の干渉色に変換するツールです
+<small>お好みの画像を素敵な虹色の干渉色に変換できます</small>
 <br>
-<br>
+<!-- 仕切り -->
+<div id="separator" style="border: 5; margin: 2px; background-color: #FCE3CD; min-height: 3px;" ></div>
 <!-- 画像入力 -->
-<span><b>変換したい画像</b></span><small>　(tiff形式は対応しておりません)</small>
-<br>
 <input type="file" id="selectfile" accept='image/*'><input type="button" id="btn1" value="クリア" onclick="fileReset();">
 <br>
 <!-- ネガ -->
 <input id="negativeCheckBox1" type="checkbox" onchange="negativeImage();"><small>ネガ</small>
 
-<!-- 縮小チェック -->
-<input type="checkbox" id="imgShrink" onclick="fileReset();" checked><small>縮小サイズ<sup>＊</sup></small>
-<small>(＊要再選択)</small><br>
+<!-- リサイズチェック -->
+<input type="checkbox" id="imgShrink" checked><small>読込時リサイズ　　<small>※繰返,位相の説明は下記</small></small><br>
+
 <!-- 仕切り -->
-<div id="separator" style="border: 5; margin: 2px; background-color: #FCE3CD; min-height: 1px;"></div>
+<div id="separator" style="border: 5; margin: 2px; background-color: #FCE3CD; min-height: 3px;" ></div>
 <!-- 繰返し回数 -->
-<span><b>繰返し回数</b></span> 
-<input id="repeatTimes" type="number" value="1" min="0" step="0.1" style="width:45px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="repeatTimesSlider" type="range" value="1" min="0" max="10" step="0.1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
-<input id="fineCheckBox1" type="checkbox" onchange="fineRepeatTimesStep();"><small>微調</small>
-<br> 
-<span style = "font-size:small">　(最小から最大輝度の間に干渉色を何周繰返すか)</span>
+<span><b>繰返</b></span> 
+<input id="repeatTimes" type="number" value="1" min="0" step="0.01" style="width:50px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="repeatTimesSlider" type="range" value="1" min="0" max="2" step="0.01" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter(); " style="width:220px;"/>
+<!-- <input id="fineCheckBox1" type="checkbox" onchange="fineRepeatTimesStep();"><small>微調</small> -->
 <br>
 <!-- 位相 -->
-<span><b>位相(%)</b></span>
-<input id="phaseRate" type="number" value="0" min="0" step="1"style="width:45px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="phaseRateSlider" type="range" value="0" min="0" max="100" step="1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" />
-<input id="fineCheckBox2" type="checkbox" onchange="finePhaseRateStep();"><small>微調</small>
-<br>
-<span style = "font-size:small">　(干渉色の位相のずらし量:0-99%)</span>
+<span><b>位相</b></span>
+<input id="phaseRate" type="number" value="0" min="0" step="1"style="width:50px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="phaseRateSlider" type="range" value="0" min="0" max="100" step="1" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter();" style="width:220px;"/>
+<!-- <input id="fineCheckBox2" type="checkbox" onchange="finePhaseRateStep();"><small>微調</small> -->
 <br>
 <!-- 仕切り -->
-<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-
-<!-- 表示サイズ -->
-表示サイズ<input type="button" value ="＋" id="large" onclick="changeSize(dispRatio= 2**0.25)"><input type="button" value ="－" id="small" onclick="changeSize(dispRatio= 2**(-0.25))">
-　位置<input type="button" value ="たて" id="alignVertical" onclick="alignVertical()"><input type="button" value ="よこ" id="alignHorizontal" onclick="alignHorizontal()">
-<input type="button" value ="⇔" id="swap" onclick="swap()">
-<br>
-<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-<span id="output">
-<span><b>画像変換結果｜　<a href='#' download='#' id="save">保存</a>　｜</b></span><br>
-
-<!-- 仕切り -->
-<hr size="1">
-<div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
-
+<div id="separator" style="border: 5; margin: 0px; background-color: #FCE3CD; min-height: 5px;"></div>
 <!-- 合成 blend-->
-
 <small>
 <b>合成</b> 
 <select id="blend_type" style="width:70px;">
@@ -71,13 +51,28 @@
 <option value="overlay">オーバーレイ[要検証]</option>
 </select>
 
-　不透明度<input id="blend_rate" type="number" value="100" min="0" max="100" step="1" style="width:40px;"
+<small>不透明度</small><input id="blend_rate" type="number" value="100" min="0" max="100" step="1" style="width:40px;"
 onkeyup="this.nextSibling.value = this.value; "
 onchange ="interferanceColorFilter();"/><input id="blendRateSlider" type="range"
 value="100" min="0" max="100" step="1" oninput="this.previousSibling.value = this.value; "
 style="width:120px;" onchange ="interferanceColorFilter();" />
 </small>
 <br>
+<!-- 仕切り -->
+<div id="separator" style="border: 5; margin: 0px; background-color: #FCE3CD; min-height: 3px;"></div>
+<hr size="1">
+
+<!-- 表示サイズ -->
+　<input type="button" value ="＋" id="large" onclick="changeSize(dispRatio= 2**0.25)"><input type="button" value ="－" id="small" onclick="changeSize(dispRatio= 2**(-0.25))">
+<input type="button" value ="たて" id="alignVertical" onclick="alignVertical()"><input type="button" value ="よこ" id="alignHorizontal" onclick="alignHorizontal()">
+<input type="button" value ="入替" id="swap" onclick="swap()">
+[
+  <a href='#' download='#' id="save"><b>結果保存</b></a>
+  ]
+<br>
+
+<!-- 仕切り -->
+<div id="separator" style="border: 5; margin: 0px; background-color: #FCE3CD; min-height: 5px;"></div>
 
 <!-- ボケ　Gaussian 【未実装】-->
 <!-- <small><b>ボケ</b></small>
@@ -97,6 +92,10 @@ onchange ="interferanceColorFilter();" style="width:50px;" />
 <canvas id="dstCanvas" hidden></canvas>
 <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
 </div>
+<small><b>繰返(回)</b> 最小最大輝度間に干渉色を何周繰返すか<br> 
+<b>位相(%)</b> 干渉色の位相のずらし量:0-100%</span><br>
+※tiff形式は対応しておりません</small>
+
 <hr size="1">
 &copy;<a href="https://ymd5022002.github.io/map-art-jp/" target="_blank">地図アート研究所</a><small>(MapArtResearch)</small>
 ｜<a href="https://github.com/ymd5022002/map-art-jp/blob/gh-pages/ice_converter/index.html" target="_blank"><small>ソース</small></a>
@@ -221,7 +220,6 @@ function drawCanvasImg(theCanvasId, theData){
 
 // 合成処理の種類を選択した時の処理
 function blendTypeValueChange(){
-  console.log("変わりました！")
   interferanceColorFilter();
 }
 
@@ -496,7 +494,7 @@ function changeSize(dispRatio){
   var dstImgDoc = document.getElementById("dstImg");
   var dispWidth = srcImgDoc.width; 
   var dispHeight = srcImgDoc.height;
-  if ( ( dispRatio < 1 ) && ( ( dispWidth < 200 ) && ( dispHeight < 200 ) ) ) { return; }
+  if ( ( dispRatio < 1 ) && ( ( dispWidth < 160 ) && ( dispHeight < 160 ) ) ) { return; }
   srcImgDoc.width  *= dispRatio;
   srcImgDoc.height *= dispRatio;
   dstImgDoc.width  *= dispRatio;
@@ -519,23 +517,23 @@ function fileReset(){
   dstContext.clearRect(0, 0, width, height);        
   }
 
-  function fineRepeatTimesStep(){
-  var valueStep = 0.1;
-  if (document.getElementById("fineCheckBox1").checked) {
-    var valueStep = 0.01; 
-  }
-  document.getElementById("repeatTimes").step = valueStep;
-  document.getElementById("repeatTimesSlider").step = valueStep;
-}
+//   function fineRepeatTimesStep(){
+//   var valueStep = 0.1;
+//   if (document.getElementById("fineCheckBox1").checked) {
+//     var valueStep = 0.01; 
+//   }
+//   document.getElementById("repeatTimes").step = valueStep;
+//   document.getElementById("repeatTimesSlider").step = valueStep;
+// }
 
-function finePhaseRateStep(){
-  var valueStep = 1;
-  if (document.getElementById("fineCheckBox2").checked) {
-    var valueStep = 0.1; 
-  }
-  document.getElementById("phaseRate").step = valueStep;
-  document.getElementById("phaseRateSlider").step = valueStep;
-}
+// function finePhaseRateStep(){
+//   var valueStep = 1;
+//   if (document.getElementById("fineCheckBox2").checked) {
+//     var valueStep = 0.1; 
+//   }
+//   document.getElementById("phaseRate").step = valueStep;
+//   document.getElementById("phaseRateSlider").step = valueStep;
+// }
 
 
 
@@ -564,7 +562,7 @@ window.addEventListener("DOMContentLoaded", function(){
     var srcCanvas = document.getElementById("srcCanvas");
     var srcContext = srcCanvas.getContext('2d');
 
-    var dispRatio = 0.5 / Math.floor( Math.max(512, Math.max(width, height)) / 512 );
+    var dispRatio = 0.5 / Math.floor( Math.max(320, Math.max(width, height)) / 320 );
     var dispWidth = Math.round(dispRatio * width);
     var dispHeight = Math.round(dispRatio * height);
     srcCanvas.width = width;
