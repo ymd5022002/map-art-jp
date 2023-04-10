@@ -1,130 +1,125 @@
-
 <!DOCTYPE html>
+<!--
+// 干渉色標高図 Leaflet版　　by 地図アート研究所　やまだこーじ　
+//　（ 地図画像の乗算合成はこちらを参照　https://www.kobiwa.jp/2021/05/09/post-1000/ )
+-->
 <html>
-<head>    
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />    
-  <script>
-    L_NO_TOUCH = false;
-    L_DISABLE_3D = false;
-  </script>    
-  <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
-  <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
-  <meta name="viewport" content="width=device25-width,
-    initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <style>
-    #map_test {
-      position: relative;
-      width: 100.0%;
-      height: 100.0%;
-      left: 0.0%;
-      top: 0.0%;
-    }
-    .leaflet-container { font-size: 1rem; }
+<head>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<style>html, body, #leafletmap {height: 100%; width: 100%;}</style>
 
-    #map-menu {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-      background-color: white;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.26);
-    }
-
-    #map-select {
-      width: 100%;
-      border: none;
-      outline: none;
-      padding: 5px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
-      background-color: #fff;
-      cursor: pointer;
-    }
-  </style>
-        
 </head>
+</html>
 <body>
-<div class="folium-map" id="map_test" ></div>
-<div id="map-menu">
-  <select id="map-select">
-    <option value="ice25">干渉色標高図(色周期  25m)</option>
-    <option value="ice50">干渉色標高図(色周期  50m)</option>
-    <option value="ice100">干渉色標高図(色周期 100m)</option>
-    <option value="ice250">干渉色標高図(色周期 250m)</option>
-    <option value="ice500">干渉色標高図(色周期 500m)</option>
-    <option value="ice1000">干渉色標高図(色周期1000m)</option>
-    <option value="ice2500">干渉色標高図(色周期2500m)</option>
-    <option value="ice5000">干渉色標高図(色周期5000m)</option>
-    <option value="std">標準地図</option>
-    <option value="pale">淡色地図</option>
-    <option value="photo">写真</option>
-    <option value="relief">色別標高図</option>  </select>
-</div>
-
-<img src="logo.jpg">
-        
-</body>
+    <div id="leafletmap">
 <script>
-  var map_test = L.map(
-      "map_test",
-      {
-          center: [35.6769883, 139.7588499],
-          crs: L.CRS.EPSG3857,
-          zoom: 10,
-          zoomControl: true,
-          preferCanvas: false,
-      }
-  );
-  var tile_layer_ttttt = L.tileLayer(
-      "https://grt.code4history.dev/tile/25/{z}/{x}/{y}",
-      {"attribution": "\u56fd\u571f\u5730\u7406\u9662", "detectRetina": false, "maxNativeZoom": 14, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-    ).addTo(map_test);
+    //地図を生成（初期表示の中心座標，ズームレベル，レイヤなどをオプションで設定）
+    let map = L.map('leafletmap', {center: [35.715370, 139.840268], zoom: 10});
+    //
+    //ペイン作成→乗算合成
+    let pnMulti = map.createPane("Multiply");
+    pnMulti.style.mixBlendMode = "multiply";
+    //
+    //切り替え可能とするタイルレイヤを生成（タイルURL，ズーム範囲，著作権表示などをオプションで設定）
+    let ice25 = L.tileLayer('https://grt.code4history.dev/tile/25/{z}/{x}/{y}', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 14,
+        attribution: "地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期25m)"
+        });
+    let ice50 = L.tileLayer('https://grt.code4history.dev/tile/50/{z}/{x}/{y}', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 14,
+        attribution: "地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期50m)"
+        });
+    let ice100 = L.tileLayer('https://grt.code4history.dev/tile/100/{z}/{x}/{y}', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 14,
+        attribution: "地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期100m)"
+        });
+    let ice250 = L.tileLayer('https://grt.code4history.dev/tile/250/{z}/{x}/{y}', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 14,
+        attribution: "地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期250m)"
+        });
+    let ice500 = L.tileLayer('https://grt.code4history.dev/tile/500/{z}/{x}/{y}', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 14,
+        attribution: "地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期500m)"
+        });
+    let ice1000 = L.tileLayer('https://grt.code4history.dev/tile/1000/{z}/{x}/{y}', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 14,
+        attribution: "地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期1000m)"
+        });
+    let ice2500 = L.tileLayer('https://grt.code4history.dev/tile/2500/{z}/{x}/{y}', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 14,
+        attribution: "地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期2500m)"
+        });
+    let ice5000 = L.tileLayer('https://grt.code4history.dev/tile/5000/{z}/{x}/{y}', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 14,
+        attribution: "地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期5000m)"
+        });
+    let hillshade = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/hillshademap/{z}/{x}/{y}.png', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 16,
+        opacity: 0.58, pane: pnMulti,
+        attribution: "地理院タイル"
+        });
+    let slope = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/slopemap/{z}/{x}/{y}.png', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 16,
+        opacity: 0.37, pane: pnMulti,
+        attribution: "地理院タイル"
+        });
+    let std = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
+        minZoom: 5, maxZoom: 18, 
+        opacity: 0.71, pane: pnMulti,
+        attribution: "地理院タイル"
+        });
+    let ort = L.tileLayer('http://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg', {
+        minZoom: 5, maxZoom: 18, 
+        opacity: 0.71, pane: pnMulti,
+        attribution: "地理院タイル"
+        });
+    let pal = L.tileLayer('http://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+        minZoom: 5, maxZoom: 18, 
+        opacity: 0.71, pane: pnMulti,
+        attribution: "地理院タイル"
+        });
+    let blk = L.tileLayer('http://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png', {
+        minZoom: 5, maxZoom: 14, 
+        opacity: 0.71, pane: pnMulti,
+        attribution: "地理院タイル"
+        });
+    let osm = L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 5, maxZoom: 18, maxNativeZoom: 16,
+        opacity: 1.0, pane: pnMulti,
+        attribution: "©OpenStreetMap contributos CC BY-SA2.0"
+        });
 
-var tile_layer = L.tileLayer('https://grt.code4history.dev/tile/25/{z}/{x}/{y}', {
-  attribution: '地理院タイル｜地図アート研究 x Code for History 干渉色標高図(色周期25m)'
-  }).addTo(map_test);
-
-var tileLayers = {
-  hillshade: L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/hillshademap/{z}/{x}/{y}.png', { attribution: '地理院タイル', "maxNativeZoom": 16 }),//opacity: 0.42}),
-  slope: L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/slopemap/{z}/{x}/{y}.png', { attribution: '地理院タイル', "maxNativeZoom": 15, }),//opacity: 0.63}),
-  ice25: L.tileLayer('https://grt.code4history.dev/tile/25/{z}/{x}/{y}', { attribution: '地理院タイル｜地図アート研究 x Code for History 干渉色標高図(色周期25m)', "maxNativeZoom": 14 }),//, opacity: 0.5}),
-  ice50: L.tileLayer('https://grt.code4history.dev/tile/50/{z}/{x}/{y}', { attribution: '地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期50m)', "maxNativeZoom": 14}),
-  ice100: L.tileLayer('https://grt.code4history.dev/tile/100/{z}/{x}/{y}', { attribution: '地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期100m)', "maxNativeZoom": 14 }),
-  ice250: L.tileLayer('https://grt.code4history.dev/tile/250/{z}/{x}/{y}', { attribution: '地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期250m)', "maxNativeZoom": 14 }),
-  ice500: L.tileLayer('https://grt.code4history.dev/tile/500/{z}/{x}/{y}', { attribution: '地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期500m)', "maxNativeZoom": 14 }),
-  ice1000: L.tileLayer('https://grt.code4history.dev/tile/1000/{z}/{x}/{y}', { attribution: '地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期1000m)', "maxNativeZoom": 14 }),
-  ice2500: L.tileLayer('https://grt.code4history.dev/tile/2500/{z}/{x}/{y}', { attribution: '地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期2500m)', "maxNativeZoom": 14 }),
-  ice5000: L.tileLayer('https://grt.code4history.dev/tile/5000/{z}/{x}/{y}', { attribution: '地理院タイル｜地図アート研究所 x Code for History 干渉色標高図(色周期5000m)', "maxNativeZoom": 14 }),
-  std: L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', { attribution: '地理院タイル', "maxNativeZoom": 18 }),//, opacity: 0.5}),
-  pale: L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', { attribution: '地理院タイル', "maxNativeZoom": 18 }),
-  photo: L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg', { attribution: '地理院タイル', "maxNativeZoom": 18 }),
-  relief: L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/relief/{z}/{x}/{y}.png', { attribution: '地理院タイル', "maxNativeZoom": 18 })
-};
-
-
-L.control.layers(tileLayers).addTo(map_test);
-
-document.getElementById('map-select').addEventListener('change', function () {
-  var layerName = this.value;
-  var layer = tileLayers[layerName];
-  if (layer) {
-    map_test.removeLayer(tile_layer_ttttt);
-    tile_layer_ttttt = layer.addTo(map_test);
-  }
-});
-     
+    //最初に表示するレイヤ
+    map.addLayer(ice100);
+    map.addLayer(hillshade);
+    map.addLayer(slope);
+    // 
+    //レイヤコントロールに切り替え可能とするレイヤを追加
+    L.control.layers({
+        '干渉色標高図(色周期25m)': ice25,
+        '干渉色標高図(色周期50m)': ice50,
+        '干渉色標高図(色周期100m)': ice100,
+        '干渉色標高図(色周期250m)': ice250,
+        '干渉色標高図(色周期500m)': ice500,
+        '干渉色標高図(色周期1000m)': ice1000,
+        '干渉色標高図(色周期2500m)': ice2500,
+        '干渉色標高図(色周期5000m)': ice5000,
+    }, {
+        '地理院タイル（陰影起伏図）': hillshade,
+        '地理院タイル（傾斜量図）': slope,
+        '地理院タイル（標準地図）': std,
+        '地理院タイル（写真）': ort,
+        '地理院タイル（白地図）': blk,
+        //'明治期迅速測図': rapid
+        'OpenStreetMap': osm
+    }, {
+        collapsed: true
+    }).addTo(map);
+    //
+    //スケールコントロールを追加（オプションはフィート単位を非表示）
+    L.control.scale({imperial: false}).addTo(map);
 </script>
+</div>
+</body>
 </html>
