@@ -183,7 +183,7 @@ function mapDrawing() {  //干渉色標高図の描画
 
     n++;
 
-    gsiURL='https://maps.gsi.go.jp/'+ str_zoomPosition +'/&base_grayscale=1&ls=std%2C0.71%7Cslopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=111&disp=0111&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&d=m&reliefdata=2'+g__id
+    gsiURL='https://maps.gsi.go.jp/'+ str_zoomPosition +'/&base_grayscale=1&ls=std%2C0.71%7Cslopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=111&disp=0111&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2'+g__id
 
 }
 
