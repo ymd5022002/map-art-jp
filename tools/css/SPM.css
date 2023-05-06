@@ -1,0 +1,320 @@
+@charset "UTF-8";
+
+/* 共通部分
+------------------------------- */
+html {
+    font-size: 100%;
+}
+
+img {
+    max-width: 100%;
+}
+
+body {
+ background-color: #FCE3CD;
+}
+
+a.
+
+/* 構造
+------------------------------- */
+div.wrapper {
+ width: 100%;
+ min-height: 100vh;
+ padding-bottom: 50px;
+ box-sizing: border-box;
+}
+
+div.footerWrap {
+ hight: 60px;
+ width: 100%;
+ background-color: #b9b2ab;
+ bottom: 0;
+ position: fxed;
+}
+
+div.title {
+ width: 90%;
+ margin-left: 5%;
+ margin-right: 5%;
+ margin-top: 30px;
+ margin-bottom: 30px;
+}
+
+div.FormWrapper {
+  width: 80%;
+  margin-left:10%;
+  margin-right: 10%;
+}
+
+/* メインメニュー
+------------------------------- */
+.page-title{
+ font-family: 'Hachi Maru Pop', cursive;
+}
+
+div.container {
+ display: flex;
+ justify-content: center;
+}
+
+div.item {
+ font-size: 18px;
+ font-weight: bold;
+ text-align: center;
+ background: #a58f86;
+ width: 100px;
+ hieght: 30px;
+ border-radius: 5px;
+ padding: 5px 5px;
+ margin: 10px 10px;
+ box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .5);
+}
+
+div.item:hover {
+ box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .5);
+ }
+
+a.item:link {
+ color: #000000; 
+ }
+a.item:visited {
+ color: #000000;
+ }
+a.item:hover {
+ color: #432f2f;
+ }
+a.item:active {
+ color: #432f2f;
+ }
+
+
+/* 地理院地図
+------------------------------- */
+/* .mapcont {
+ display: flex;
+ justify-content: center;
+}
+
+.mapitem {
+ background: #FCE3CD;
+ border-radius: 2px;
+ padding: 10px 10px;
+ margin: 5px 5px;
+ text-align: center;
+ font-size: 14px;
+ font-weight: bold;
+} */
+
+
+/* タイトル・説明文
+------------------------------- */
+p.title {
+ font-size: 18px;
+ font-weight: bold;
+ color: #663236;
+ text-align:center;
+}
+
+div.textbox1 {
+ width: 100%;
+ max-width: 800px;
+ margin: 0 auto;
+}
+
+div.textbox2 {
+ width: 70%;
+ max-width: 800px;
+ min-width: 400px;
+ margin: 0 auto;
+}
+
+div.textbox3 {
+ width: 80%;
+ margin: 0 auto;
+ background: #b9b2ab;
+}
+
+p.textbox3 {
+ font-size: 18px;
+ text-align: center;
+ color: #663236;
+ font-weight: bold;
+} 
+
+div.textbox4 {
+ width: 32%;
+ min-width: 300px;
+ max-width: 450px;
+ height: 100%;
+ background: #ffffff;
+ border: 2px #663236;
+ vertical-align: middle;
+ padding-top: 5px;
+ padding-bottom: 5px;
+ padding-right: 10px;
+ padding-left: 10px;
+}
+
+div.textbox5 {
+ width: 68%;
+}
+
+p.text {
+ font-size: 16px;
+ text-indent: 1em;
+}
+
+p.text2 {
+ font-size: 14px;
+ text-indent: 1em;
+}
+
+
+p.ref {
+ font-size: 14px;
+ text-indent: -1em;
+}
+
+
+/* 入出力エリア
+------------------------------- */
+table.wrap {
+ width: 200%;
+ margin-left: 10px;;
+}
+
+td.wrap_left1 {
+ width: 20%;
+ min-width: 80px;
+ height: 40px;
+ vertical-align: middle;
+ text-align: center;
+ background-color: #ffffff;
+ color: #663236;
+}
+
+td.wrap_left2 {
+ width: 30%;
+ height: 40px;
+ min-width: 180px;
+ vertical-align: middle;
+ background-color: #ffffff;
+}
+
+td.wrap_left3 {
+ width: 30%;
+ min-width: 180px;
+ height: 40px;
+ vertical-align: middle;
+ text-align: left;
+ background-color: #ffffff;
+}
+
+td.wrap_left4 {
+ width: 200%;
+ min-width: 100px;
+ /* line-height:1; */
+ height: 2px;
+ vertical-align: middle;
+ text-align: left;
+ background-color: #000000;
+ color: #FFFFFF;
+}
+
+td.wrap_left5 {
+ width: 25%;
+ height: 40px;
+ vertical-align: middle;
+ text-align: center;
+ background-color: #000000;
+ color: #FFFFFF;
+}
+
+td.leftbottom {
+ vertical-align: middle;
+ text-align: center;
+}
+ 
+
+p.subtitle {
+ font-size: 16px;
+ font-weight: bold;
+ color: #663236;
+ text-align:center;
+}
+
+p.IptText {
+ font-size: 14px;
+ text-indent: 1em;
+}
+
+p.colorselect {
+ font-size: 12px;
+ margin-left: 0.5em;
+}
+
+td.blank1 {
+ height: 2px;
+ background-color: #333333;
+}
+
+td.blank2 {
+ height: 3px;
+ background-color: #333333;
+}
+
+
+div.form_wrap {
+ width: 100%;
+ max-width: 800px;
+ margin: 0 auto;
+ display: flex;
+ justify-content: center;
+}
+
+
+/* フォーム
+------------------------------- */
+.elevation {
+ border: 1px #663236 solid;
+ width: 40%;
+ min-width: 25px;
+ border-radius: 1px;
+ height: 30px;
+ text-align: right;
+ margin-right: 1em;
+ margin-left: 1em;
+}
+
+form.option {
+ margin-left: 15px;
+}
+
+input.colorselect {
+}
+
+input.BTN {
+ border: solid 1px #000000;
+ border-radius: 1px;
+ padding: 5px 10px;
+ margin: 5px 10px;
+ background: #d3d3d3;
+ font-family: Arial, sans-serif;
+ font-size: 14px;
+ font-weight: bold;
+ color: #000000;
+ box-shadow    : 2px 2px 2px #663236;
+}
+
+input.BTN2 {
+ border: solid 1px #000000;
+ border-radius: 1px;
+ padding: 5px 5px;
+ margin: 5px 5px;
+ background: #d3d3d3;
+ font-family: Arial, sans-serif;
+ font-size: 14px;
+ color: #000000;
+ box-shadow    : 2px 2px 2px #663236;
+}

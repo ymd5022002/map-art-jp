@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/ fb# website: http://ogp.me/ns/ website#">
+    <title>地図アート研究所</title>
+    <meta property="og:url" content="https://ymd5022002.github.io/map-art-jp/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="【地図アート研究所】" />
+    <meta property="og:description" content="誰でも簡単！微地形が見える虹色の地図が作れます" />
+    <meta property="og:site_name" content="干渉色標高地図作成ツール" />
+    <meta property="og:image" content="https://ymd5022002.github.io/map-art-jp/img/thumnail01_ogp_fb_mar.jpg" />
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--ブラウザのアイコンの設定
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/android-chrome-256x256.png">
+    -->
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+    <script>
+        /* ピッチインピッチアウトによる拡大縮小を禁止 */
+        document.documentElement.addEventListener('touchstart', function (e) {
+        if (e.touches.length >= 2) {e.preventDefault();}
+        }, {passive: false});
+    </script>
+
+    <!-- ここに記載されていた <style> は、./css/style.css へ移行した 2021/5/4 -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <main>
+   <h2>地理院タイルを２ｘ２で並べるテスト</h2>
+   <p>
+    <span>倍率<input id="zoom" value="15"></span><span style = "font-size:small">1(縮小)～18(拡大)</span><br>
+    <span>緯度<input id="lat" value="35.715370"></span><span style = "font-size:small">-90～90</span><br>
+    <span>経度<input id="lng" value="139.840268"></span><span style = "font-size:small">-180～180</span><br>
+
+
+    <canvas id="canvas0_0" width="256" height="256"></canvas><canvas id="canvas1_0" width="256" height="256"></canvas><br>
+    <canvas id="canvas0_1" width="256" height="256"></canvas><canvas id="canvas1_1" width="256" height="256"></canvas><br>
+    <canvas id="canvas2" width="1" height="1"></canvas><br>
+
+    〔出典〕<br><!--上図：地理院タイルを元に色を加工(地図アート研究所)<br>-->
+    　地理院タイル<br>
+　    　https://cyberjapandata.gsi.go.jp/std/dem_png/{z}/{x}/{y}.png<br>
+  　  　z : ズームレベル<br>
+    　　x = 【 2^(7+z)*(緯度/180+1)/256 】<br>
+    　　y = 【 2^(7+z)/π*(atanh(sin(π/180*経度))+atanh(sin(π/180*85.05112878)))/256 】<br>
+    　　ただし【　】は、【　】内の小数以下を切り捨てた値<br>
+    　　<a href = "https://www.trail-note.net/tech/coordinate/">計算方法はこちらより</a><br>
+    〔バグ報告〕<br>
+    　倍率が３以下の時は、タイルの取得の関係で表示がおかしくなっています。
+    <br>
+    </span>
+    </p>
+  </main>
+
+  <footer>
+    <p class="copyright">Copyright &copy; Map Art Labo (地図アート研究所) All Rights Reserved.</p>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.4/css/all.css">
+    <div id="page_top"><a href="#"></a></div>
+  </footer>
+
+</body>
+<script>
+
+    function drawMap () {
+        //各入力値(文字列)を取得
+        var str_zoom = document.getElementById( "zoom" ).value;
+        var str_lat = document.getElementById( "lat" ).value;
+        var str_lng = document.getElementById( "lng" ).value;
+    
+        //文字列を数値に変換
+        var zoom  = Number(str_zoom);
+        var lat  = Number(str_lat);
+        var lng  = Number(str_lng);
+
+        //地理院タイルURLの/{z}/{x}/{y}の部分の算出
+        var x = Math.floor( 2 ** ( 7.0 + zoom ) * ( lng / 180.0 + 1.0 ) / 256 );
+        var y = Math.floor( 2 ** ( 7.0 + zoom ) / Math.PI * ( -Math.atanh ( Math.sin ( Math.PI / 180.0 * lat ) ) + Math.atanh ( Math.sin ( Math.PI / 180 * 85.05112878 ) ) ) / 256 );
+
+        // 地理院DEMタイルのcanvas準備, 画像読み込み
+
+        var canvas0_0 = document.getElementById('canvas0_0');
+        var canvas0_1 = document.getElementById('canvas0_1');
+        var canvas1_0 = document.getElementById('canvas1_0');
+        var canvas1_1 = document.getElementById('canvas1_1');
+
+        var context0_0 = canvas0_0.getContext('2d');
+        var context0_1 = canvas0_1.getContext('2d');
+        var context1_0 = canvas1_0.getContext('2d');
+        var context1_1 = canvas1_1.getContext('2d');
+
+        const img_dem0_0 = new Image();
+        const img_dem0_1 = new Image();
+        const img_dem1_0 = new Image();
+        const img_dem1_1 = new Image();
+
+        img_dem0_0.crossOrigin = 'anonymous';
+        img_dem0_1.crossOrigin = 'anonymous';
+        img_dem1_0.crossOrigin = 'anonymous';
+        img_dem1_1.crossOrigin = 'anonymous';
+
+        img_dem0_0.src = "https://cyberjapandata.gsi.go.jp/xyz/std/" + str_zoom + "/" + String(x + 0) + "/" + String(y + 0) + ".png";  // 画像のURLを指定
+        img_dem0_1.src = "https://cyberjapandata.gsi.go.jp/xyz/std/" + str_zoom + "/" + String(x + 0) + "/" + String(y + 1) + ".png";  // 画像のURLを指定
+        img_dem1_0.src = "https://cyberjapandata.gsi.go.jp/xyz/std/" + str_zoom + "/" + String(x + 1) + "/" + String(y + 0) + ".png";  // 画像のURLを指定
+        img_dem1_1.src = "https://cyberjapandata.gsi.go.jp/xyz/std/" + str_zoom + "/" + String(x + 1) + "/" + String(y + 1) + ".png";  // 画像のURLを指定
+
+
+        img_dem0_0.onload = () => {context0_0.drawImage(img_dem0_0, 0, 0);}
+        img_dem0_1.onload = () => {context0_1.drawImage(img_dem0_1, 0, 0);}
+        img_dem1_0.onload = () => {context1_0.drawImage(img_dem1_0, 0, 0);}
+        img_dem1_1.onload = () => {
+            context1_1.drawImage(img_dem1_1, 0, 0);
+
+            //描画地図のcanvasの準備
+            var canvas2 = document.getElementById('canvas2');
+            var context2 = canvas2.getContext('2d');
+
+            // キャンバス全体のピクセル情報を取得
+            var imageData_iceMap = context2.getImageData(0, 0, canvas2.width, canvas2.height);
+            var width_iceMap = imageData_iceMap.width, height_iceMap = imageData_iceMap.height;
+            var pixels_iceMap = imageData_iceMap.data;  // ピクセル配列：RGBA4要素で1ピクセル
+
+            //標高読込み用　　　　＃＃＃使っていない　＆　canvas を配列に直していない
+            var
+                r, g, b, xx, h,
+                u = 0.01, // 標高分解能0.01m
+                canvas = document.createElement('canvas'),
+                context = canvas.getContext( '2d' );
+                canvas.width = canvas0_0.width;
+                canvas.height = canvas0_0.height;  
+                context.drawImage( canvas0_0, 0, 0 );
+                data = context.getImageData( 0, 0, 256, 256 ).data;
+
+            /////////むかし風地図の描画///    ＃＃＃使っていない
+            // ピクセル単位操作
+            for (var y = 0; y < height_iceMap; ++y) {
+                for (var x = 0; x < width_iceMap; ++x ) {
+                    var base = (y * width_iceMap + x) * 4;
+                    for (let i = 0; i < 3; i++ ) {
+
+                        //地理院DEMタイルから標高値の読み出し
+                        if ( data[ base + 3 ] == 0 )  {
+                            r = 0;
+                            g = 0;
+                            b = 0;
+                            console.log( '無効値' );
+                            h = 0; //とりあえず無効値の場合は標高0mとした。後日必要に応じ別の値に。。
+
+                        } else {
+                            r = data[ base + 0 ];
+                            g = data[ base + 1 ];
+                            b = data[ base + 2 ];
+                            xx = 2**16 * r + 2**8 * g + b;
+                            h = ( xx <  2**23 ) ? xx * u: ( x - 2 ** 24 ) * u ;
+                            ////////////　↑↑↑↑↑↑　あとで　==2*23の時の処理を追加すること
+                        }
+
+                        // ピクセルに書き込む
+                        pixels_iceMap[base + 0 ] = Math.max(0,Math.min(255,(255 - data[ base  + 0 ])  )); //Red
+                        pixels_iceMap[base + 1 ] = Math.max(0,Math.min(255,(255 - data[ base  + 1 ])  )); //Green
+                        pixels_iceMap[base + 2 ] = Math.max(0,Math.min(255,(255 - data[ base  + 2 ])  )); //Blue
+                        pixels_iceMap[base + 3 ] = 255;  // Alpha
+                    }
+                }
+            }
+            // 変更した内容をキャンバスに書き戻す
+            context2.putImageData(imageData_iceMap, 0, 0); 
+        };
+    };
+    window.onload = ()=>{
+        //設定値入力時の地図再描画待受け
+        const inputElem1 = document.getElementById('zoom');
+        inputElem1.addEventListener('input', drawMap); 
+        const inputElem2 = document.getElementById('lng');
+        inputElem2.addEventListener('input', drawMap); 
+        const inputElem3 = document.getElementById('lat');
+        inputElem3.addEventListener('input', drawMap); 
+/*
+        const inputElem4 = document.getElementById('noiseLevel');
+        inputElem4.addEventListener('input', drawMap); 
+*/
+        drawMap();
+    };
+</script>

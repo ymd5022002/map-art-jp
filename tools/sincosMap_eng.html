@@ -1,0 +1,158 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja">
+<body>
+    <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5 deprecated, so will be migrated to CSS later-->        
+        <!-- link="Link text color" alink="Selected link text color" vlink="Visited link text color"> -->
+    <h2>Interference Color Art mapping tool<br>
+    &nbsp;[beta version] by <a href ="https://ymd5022002.github.io/map-art-jp/">MapArtReserch</a></h2>
+    Mapping will change when changing the numbers<br>
+    &nbsp;z = cos(x^
+    <input id="aa" value="4" style="width: 20px;">
+    * y^
+    <input id="bb" value="1" style="width: 20px;">
+    ) * cos(
+    <input id="cc" value="2" style="width: 30px;">
+    *y^2) + sin (y^
+    <input id="dd" value="1" style="width: 20px;">
+    )<br>
+    <span>&nbsp;Color repetition<input id="cycle" value="0.2" type="text" style="width: 20px;" />times　</span>
+    <span>&nbsp;x:<input id="Xmin" value="-5" style="width: 20px;"></span>
+    <span>- <input id="Xmax" value="5" style="width: 20px;"></span>
+    <span>&nbsp;&nbsp;y:<input id="Ymin" value="-5" style="width: 20px;"></span>
+    <span>- <input id="Ymax" value="5" style="width: 20px;"></span><br>
+    <canvas id="canvas2" width="512" height="512"></canvas><br>
+</span>
+
+</body>
+<script>
+    function face(X,Y,a,b,c,d,e,f,g){　//Define curve function
+        var Z =  Math.cos(X**a * Y**b) * Math.cos(c*Y**2) - Math.sin(Y **d);  
+        return Z;
+    }
+    function drawMap () {
+        //Preparation of interference color canvas
+        var canvas2 = document.getElementById('canvas2');
+        var context2 = canvas2.getContext('2d');
+
+        //Get pixel information for the entire canvas
+        var imageData_iceMap = context2.getImageData(0, 0, canvas2.width, canvas2.height);
+        var width_iceMap = imageData_iceMap.width, height_iceMap = imageData_iceMap.height;
+        var pixels_iceMap = imageData_iceMap.data;  //Pixel array: 1 pixel with RGBA4 elements
+
+        //Get each input value (character string)
+        var str_aa = document.getElementById( "aa" ).value;
+        var str_bb = document.getElementById( "bb" ).value;
+        var str_cc = document.getElementById( "cc" ).value;
+        var str_dd = document.getElementById( "dd" ).value;        
+        var str_cycleHeight = document.getElementById( "cycle" ).value;
+        var str_Xmin = document.getElementById( "Xmin" ).value;
+        var str_Xmax = document.getElementById( "Xmax" ).value;
+        var str_Ymin = document.getElementById( "Ymin" ).value;
+        var str_Ymax = document.getElementById( "Ymax" ).value;
+
+        document.getElementById("aa").innerHTML  = aa;
+
+        //Convert strings to numbers
+        var aa  = Number(str_aa);
+        var bb  = Number(str_bb);
+        var cc  = Number(str_cc);
+        var dd  = Number(str_dd);
+        var cycle  = Number(str_cycleHeight); 
+        var Xmin = Number(str_Xmin);         
+        var Xmax  = Number(str_Xmax);        
+        var Ymin  = Number(str_Ymin);        
+        var Ymax  = Number(str_Ymax);        
+
+        //Fitting parameters (R, G, B values)
+        var rgb_iC  = [ 0.0 , 0.0 , 0.0 ];           //Color value
+        //Interference color
+        var t_iC = [ 0.64 , 0.35 , 0.355];     //Amplitude
+        var c_iC = [ 0.5 , 0.5 , 0.5];         //Median
+        var u_iC = [ 0.5 , 0.52 , 0.5];        //Phase factor
+        var k_iC = [ 2.98 , 3.71 , 4.35];      //Wave number
+        var s_iC = [ 0.105 , 0 , 0];           //Wavelength increase rate
+        var alpha_iC = [ 0.2 , 0.53 , 0.5];    //Envelope amplitude
+        var delta_iC = [ 0.5 , 0.1 , 0.042];   //Envelope phase factor
+        var beta_iC  = [ 0.7 , 0.45 , 0.35];   //Envelope wavenumber
+        var n_iC = 0;                          //Number in one color cycle
+        var Num_iC = 1/cycle*1000;             //Meters in one color cycle
+        var r_iC = 0.15; //0.15;               //Unused gradation rate
+        var dots = 1;                          //Number of drawing dots of interference color
+        var h = 0;                      　　
+        var hmin = 0;
+        var hmax = 0;
+        var scale = 1;
+        var Y = 0;
+        var X = 0;
+
+        for (var y = 0; y < canvas2.height ; ++y) {         
+            for (var x = 0; x < canvas2.width ; ++x) {　　　 
+                X = Xmin + ( x / canvas2.width  ) * ( Xmax - Xmin ) 
+                Y = Ymax - ( y / canvas2.height ) * ( Ymax - Ymin )
+                h =  face(X,Y,aa,bb,cc,dd)
+                if (( x == 0 ) * ( y == 0 )){
+                    hmin = h;
+                    hmax = h;
+                    }
+                if (h > hmax ) hmax = h ;
+                if (h < hmin ) hmin = h ;
+            }
+        }
+        scale  = 1000 / (hmax - hmin) ; //Coefficient that normalizes the width of h to 1000
+        var Num_iC = 1000 / cycle  ; 
+        for (var y = 0; y < canvas2.height; ++y) {
+            for (var x = 0; x < canvas2.width; ++x) {
+                X = Xmin + ( x / canvas2.width  ) * ( Xmax - Xmin )  
+                Y = Ymax - ( y / canvas2.height ) * ( Ymax - Ymin )
+                h =  face(X,Y,aa,bb,cc,dd)
+                h =  ( h - hmin ) * scale
+                var base = (y * canvas2.width + x) * 4;
+                    for (let i = 0; i < 3; i++ ) {
+                        n_iC = h  % Num_iC ;
+                        rgb_iC[i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) )
+                                * Math.cos ( 2 * Math.PI * ( 1 + s_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) ) * k_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * u_iC[i] );
+                        if ( rgb_iC[i] > 0.0031308 ) {
+                            rgb_iC[i] = 1.055 * ( rgb_iC[i] ** (1/2.4) ) - 0.055;
+                        }
+                        else{
+                            rgb_iC[i] = 12.92 * rgb_iC[i];
+                        }
+                        rgb_iC[i] = Math.round(255 * Math.max( 0 , Math.min(1, rgb_iC[i]) ) ) ;
+                    }
+                    //Draw in pixels
+                for ( let j = 0 ; j < dots + 1 ; j++){
+                    pixels_iceMap[base + 0 + j*4 ] = rgb_iC[0];  // Red
+                    pixels_iceMap[base + 1 + j*4 ] = rgb_iC[1];  // Green
+                    pixels_iceMap[base + 2 + j*4 ] = rgb_iC[2];  // Blue
+                    pixels_iceMap[base + 3 + j*4 ] = 255;  // Alpha
+                }
+            }
+        }
+        //Draw the changed contents back on the canvas
+        context2.putImageData(imageData_iceMap, 0, 0); 
+    };
+    window.onload = ()=>{
+        //Map redraw standby when setting value is input
+        const inputElem0 = document.getElementById('dd');
+        inputElem0.addEventListener('input', drawMap);
+        const inputElem1 = document.getElementById('aa');
+        inputElem1.addEventListener('input', drawMap); 
+        const inputElem2 = document.getElementById('bb');
+        inputElem2.addEventListener('input', drawMap); 
+        const inputElem3 = document.getElementById('cc');
+        inputElem3.addEventListener('input', drawMap); 
+        const inputElem4 = document.getElementById('cycle');
+        inputElem4.addEventListener('input', drawMap); 
+        const inputElem5 = document.getElementById('Xmin');
+        inputElem5.addEventListener('input', drawMap); 
+        const inputElem6 = document.getElementById('Xmax');
+        inputElem6.addEventListener('input', drawMap); 
+        const inputElem7 = document.getElementById('Ymin');
+        inputElem7.addEventListener('input', drawMap); 
+        const inputElem8 = document.getElementById('Ymax');
+        inputElem8.addEventListener('input', drawMap); 
+        drawMap();
+    };
+</script>

@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/ fb# website: http://ogp.me/ns/ website#">
+    <title>地図アート研究所</title>
+    <meta property="og:url" content="https://ymd5022002.github.io/map-art-jp/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="【地図アート研究所】" />
+    <meta property="og:description" content="誰でも簡単！微地形が見える虹色の地図が作れます" />
+    <meta property="og:site_name" content="干渉色標高地図作成ツール" />
+    <meta property="og:image" content="https://ymd5022002.github.io/map-art-jp/img/thumnail01_ogp_fb_mar.jpg" />
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--ブラウザのアイコンの設定
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/android-chrome-256x256.png">
+    -->
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+    <script>
+        /* ピッチインピッチアウトによる拡大縮小を禁止 */
+        document.documentElement.addEventListener('touchstart', function (e) {
+        if (e.touches.length >= 2) {e.preventDefault();}
+        }, {passive: false});
+    </script>
+
+    <!-- ここに記載されていた <style> は、./css/style.css へ移行した 2021/5/4 -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <main>
+    <h2>セルオートマトンアート(テスト版)</h2>
+    <span>ルール</span>
+    <input id="ruleNum" value="90" style="width: 30px;" type="text" size="4" onkeyup="this.nextSibling.value = this.value"/><input id="ruleNumSlider" type="range" value="90" min="0" max="255" step="1" oninput="this.previousSibling.value = this.value" />
+    ( おすすめ 73,86,90,102,105,110,129,167,169 )<br>
+    <span>起点数</span>
+    <input id="originNum" value="1" style="width: 30px;" type="text" size="4" onkeyup="this.nextSibling.value = this.value"/><input id="originNumSlider" type="range" value="1" min="1" max="1024" step="1" oninput="this.previousSibling.value = this.value" />
+    <br>
+    <canvas id="canvas1" width="1024" height="512"></canvas><br>
+  </main>
+
+  <footer>
+    <p class="copyright">Copyright &copy; Map Art Labo (地図アート研究所) All Rights Reserved.</p>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.4/css/all.css">
+    <div id="page_top"><a href="#"></a></div>
+  </footer>
+
+<script>
+    function drawMap (){
+        //canvasの準備
+        var canvas1 = document.getElementById('canvas1');
+        var context1 = canvas1.getContext('2d');
+
+        // キャンバス全体のピクセル情報を取得
+        var imageData_caMap = context1.getImageData(0, 0, canvas1.width, canvas1.height);
+        var width_caMap = imageData_caMap.width;
+        var height_caMap = imageData_caMap.height;
+        var pixels_caMap = imageData_caMap.data;  // ピクセル配列：RGBA4要素で1ピクセル
+
+        //各入力値(文字列)を取得
+        var str_originNum = document.getElementById( "originNum" ).value;
+        var str_ruleNum = document.getElementById( "ruleNum" ).value;
+ 
+        //文字列を数値に変換
+        var originNum  = Number(str_originNum);     //起点数
+        var ruleNum  = Number(str_ruleNum);         //ルール番号      
+
+        //RGB値
+        var rowNum = 512;       //画像の行数
+        var Xmax = rowNum*2;    //画像の横幅
+        var Ymax = rowNum;      //画像の縦幅
+        var automaton= [];      //セルオートマトンの変換配列
+        var cell = [];          //セルの配列
+
+        // ルール番号の2進化
+        for ( let i = 0 ; i < 8 ; i++){
+            automaton[7-i] = Math.floor( ruleNum / 2**(7-i) );
+            ruleNum -= automaton[7-i] * 2**(7-i);
+        }
+
+        // セルの値の消去
+        var i, j;
+        var cell = new Array( canvas1.height + 1);
+        for(j = 0; j < canvas1.height + 1 ; j++) {
+            cell[j] = new Array( canvas1.width + 1);
+            for(i = 0; i < canvas1.width + 1 ; i++) {
+                cell[j][i] = 0;
+            }
+        }
+
+        // セルの値の初期条件の定義
+        for ( let i = 1 ; i < originNum + 1 ; i++){
+            cell[0][ Math.floor( Xmax / ( originNum + 1 ) * i )] = 1
+        }
+
+        // セルの値の計算
+        for ( let j = 1 ; j < Ymax ; j++){
+            for ( let i = 1 ; i < Xmax ; i++){
+                hantei = cell[j-1][i-1] * 4 + cell[j-1][i] * 2 + cell[j-1][i+1];
+                cell[j][i] = automaton[hantei];
+            }
+        }
+        for (var j = 0; j < canvas1.height ; ++j) {
+            for (var i = 0; i < canvas1.width; ++i) {
+                var base = (j * canvas1.width + i) * 4;
+                // ピクセルに書き込む
+                pixels_caMap[base + 0 ] = 255 * cell[j][i]; //Red
+                pixels_caMap[base + 1 ] = 255 * cell[j][i]; // Green
+                pixels_caMap[base + 2 ] = 255 * cell[j][i]; // Blue
+                pixels_caMap[base + 3 ] = 255;              // Alpha
+            }
+        }
+        // 変更した内容をキャンバスに書き戻す
+        context1.putImageData(imageData_caMap, 0, 0); 
+    }
+    window.onload = ()=>{
+        //設定値入力時の再描画待受け
+        const inputElem1 = document.getElementById('originNum');
+        inputElem1.addEventListener('input', drawMap); 
+        const inputElem2 = document.getElementById('originNumSlider');
+        inputElem2.addEventListener('change', drawMap); 
+        const inputElem3 = document.getElementById('ruleNum');
+        inputElem3.addEventListener('input', drawMap);
+        const inputElem4 = document.getElementById('ruleNumSlider');
+        inputElem4.addEventListener('change', drawMap);
+        drawMap();
+    }
+</script>
+</body></html>
