@@ -2,10 +2,114 @@ html,body{
     touch-action: pan-Y;
 }
 
-body{
-    background-color: #FCE3CD; /*背景色*/
-    color: #663236; /*文字色*/
+header {
+    text-align: center;
+    margin: 0 0 0 0;
+    background-color: #663236; /*背景色*/ 
+    color: #eee9e9; 
 }
+
+header h1{
+    margin: 0 0 0 0; 
+}
+
+body{
+    max-width: 1000px;
+    margin: 0 0 0 0;
+    background-color: #FCE3CD; /*背景色*/
+    color: #253958; /*文字色*/
+}
+
+main{
+    margin: 0px 10px 0px 10px;
+    max-width: 1000;
+}
+
+main h2{
+    margin: 10px 0 0px 0;
+    border-bottom: 2px solid #253958;
+    padding:0 0 5px 0;
+    color:#253958;
+    font-size: 1.3rem;
+}
+
+nav ul{
+    display: table;
+    margin: 0 auto 0 auto;
+    padding: 0 ;
+    width: 95%;
+    text-align: center;
+    text-emphasis: true;
+    background-color: #b9a0a2; /*背景色*/
+}
+
+nav li{
+display: table-cell;
+min-width: 50px;
+border-right: 1px solid #663236;
+border-left: 1px solid #663236;
+}
+
+nav a{
+display: block;
+width: 100%;
+text-decoration: none;
+color:  #000 ;/*文字色*/
+font-weight: bold;
+padding-top: 5px;
+}
+
+nav li.current{
+/*border-top: 3px solid #663236;*/
+background-color: #FCE3CD; /*背景色*/
+color: #253958;
+
+}
+
+nav li:hover{
+/* border-top: 3px solid #dfae4b; */
+background-color: #dfae4b; /*背景色*/
+
+}
+
+.copyright {
+    text-align: center;
+    background-color: #663236; /*背景色*/ 
+    color: #eee9e9;   
+}
+
+#page_top{
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    background: #663236;
+    opacity: 0.6;
+  }
+  #page_top a{
+    position: relative;
+    display: block;
+    width: 50px;
+    height: 50px;
+    text-decoration: none;
+  }
+  #page_top a::before{
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    content: '\f0d8';
+    font-size: 25px;
+    color: #eee9e9;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    text-align: center;
+  }
 
 @media screen and (max-width: 768px) {
     /* [iframe]を囲む要素 */
