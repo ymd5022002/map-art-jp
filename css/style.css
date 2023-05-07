@@ -1,90 +1,184 @@
-html,body{
-    touch-action: pan-Y;
+/*　配色リスト　置換編集用
+html    背景        E9F0F7 
+body    ボーダー    F2F6FA
+main    背景        FCFDFE
+        文字        333333
+header, footer
+        背景        2266AF
+        文字        FCFDFE
+        nav
+        　文字      333333
+        　選択      D6DCE5
+        　非選択    B4C7E7
+
+*/
+
+
+html{
+    font-size: 16px;
+    font-family: sans-serif;
+    background-color: #E9F0F7;
+}
+
+p, li, td{
+    line-height: 1.7;
+}
+
+a:link{
+    font-weight:bold;
+    color:#333333;
+    text-decoration:none
+
+}
+a:visited{
+    font-weight:bold;
+    color:#333333;
+    text-decoration:none
+}
+a:hover{
+    font-weight:bold;
+    color:#333333;
+    text-decoration:underline
+}
+a:active{
+    font-weight:bold;
+    color:#333333;
+    text-decoration:none
 }
 
 header {
+    text-align: left;
+    
+    background-color: #2266AF; /*背景色*/ 
+    color: #FCFDFE; 
+}
+.copyright {
     text-align: center;
-    margin: 0 0 0 0;
-    background-color: #663236; /*背景色*/ 
-    color: #eee9e9; 
+    background-color: #2266AF; /*背景色*/ 
+    color: #FCFDFE;   
 }
 
 header h1{
-    margin: 0 0 0 0; 
+    margin: 0px 0px 0px 30px; 
 }
 
 body{
-    max-width: 1000px;
-    margin: 0 0 0 0;
-    background-color: #FCE3CD; /*背景色*/
-    color: #253958; /*文字色*/
+    border-left: 2px solid #b9c0c7;
+    border-right: 2px solid #b9c0c7;
+    max-width: 1050px;
+    margin: 0 auto 0 auto;
+    background-color: #FCFDFE; /*背景色*/
+    color: #333333; /*文字色*/
 }
 
 main{
     margin: 0px 10px 0px 10px;
-    max-width: 1000;
+    max-width: 1050;
+}
+
+header h1 a:link{
+    color: #FCFDFE;
+    text-decoration:none
+}
+header h1 a:visited{
+    color: #FCFDFE;
+    text-decoration:none
+}
+header h1 a:hover{
+    color: #FCFDFE;
+    text-decoration:none
+}
+header h1 a:active{
+    color: #FCFDFE;
+    text-decoration:none
 }
 
 main h2{
     margin: 10px 0 0px 0;
-    border-bottom: 2px solid #253958;
+    border-bottom: 2px solid #333333;
     padding:0 0 5px 0;
-    color:#253958;
+    color:#333333;
     font-size: 1.3rem;
 }
 
-nav ul{
-    display: table;
-    margin: 0 auto 0 auto;
-    padding: 0 ;
-    width: 95%;
-    text-align: center;
-    text-emphasis: true;
-    background-color: #b9a0a2; /*背景色*/
+/*表*/
+table {
+    background-color: #fff;
+    font-size: 16px;
+    /* border-collapse: collapse; */
+  }
+  
+th {
+padding: 10px;
+text-align: center;
+background-color: #efefef;
+color: #555;
+}
+td {
+    padding: 10px;
+    text-align: left;
+    background-color: #f9f9f9;
+    color: #555;
+    border-bottom: 1px solid #FCFDFE;
+    }
+
+/* サイトのナビゲーション */
+nav ul {
+  display: table;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #B4C7E7; /*非選択タブ背景色*/
+}
+nav li {
+  display: table-cell;
+  width: 20%;
+}
+nav a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: #333333; /*文字色*/
+  font-weight: bold;
+  padding-top: 5px;
+}
+nav li.current a {
+  background-color: #FCFDFE; /*現在タブ背景色*/
+  color: #333333;
+}
+nav li:hover a {
+  background-color: #D6DCE5; /*選択タブ背景色*/
+}
+nav a:link{
+    font-weight:bold;
+    color:#333333;
+    text-decoration:none
+}
+nav a:visited{
+    font-weight:bold;
+    color:#333333;
+    text-decoration:none
+}
+nav a:hover{
+    font-weight:bold;
+    color:#333333;
+    text-decoration:none
+}
+nav a:active{
+    font-weight:bold;
+    color:#333333;
+    text-decoration:none
 }
 
-nav li{
-display: table-cell;
-min-width: 50px;
-border-right: 1px solid #663236;
-border-left: 1px solid #663236;
-}
-
-nav a{
-display: block;
-width: 100%;
-text-decoration: none;
-color:  #000 ;/*文字色*/
-font-weight: bold;
-padding-top: 5px;
-}
-
-nav li.current{
-/*border-top: 3px solid #663236;*/
-background-color: #FCE3CD; /*背景色*/
-color: #253958;
-
-}
-
-nav li:hover{
-/* border-top: 3px solid #dfae4b; */
-background-color: #dfae4b; /*背景色*/
-
-}
-
-.copyright {
-    text-align: center;
-    background-color: #663236; /*背景色*/ 
-    color: #eee9e9;   
-}
-
+/* 上に戻るボタン */ 
 #page_top{
     width: 50px;
     height: 50px;
     position: fixed;
     right: 0;
     bottom: 0;
-    background: #663236;
+    background: #2266AF;
     opacity: 0.6;
   }
   #page_top a{
@@ -111,6 +205,9 @@ background-color: #dfae4b; /*背景色*/
     text-align: center;
   }
 
+html,body{
+    touch-action: pan-Y;
+}
 @media screen and (max-width: 768px) {
     /* [iframe]を囲む要素 */
     .iframe-window{        
@@ -133,4 +230,20 @@ background-color: #dfae4b; /*背景色*/
         left: 0 ;
     }
 }
+
+/*色周期ボタン用*/ 
+.changeCycleHeight img {
+    /* width: 13.5%; */
+    max-width: 100%
+}
+.cycleHeight_button img {
+    opacity: 0.5;
+    /* width: 12%; */
+    max-width: 100%
+  }
+.cycleHeight_button img:hover {
+    opacity: 1;
+    /* width: 12%; */
+    max-width: 100%
+  }
 
