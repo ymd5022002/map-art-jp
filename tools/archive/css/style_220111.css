@@ -1,0 +1,31 @@
+html,body{
+    touch-action: pan-Y;
+}
+
+body{
+    background-color: #FCE3CD; /*背景色*/
+    color: #663236; /*文字色*/
+}
+
+@media screen and (max-width: 768px) {
+    /* [iframe]を囲む要素 */
+    .iframe-window{        
+        width: 95% ;
+        max-width: 480px ;			/* 最大の横幅 */
+        height: 0 ;					/* 高さは0にする */
+        padding-bottom: 130% ;	/* 横幅に対する縦幅の比率 */
+        position: relative ;
+        top: 0 ;
+        left: 0 ;
+    }
+    /* [ifram] */
+    .iframe-window iframe{       
+        width: 100% ;		/* 親要素の余白いっぱい */
+        height: 100% ;		/* 親要素の余白いっぱい */
+        margin: 0 ;			/* 余白 */
+        padding: 0 ;		/* スペース */
+        position: absolute ;
+        top: 0 ;
+        left: 0 ;
+    }
+}

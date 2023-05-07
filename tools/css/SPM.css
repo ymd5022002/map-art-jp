@@ -28,9 +28,10 @@ div.wrapper {
 div.footerWrap {
  hight: 60px;
  width: 100%;
- background-color: #b9b2ab;
+ background-color: #2266AF;
  bottom: 0;
  position: fxed;
+ color:#FCFDFE;
 }
 
 div.title {

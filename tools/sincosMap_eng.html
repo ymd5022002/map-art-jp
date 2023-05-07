@@ -1,12 +1,44 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/ fb# website: http://ogp.me/ns/ website#">
+    <title>地図アート研究所</title>
+    <meta property="og:url" content="https://ymd5022002.github.io/map-art-jp/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="【地図アート研究所】" />
+    <meta property="og:description" content="誰でも簡単！微地形が見える虹色の地図が作れます" />
+    <meta property="og:site_name" content="干渉色標高地図作成ツール" />
+    <meta property="og:image" content="https://ymd5022002.github.io/map-art-jp/img/thumnail01_ogp_fb_mar.jpg" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--ブラウザのアイコンの設定
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/android-chrome-256x256.png">
+    -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script>
+        /* ピッチインピッチアウトによる拡大縮小を禁止 */
+        document.documentElement.addEventListener('touchstart', function (e) {
+        if (e.touches.length >= 2) {e.preventDefault();}
+        }, {passive: false});
+    </script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
 <body>
-    <body bgcolor="#FCE3CD" text="#663236" > <!--HTML5 deprecated, so will be migrated to CSS later-->        
-        <!-- link="Link text color" alink="Selected link text color" vlink="Visited link text color"> -->
-    <h2>Interference Color Art mapping tool<br>
-    &nbsp;[beta version] by <a href ="https://ymd5022002.github.io/map-art-jp/">MapArtReserch</a></h2>
+    <header>
+        <h1>
+            <a href="../index.html">地図アート研究所</a>
+        </h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li class="current"><a href="../tools/index.html">Tools</a></li>
+                <li><a href="../gallery/index.html">Gallery</a></li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeNrg0qJqzTHCfI_xUaYhjDWPU8TeaY1YbBjcSR9M4uBZ9D9A/viewform" target="_blank">Contact</a></li>
+                <li><a href="../about/index.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
     Mapping will change when changing the numbers<br>
     &nbsp;z = cos(x^
     <input id="aa" value="4" style="width: 20px;">
@@ -23,9 +55,14 @@
     <span>&nbsp;&nbsp;y:<input id="Ymin" value="-5" style="width: 20px;"></span>
     <span>- <input id="Ymax" value="5" style="width: 20px;"></span><br>
     <canvas id="canvas2" width="512" height="512"></canvas><br>
-</span>
-
+    </span>
+    </main>
 </body>
+<footer>
+    <p class="copyright">Copyright &copy; Map Art Labo (地図アート研究所) All Rights Reserved.</p>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.4/css/all.css">
+    <div id="page_top"><a href="#"></a></div>
+</footer>
 <script>
     function face(X,Y,a,b,c,d,e,f,g){　//Define curve function
         var Z =  Math.cos(X**a * Y**b) * Math.cos(c*Y**2) - Math.sin(Y **d);  

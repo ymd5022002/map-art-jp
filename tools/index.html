@@ -8,45 +8,42 @@
     <meta property="og:description" content="誰でも簡単！微地形が見える虹色の地図が作れます" />
     <meta property="og:site_name" content="干渉色標高地図作成ツール" />
     <meta property="og:image" content="https://ymd5022002.github.io/map-art-jp/img/thumnail01_ogp_fb_mar.jpg" />
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!--ブラウザのアイコンの設定
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" href="/android-chrome-256x256.png">
     -->
-
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-
     <script>
         /* ピッチインピッチアウトによる拡大縮小を禁止 */
         document.documentElement.addEventListener('touchstart', function (e) {
         if (e.touches.length >= 2) {e.preventDefault();}
         }, {passive: false});
     </script>
-
-    <!-- ここに記載されていた <style> は、./css/style.css へ移行した 2021/5/4 -->
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <header>
-    <h1>地図アート研究所</h1>
-    <nav class="nav">
-        <ul>
-            <li><a href="../index.html">トップ</a></li>
-            <li class="current"><a href="../tools/index.html">ツール</a></li>
-            <li><a href="../gallery/index.html">ギャラリ</a></li>
-            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeNrg0qJqzTHCfI_xUaYhjDWPU8TeaY1YbBjcSR9M4uBZ9D9A/viewform" target="_blank">お問合せ</a></li>
-            <li><a href="../about/index.html">研究所について</a></li>
-        </ul>
-    </nav>
-  </header>
-  <main>
+    <header>
+        <h1>
+            <a href="../index.html">地図アート研究所</a>
+        </h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li class="current"><a href="../tools/index.html">Tools</a></li>
+                <li><a href="../gallery/index.html">Gallery</a></li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeNrg0qJqzTHCfI_xUaYhjDWPU8TeaY1YbBjcSR9M4uBZ9D9A/viewform" target="_blank">Contact</a></li>
+                <li><a href="../about/index.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+<main>
     <h2>干渉色変換ツール</h2>
     <small>お好みの画像を素敵な虹色の干渉色に変換できます</small>
     <br>
     <!-- 仕切り -->
-    <div id="separator" style="border: 5; margin: 2px; background-color: #FCE3CD; min-height: 3px;" ></div>
+    <div id="separator" style="border: 5; margin: 2px; background-color: #FCFDFE; min-height: 3px;" ></div>
     <!-- 画像入力 -->
     <input type="file" id="selectfile" accept='image/*'><input type="button" id="btn1" value="クリア" onclick="fileReset();">
     <br>
@@ -57,7 +54,7 @@
     <input type="checkbox" id="imgShrink" checked><small>読込時リサイズ　　<small>※繰返,位相の説明は下記</small></small><br>
 
     <!-- 仕切り -->
-    <div id="separator" style="border: 5; margin: 2px; background-color: #FCE3CD; min-height: 3px;" ></div>
+    <div id="separator" style="border: 5; margin: 2px; background-color: #FCFDFE; min-height: 3px;" ></div>
     <!-- 繰返し回数 -->
     <span><b>繰返</b></span> 
     <input id="repeatTimes" type="number" value="1" min="0" step="0.01" style="width:50px;" onkeyup="this.nextSibling.value = this.value; " onchange ="interferanceColorFilter();"/><input id="repeatTimesSlider" type="range" value="1" min="0" max="2" step="0.01" oninput="this.previousSibling.value = this.value; " onchange ="interferanceColorFilter(); " style="width:220px;"/>
@@ -69,7 +66,7 @@
     <!-- <input id="fineCheckBox2" type="checkbox" onchange="finePhaseRateStep();"><small>微調</small> -->
     <br>
     <!-- 仕切り -->
-    <div id="separator" style="border: 5; margin: 0px; background-color: #FCE3CD; min-height: 5px;"></div>
+    <div id="separator" style="border: 5; margin: 0px; background-color: #FCFDFE; min-height: 5px;"></div>
     <!-- 合成 blend-->
     <small>
     <b>合成</b> 
@@ -90,7 +87,7 @@
     </small>
     <br>
     <!-- 仕切り -->
-    <div id="separator" style="border: 5; margin: 0px; background-color: #FCE3CD; min-height: 3px;"></div>
+    <div id="separator" style="border: 5; margin: 0px; background-color: #FCFDFE; min-height: 3px;"></div>
     <hr size="1">
 
     <!-- 表示サイズ -->
@@ -103,7 +100,7 @@
     <br>
 
     <!-- 仕切り -->
-    <div id="separator" style="border: 5; margin: 0px; background-color: #FCE3CD; min-height: 5px;"></div>
+    <div id="separator" style="border: 5; margin: 0px; background-color: #FCFDFE; min-height: 5px;"></div>
 
     <!-- ボケ　Gaussian 【未実装】-->
     <!-- <small><b>ボケ</b></small>
@@ -121,16 +118,23 @@
     <!-- 計算用のCanvas(非表示) -->
     <canvas id="srcCanvas" hidden></canvas>
     <canvas id="dstCanvas" hidden></canvas>
-    <div id="separator" style="border: 5; margin: 5px; background-color: #FCE3CD; min-height: 3px;"></div>
+    <div id="separator" style="border: 5; margin: 5px; background-color: #FCFDFE; min-height: 3px;"></div>
     </div>
     <small><b>繰返(回)</b> 最小最大輝度間に干渉色を何周繰返すか<br> 
     <b>位相(%)</b> 干渉色の位相のずらし量:0-100%</span><br>
     ※tiff形式は対応しておりません</small>
 
-    <h2>地図/干渉色/数学 アートツール他(試作中)</h2>
+    <h2>地図・干渉色・数学 アートツールなど (開発中)</h2>
     <p>試作中ですのでPC閲覧を推奨します。今後、少しずつ作りこんでいく予定です。一緒に開発でコラボをしてくださる方を募集中です。<a href="https://docs.google.com/forms/d/e/1FAIpQLSeNrg0qJqzTHCfI_xUaYhjDWPU8TeaY1YbBjcSR9M4uBZ9D9A/viewform" target="_blank"><b>こちら</b></a>から、メッセージをおねがいします</p>
     <ul>
-      <li><a href="icemap_leaflet.html" target="_blank">干渉色標高図(Leaflet版)</a></li>
+      <li>
+        <a href="icemap_leaflet.html" target="_blank">干渉色標高図(Leaflet版)</a><br>
+        ⇒ <a href="https://code4history.dev/index_ja.html" target="_blank">Code for History</a>　<a href="https://researchmap.jp/kochizufan/?fbclid=IwAR3qBD_PQvpf2Ormq02eJgng-v9EoxGmINz3JbdhX_OMPXG4Rw5Dduebo64" target="_blank">大塚 恒平 様</a> とのコラボ
+      </li>
+      <li>
+        <a href="https://ymd5022002.github.io/3d-icmap/#17.12/35.100405/138.860393/162.5/58" target="_">ボクセル3D干渉色マップ(静岡編)</a><br>
+        ⇒ <a href="https://www.gsi.go.jp/top.html" target="_blank">国土地理院</a>　<a href="https://github.com/hfu/profile/blob/master/profile_ja.md" target="_blank">藤村 英範 様</a> とのコラボ
+      </li>
       <li><a href="krmsp.html" target="_blank">干渉色標高図作成ツール(小数標高版)</a></li>
       <li><a href="ic_cp_map.html" target="_blank">干渉色・抽出色地図アート作成ツール</a></li>
       <li><a href="icecam.html" target="_blank">干渉色カメラ</a></li>
@@ -141,7 +145,13 @@
       <li><a href="cellautomaton01.html" target="_blank">セルオートマトンアート</a></li>
       <li><a href="iconkb.html" target="_blank">アイコン・キーボードー</a></li>
     </ul>
-  
+
+    <h2>アーカイブ</h2>
+    <ul>
+      <li>タブなし　<a href="archive/index_220111.html" target="_blank">～2023.5.6 </a></li>
+      <li>開設時　　　<a href="archive/index_200807.html" target="_blank">2020.8.3 </a></li>
+    </ul>
+
   </main>
 
   <footer>

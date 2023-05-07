@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>
-    干渉色・抽出色標高図作成ツール
-  </title>
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/ fb# website: http://ogp.me/ns/ website#">
+  <meta property="og:url" content="https://ymd5022002.github.io/map-art-jp/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="【地図アート研究所】" />
+  <meta property="og:description" content="誰でも簡単！微地形が見える虹色の地図が作れます" />
+  <meta property="og:site_name" content="干渉色標高地図作成ツール" />
+  <meta property="og:image" content="https://ymd5022002.github.io/map-art-jp/img/thumnail01_ogp_fb_mar.jpg" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <!-- CSS -->
   <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -12,17 +15,38 @@
   <link href="css/SPM.css" rel="stylesheet">
   <!--JavaScript-->
   <script type="text/javascript" src="js/SPM.js"></script>
+  <div class="wrapper">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script>
+        /* ピッチインピッチアウトによる拡大縮小を禁止 */
+        document.documentElement.addEventListener('touchstart', function (e) {
+        if (e.touches.length >= 2) {e.preventDefault();}
+        }, {passive: false});
+    </script>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <div class="wrapper">
     <header>
-      地図アート研究所
+        <h1>
+            <a href="../index.html">地図アート研究所</a>
+        </h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li class="current"><a href="../tools/index.html">Tools</a></li>
+                <li><a href="../gallery/index.html">Gallery</a></li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSeNrg0qJqzTHCfI_xUaYhjDWPU8TeaY1YbBjcSR9M4uBZ9D9A/viewform" target="_blank">Contact</a></li>
+                <li><a href="../about/index.html">About</a></li>
+            </ul>
+        </nav>
     </header>
+
     <main>
+      <h2>干渉色・抽出色地図アート作成ツール（試作版）</h2>
       <div class="FormWrapper">
         <div class="title">
           <p class="title">
-            干渉色・抽出色地図アート作成ツール（試作版）
+            
           </p>
         </div>
         <div class="textbox1">
