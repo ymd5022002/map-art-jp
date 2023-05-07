@@ -235,3 +235,13 @@ function jumpToGSIMap(){        //干渉色の拡大地図を表示する関数
 function mod(i, j) {   //Javascript は　負の剰余が負の値になる(例：(−5) %　2 = -1 )定義なので、正になる剰余関数を定義する。
     return (i % j) < 0 ? (i % j) + 0 + (j < 0 ? -j : j) : (i % j + 0);
 }
+
+//色周期ボタン処理
+function changeCycleHeight(value) {
+    // Change input value
+    document.getElementById("cycleHeight").value = value;
+    document.getElementById("slider").value = value;    
+    // Confirm value change
+    mapDrawing();
+  }
+
