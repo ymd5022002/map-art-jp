@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="20.00001mm"
+   height="19.999928mm"
+   viewBox="0 0 20.00001 19.999928"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="button100.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="5.8010105"
+     inkscape:cx="13.359741"
+     inkscape:cy="45.681696"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g651" />
+  <defs
+     id="defs2">
+    <clipPath
+       id="clip0">
+      <rect
+         x="551"
+         y="281"
+         width="81"
+         height="84"
+         id="rect636" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(3.0000002e-7,-3.7370001e-5)">
+    <g
+       clip-path="url(#clip0)"
+       transform="matrix(0.26315805,0,0,0.27777677,-145.78956,-78.055235)"
+       id="g651">
+      <rect
+         style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.203347;stroke-opacity:0"
+         id="rect2757"
+         width="75.791031"
+         height="71.802338"
+         x="554.10168"
+         y="281.10168"
+         transform="translate(-1.2983326e-6)" />
+      <path
+         d="m 557.3125,288.23345 c 0,-2.24868 1.82225,-4.07094 4.07092,-4.07094 h 61.23311 c 2.24868,0 4.07093,1.82226 4.07093,4.07094 v 57.53337 c 0,2.24868 -1.82225,4.07093 -4.07093,4.07093 h -61.23311 c -2.24867,0 -4.07092,-1.82225 -4.07092,-4.07093 z"
+         stroke="#000000"
+         stroke-miterlimit="8"
+         fill="#5480c8"
+         fill-rule="evenodd"
+         id="path641"
+         style="stroke-width:0.925001" />
+      <path
+         d="m 557.775,324.48981 h 68.44996 l -9.61722,-9.98448 -11.87977,7.26127 -16.40486,-11.15184 -15.27452,10.89284 -6.22247,-6.09485 z"
+         fill="#143b66"
+         fill-rule="evenodd"
+         id="path643"
+         style="stroke-width:0.925001" />
+      <path
+         d="m 557.49128,345.96107 c 0.021,-7.18728 0.0431,-14.37364 0.0641,-21.56092 h 68.66957 c -0.005,7.18728 -0.01,14.37364 -0.0155,21.56092 0,1.88515 -1.51306,3.41418 -3.37895,3.41418 h -61.95929 c -1.86682,0 -3.37986,-1.52903 -3.37986,-3.41418 z"
+         fill="#143b66"
+         fill-rule="evenodd"
+         id="path645"
+         style="stroke-width:0.920716" />
+      <text
+         fill="#fcfdfe"
+         font-family="'BIZ UDPGothic', 'BIZ UDPGothic_MSFontService', sans-serif"
+         font-weight="700"
+         font-size="22.2px"
+         id="text647"
+         x="567.68768"
+         y="344.74951"
+         style="stroke-width:0.925001">1</text>
+      <text
+         fill="#fcfdfe"
+         font-family="'BIZ UDPGothic', 'BIZ UDPGothic_MSFontService', sans-serif"
+         font-weight="700"
+         font-size="22.2px"
+         id="text649"
+         x="581.71625"
+         y="344.74951"
+         style="stroke-width:0.925001">００</text>
+    </g>
+  </g>
+</svg>

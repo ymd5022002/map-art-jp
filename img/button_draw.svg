@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="25mm"
+   height="20.000008mm"
+   viewBox="0 0 25 20.000008"
+   version="1.1"
+   id="svg450"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview452"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false" />
+  <defs
+     id="defs447">
+    <clipPath
+       id="clip0">
+      <rect
+         x="981"
+         y="281"
+         width="147"
+         height="75"
+         id="rect9" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-32.230893,-83.079732)">
+    <g
+       clip-path="url(#clip0)"
+       transform="matrix(0.24756178,0,0,0.27787113,-214.09308,4.997943)"
+       id="g18">
+      <rect
+         style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.234352;stroke-opacity:0"
+         id="rect2757"
+         width="100.75054"
+         height="71.741463"
+         x="995.11719"
+         y="281.11719" />
+      <path
+         d="m 998.4555,288.19911 c 0,-2.25041 1.54442,-4.07407 3.4502,-4.07407 h 87.1743 c 1.9051,0 3.4494,1.82366 3.4494,4.07407 v 57.57853 c 0,2.24948 -1.5443,4.07314 -3.4494,4.07314 h -87.1743 c -1.90578,0 -3.4502,-1.82366 -3.4502,-4.07314 z"
+         stroke="#14233c"
+         stroke-miterlimit="8"
+         fill="#143b66"
+         fill-rule="evenodd"
+         id="path14"
+         style="stroke-width:0.851888" />
+      <text
+         fill="#fcfdfe"
+         font-family="'BIZ UDPGothic', 'BIZ UDPGothic_MSFontService', sans-serif"
+         font-weight="700"
+         font-size="32.8273px"
+         transform="scale(1.0145174,0.98569034)"
+         id="text16"
+         x="992.56384"
+         y="333.78275"
+         style="stroke-width:0.937924">描 画</text>
+    </g>
+  </g>
+</svg>

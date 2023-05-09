@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="29.954971mm"
+   height="20.006714mm"
+   viewBox="0 0 29.954971 20.006714"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="button_fullscreen.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="11.394186"
+     inkscape:cx="54.545364"
+     inkscape:cy="44.847436"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g18" />
+  <defs
+     id="defs2">
+    <clipPath
+       id="clip0">
+      <rect
+         x="981"
+         y="281"
+         width="147"
+         height="75"
+         id="rect9" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-98.784975,-87.824903)">
+    <g
+       clip-path="url(#clip0)"
+       transform="matrix(0.24756178,0,0,0.27787113,-147.539,9.7431135)"
+       id="g18">
+      <rect
+         style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.256706;stroke-opacity:0"
+         id="rect2757"
+         width="120.92516"
+         height="71.719109"
+         x="995.12836"
+         y="281.12836" />
+      <path
+         d="m 998.49852,288.2368 c 0,-2.24747 1.87458,-4.06874 4.18778,-4.06874 h 105.8103 c 2.3123,0 4.1868,1.82127 4.1868,4.06874 v 57.50315 c 0,2.24654 -1.8745,4.06781 -4.1868,4.06781 h -105.8103 c -2.3132,0 -4.18778,-1.82127 -4.18778,-4.06781 z"
+         stroke="#14233c"
+         stroke-miterlimit="8"
+         fill="#143b66"
+         fill-rule="evenodd"
+         id="path14"
+         style="stroke-width:0.937924" />
+      <text
+         fill="#fcfdfe"
+         font-family="'BIZ UDPGothic', 'BIZ UDPGothic_MSFontService', sans-serif"
+         font-weight="700"
+         font-size="32.8273px"
+         transform="scale(1.0145174,0.98569034)"
+         id="text16"
+         x="990.45691"
+         y="333.78275"
+         style="stroke-width:0.937924">全画面</text>
+    </g>
+  </g>
+</svg>
