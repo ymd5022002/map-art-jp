@@ -181,7 +181,8 @@
                             ////////////　↑↑↑↑↑↑　あとで　==2*23の時の処理を追加すること
                         }
 
-                        n_iC = h  % Num_iC ;
+                        n_iC = mod(h, Num_iC);  //h  % Num_iC ;
+                        
 
                         //干渉色計算（cos近似式)
                         rgb_iC[i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) )
@@ -209,6 +210,10 @@
             context2.putImageData(imageData_iceMap, 0, 0); 
         };
     };
+
+    function mod(i, j) {
+    return (i % j) < 0 ? (i % j) + 0 + (j < 0 ? -j : j) : (i % j + 0);
+}
     window.onload = ()=>{
         //設定値入力時の地図再描画待受け
         const inputElem1 = document.getElementById('zoom');
