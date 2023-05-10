@@ -49,8 +49,8 @@
         <h2>干渉色標高図 作成ツール</h2>
         <p>
             標高値に応じてシャボン玉の干渉色で着色して起伏を見やすくした地図を作れます。
-            数字のボタンを押すと地図の色が変わり、全画面ボタンで広い地図が開きます。
-            ボタンの数字(色周期)を小さくすると、ゆるやかな起伏があぶり出されます
+            青い数字のボタンを押すと地図の色が変わり全画面ボタンで広い地図が開きます。
+            数字(色周期)の小さいボタンにすると、ゆるやかな起伏があぶり出されます
         </p>
         <div class="changeCycleHeight">
             <span class="cycleHeight_button">
@@ -59,41 +59,10 @@
                     src="img/button100.svg" alt="100" width="40" height="40" onclick="changeCycleHeight(100)"><img
                     src="img/button200.svg" alt="200" width="40" height="40" onclick="changeCycleHeight(200)"><img
                     src="img/button500.svg" alt="500" width="40" height="40" onclick="changeCycleHeight(500)"> <img
-                    src="img/button_draw.svg" alt="draw" width="50" height="40" onclick="mapDrawing();"> <img
                     src="img/button_fullscreen.svg" alt="fullscren" width="60" height="40" onclick="jumpToGSIMap();"
                     id="url">
             </span>
         </div>
-
-        <label class="accented">
-            <span>色周期(ｍ)</span
-                ><input id="cycleHeight" value="100" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
-                type="range" id="slider" value="100" min="25" max="2000" step="25"
-                oninput="this.previousSibling.value = this.value"
-                ><span style="font-size:small">配色1周</span>
-            <br>
-            <span>最高　(ｍ)</span
-                ><input id="maxHeight" value="4000" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
-                type="range" value="4000" min="0" max="9000" step="100" oninput="this.previousSibling.value = this.value" />
-            <br>
-            <span>最低　(ｍ)</span
-                ><input id="minHeight" value="-50" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
-                type="range" value="-50" min="-500" max="3500" step="5" oninput="this.previousSibling.value = this.value" />
-            <br>
-            <span>基準高(ｍ)</span
-                ><input id="originHeight" value="0" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
-                type="range" value="0" min="-500" max="3500" step="5" oninput="this.previousSibling.value = this.value" /
-                ><span style="font-size:small">色シフト</span><br>
-            <span>階調数　　</span
-                ><input id="cycleTone" value="25" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
-                type="range" value="25" min="0" max="100" step="5" oninput="this.previousSibling.value = this.value" /
-                ><span style="font-size:small">1周期色数</span>
-            <br>
-            <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268"><br></span>
-            <span>└ <input type="button" onclick="zoomPositionPaste();" value="変換貼付"> <input id="mapsURL"
-                    placeholder="地理院地図URLを貼付け"></span>
-        </label>
-        <br>
     
         <figure>
             <div class="iframe-window" style="font-size: small;">
@@ -117,18 +86,64 @@
                 <span>干渉色標高図作成ツール:地図アート研究所</span><br>
                 <span>出典:<a href="https://maps.gsi.go.jp/development/ichiran.html"
                     target="_blank">国土地理院ウェブ</a>　</span><br>       
-            </figcaption>
+        </figcaption>
+
+            <hr>
+            <div class="changeCycleHeight">
+                <span class="cycleHeight_button">
+                    <img src="img/button25.svg" alt="25" width="40" height="40" onclick="changeCycleHeight(25)"><img
+                        src="img/button50.svg" alt="50" width="40" height="40" onclick="changeCycleHeight(50)"><img
+                        src="img/button100.svg" alt="100" width="40" height="40" onclick="changeCycleHeight(100)"><img
+                        src="img/button200.svg" alt="200" width="40" height="40" onclick="changeCycleHeight(200)"><img
+                        src="img/button500.svg" alt="500" width="40" height="40" onclick="changeCycleHeight(500)"> <img
+                        src="img/button_draw.svg" alt="draw" width="50" height="40" onclick="mapDrawing();"> <img
+                        src="img/button_fullscreen.svg" alt="fullscren" width="60" height="40" onclick="jumpToGSIMap();"
+                        id="url">
+                </span>
+            </div>
+
+            <label class="accented">
+                <span>色周期(ｍ)</span
+                    ><input id="cycleHeight" value="100" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
+                    type="range" id="slider" value="100" min="25" max="2000" step="25"
+                    oninput="this.previousSibling.value = this.value"
+                    ><span style="font-size:small">配色1周</span>
+                <br>
+                <span>最高　(ｍ)</span
+                    ><input id="maxHeight" value="4000" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
+                    type="range" value="4000" min="0" max="9000" step="100" oninput="this.previousSibling.value = this.value" />
+                <br>
+                <span>最低　(ｍ)</span
+                    ><input id="minHeight" value="-50" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
+                    type="range" value="-50" min="-500" max="3500" step="5" oninput="this.previousSibling.value = this.value" />
+                <br>
+                <span>基準高(ｍ)</span
+                    ><input id="originHeight" value="0" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
+                    type="range" value="0" min="-500" max="3500" step="5" oninput="this.previousSibling.value = this.value" /
+                    ><span style="font-size:small">色シフト</span><br>
+                <span>階調数　　</span
+                    ><input id="cycleTone" value="25" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
+                    type="range" value="25" min="0" max="100" step="5" oninput="this.previousSibling.value = this.value" /
+                    ><span style="font-size:small">1周期色数</span>
+                <br>
+                <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268"><br></span>
+                <span>└ <input type="button" onclick="zoomPositionPaste();" value="変換貼付"> <input id="mapsURL"
+                        placeholder="地理院地図URLを貼付け"></span>
+            </label>
+            <br>
+
             <br>
             地理院地図のURLが長すぎてSNSで共有が出来ない場合は、下記の方法をお試しください
             <ol>
                 <li>地理院地図のURLをコピーして下の窓に貼りつける
-                <form action="https://tinyurl.com/api-create.php?" method="post" target="_blank">
-                    <input type="text" name="url" size="20" placeholder="地理院地図URLを貼付け">
-                    <input type="submit" name="submit" value="URL短縮">
-                    <a href="https://tinyurl.com" target=_blank><small>TinyURL</small></a>
-                </form>
-                    <span>総色階調</span><span id="output_totalTone1">1013</span>
-                    <span style="font-size:small">※約1300階調まで短縮可です。</span>
+                    <form action="https://tinyurl.com/api-create.php?" method="post" target="_blank">
+                        <input type="text" name="url" size="20" placeholder="地理院地図URLを貼付け">
+                        <input type="submit" name="submit" value="URL短縮">
+                        <a href="https://tinyurl.com" target=_blank><small>TinyURL</small></a>
+                    </form>
+                    <font color="#2266AF"><span><b>総色階調</span><span id="output_totalTone1">1013</span></b></font>
+                    <span style="font-size:small">※約1300以上はErrorになります<br>
+                    Errorの場合、最高(m)を1/4～1/2に減らして描画し総色階調1300以下でお試しください</span>
                 </li>
                 <li>「URL短縮」を押して、別窓に表示されるURLをコピーする</li>
                 <li>コピーしたURLをSNSの記事に貼付ける</li>
@@ -136,7 +151,7 @@
 
 
         <h3>くわしい使い方</h3>
-        <p>設定値を変更して「描画更新」ボタンを押すと再描画します。「全画面」ボタンで地理院地図webが開きます。詳細は下記の通りです</p>
+        <p>設定値を変更して「描画」ボタンを押すと再描画します。「全画面」ボタンで地理院地図webが開きます。詳細は下記の通りです</p>
         <ul>
             <li>干渉色標高図ではカラースケールとして、シャボン玉に見られるような薄膜光干渉による「1次の白色」から「3次の緑色」までのカラーグラデーションを周期的に繰返して使っています</li>
             <li>色周期：小さくすると細かい凸凹が可視化できます(推奨最小値25)。色周期とは、同じ色が次に現れるまでの標高差のことです。</li>
