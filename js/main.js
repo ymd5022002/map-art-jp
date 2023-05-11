@@ -87,7 +87,6 @@ function mapDrawing() {  //干渉色標高図の描画
     shiftColor = mod( originHeight , cycleHeight ) * cycleTone / cycleHeight;
     cycleHeight_1st = originHeight + cycleHeight;
     cycleHeight_2nd = originHeight + 2 * cycleHeight;
-    cycleHeight_3rd = originHeight + 3 * cycleHeight;
 
     //計算値を文字列に変換
     str_minDeg = String(minDeg);
@@ -113,13 +112,7 @@ function mapDrawing() {  //干渉色標高図の描画
     if (cycleHeight_2nd > maxHeight || cycleHeight_2nd < minHeight){
         str_cycleHeight_2nd = "";
       }else{
-        str_cycleHeight_2nd = String(cycleHeight_2nd);
-      }
-
-    if (cycleHeight_3rd > maxHeight || cycleHeight_3rd < minHeight){
-        str_cycleHeight_3rd = "";
-      }else{
-        str_cycleHeight_3rd = String(cycleHeight_3rd) + "…";
+        str_cycleHeight_2nd = String(cycleHeight_2nd) + "…";;
       }
 
 
@@ -204,7 +197,7 @@ function mapDrawing() {  //干渉色標高図の描画
     document.getElementById("output_cycleHeight_0th").innerHTML   = str_cycleHeight_0th; 
     document.getElementById("output_cycleHeight_1st").innerHTML   = str_cycleHeight_1st; 
     document.getElementById("output_cycleHeight_2nd").innerHTML   = str_cycleHeight_2nd; 
-    document.getElementById("output_cycleHeight_3rd").innerHTML   = str_cycleHeight_3rd;; 
+
     //地理院地図の書き換え
     document.getElementById('mapFrame1').contentWindow.location.replace('https://maps.gsi.go.jp/?hc=hic'+ str_zoomPosition +'/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2'+g__id);
 
