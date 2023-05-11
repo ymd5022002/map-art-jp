@@ -18,6 +18,10 @@ html{
     background-color: #E9F0F7;
 }
 
+.right-align {
+    text-align: right;
+  }
+
 p, li, td{
     line-height: 1.7;
 }
