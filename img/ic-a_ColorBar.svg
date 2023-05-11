@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="590"
+   width="395"
    height="50"
-   viewBox="0 0 590 50"
+   viewBox="0 0 395 50"
    version="1.1"
    id="svg145"
    sodipodi:docname="ic-a_ColorBar.svg"
@@ -319,16 +319,6 @@
        id="linearGradient5438"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(1.9537191,0,0,0.31944106,2.3202405,1.7740932)"
-       x1="0"
-       y1="0"
-       x2="100"
-       y2="0" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#grad1"
-       id="linearGradient6042"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.9537191,0,0,0.31944106,392.91737,1.7927416)"
        x1="0"
        y1="0"
        x2="100"
@@ -819,86 +809,6 @@
      y="34.831902"
      ry="0" />
   <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.61478"
-     id="rect1977-3-5-4"
-     width="1.6280992"
-     height="12.079485"
-     x="489.68552"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.04585"
-     id="rect1977-3-1-40-7"
-     width="1.6280992"
-     height="7.3949919"
-     x="411.53677"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.04585"
-     id="rect1977-3-1-4-7-2"
-     width="1.6280992"
-     height="7.3949919"
-     x="450.61115"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.04585"
-     id="rect1977-3-1-4-6-8-0"
-     width="1.6280992"
-     height="7.3949919"
-     x="431.07394"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.04585"
-     id="rect1977-3-1-4-6-3-8-1"
-     width="1.6280992"
-     height="7.3949919"
-     x="470.14832"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.04585"
-     id="rect1977-3-1-9-5-4"
-     width="1.6280992"
-     height="7.3949919"
-     x="509.22269"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.04585"
-     id="rect1977-3-1-4-0-7-7"
-     width="1.6280992"
-     height="7.3949919"
-     x="548.29712"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.04585"
-     id="rect1977-3-1-4-6-0-2-0"
-     width="1.6280992"
-     height="7.3949919"
-     x="528.75995"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.04585"
-     id="rect1977-3-1-4-6-3-6-2-5"
-     width="1.6280992"
-     height="7.3949919"
-     x="567.83429"
-     y="34.831902"
-     ry="0" />
-  <rect
-     style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.89386"
-     id="rect1977-7-7-9"
-     width="1.6280992"
-     height="14.79578"
-     x="587.37152"
-     y="34.831902"
-     ry="0" />
-  <rect
      x="2.3202133"
      y="1.7740862"
      width="195.3719"
@@ -918,14 +828,4 @@
      fill="url(#grad1)"
      id="rect143-7"
      style="fill:url(#linearGradient5070);stroke-width:0.789997" />
-  <rect
-     x="392.91736"
-     y="1.7927349"
-     width="195.3719"
-     height="31.944103"
-     rx="0"
-     ry="0"
-     fill="url(#grad1)"
-     id="rect143-7-6"
-     style="fill:url(#linearGradient6042);stroke-width:0.789997" />
 </svg>
