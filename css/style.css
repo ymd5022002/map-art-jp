@@ -247,11 +247,6 @@ html,body{
     touch-action: pan-Y;
 }
 
-.contact_form{
-    width: 100%;
-    margin: 0 auto;
-    }
-
 @media screen and (max-width: 768px) {
     /* [iframe]を囲む要素 */
     .iframe-window{        
