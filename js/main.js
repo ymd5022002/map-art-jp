@@ -75,10 +75,16 @@ document.getElementById("bColorCheckbox").addEventListener("change",function() {
         colorCode = colorCode_B
         colorBar1.src = "img/ic-b_ColorBar.svg";
         colorBar1.alt = "ic-b_ColorBar";
+        document.getElementById("output_cycleTone").innerHTML = 75;
+        document.getElementById( "cycleTone" ).value = "75"
+        str_cycleTone = 75;
     }else{
         colorCode = colorCode_A
         colorBar1.src = "img/ic-a_ColorBar.svg";
         colorBar1.alt = "ic-a_ColorBar";
+        document.getElementById("output_cycleTone").innerHTML = 25;
+        document.getElementById( "cycleTone" ).value = "25"
+        str_cycleTone = 25;
     }
 });
 
