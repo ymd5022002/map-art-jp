@@ -1,3 +1,4 @@
+
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja">
@@ -70,14 +71,14 @@
                     id="url">
             </span>
         </div>
-    
+
         <figure>
             <div class="iframe-window" style="font-size: small;">
                 <iframe id="mapFrame1" frameborder="3" scrolling="yes" marginheight="0" marginwidth="100" Width="500" height="500" src="https://maps.gsi.go.jp/?hc=hic#8/35.715370/139.840268/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2-16GCCCCCCG0GCCCCCCGGCCCCCC"></iframe>                <br>
             </div>
             <figcaption style="font-size:small">
                 <div>
-                    　<img src="img/ic-a_ColorBar.svg" alt="ic-a_ColorBar" width="240" height ="30">標高(m)<br>
+                    　<img id="colorBar1" src="img/ic-a_ColorBar.svg" alt="ic-a_ColorBar" width="240" height ="30">標高(m)<br>
                 </div>
                 <div>
                     <div>
@@ -141,7 +142,8 @@
                     type="range" value="25" min="0" max="100" step="5" oninput="this.previousSibling.value = this.value" /
                     ><span style="font-size:small">1周期色数</span>
                 <br>
-                <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268"><br></span>
+                <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268"></span>
+                <span>黒</span><input type="checkbox" id="bColorCheckbox"><br>
                 <span>└ <input type="button" onclick="zoomPositionPaste();" value="変換貼付"> <input id="mapsURL"
                         placeholder="地理院地図URLを貼付け"></span>
             </label>
