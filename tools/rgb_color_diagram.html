@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+<head>
+  <title>Color Graph</title>
+  <style>
+    html,body {
+     overflow: hidden
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      color: white;
+      background-color: #000;
+      margin-left: 10px;
+      font-family: sans-serif;
+    }
+    .y-text {
+      display: inline-block;
+      text-align: right;
+      line-height: 16px;
+      font-size: 12px;
+    }
+    .x-text {
+      text-align: left;
+      line-height: 16px;
+      font-size: 12px;
+    }
+    canvas {
+      margin-top: 10px;
+      display: inline-block;
+    }
+    #fixedValue {
+      font-size: 16px;
+      text-align: left;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+<h2>RGBカラーダイヤグラム(B)</h2>
+<div>あるBの時の(R,G)の色を描出します</div>
+<hr size="1">
+<div class="x-text">　　タップで停止/再開、左右スワイプで1ステップ増減</div>
+<div id="fixedValue">　　B:</div>
+<span class="y-text">G<br><br><br><br><br><br><br><br><br></span>
+<span class="y-text">255<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></span>
+<canvas id="graphCanvas" width="272" height="272"></canvas>
+<div class="x-text">　　0　　　　　　　　　　　　　　　　　　　　　　255</div>
+<div class="x-text">　　　　　　　　　　　　　　R</div>
+
+<hr size="1">
+Copyright &copy;<a href="https://ymd5022002.github.io/map-art-jp/">地図アート研究所</a>
+
+<script>
+  const dotSize = 16 ;
+  const step = 16 ;
+  const dotGap = 2;
+  const intervalMiliiSec = 120;
+  const canvas = document.getElementById('graphCanvas');
+  const context = canvas.getContext('2d');
+  const fixedValueElement = document.getElementById('fixedValue');
+  let fixedValue = 0;
+  let isPaused = false;
+
+  function disableScroll(event) {
+  event.preventDefault();
+  }
+
+  // イベントと関数を紐付け
+  document.addEventListener('touchmove', disableScroll, { passive: false });
+
+  function drawGraph() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let x = 0; x <= 256; x += step) {
+      for (let y = 0; y <= 256; y += step) {
+        const r = x;
+        const g = 256 - y;
+        const b = fixedValue;
+
+        context.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        context.fillRect(x + dotGap, y + dotGap, dotSize - dotGap, dotSize - dotGap);
+      }
+    }
+
+    // Update fixedValue display
+    fixedValueElement.textContent = `　　B: ${fixedValue}`;
+  }
+
+  function updatefixedValue() {
+    if (!isPaused) {
+      fixedValue += 16;
+      if (fixedValue > 255) {
+        fixedValue = 0;
+      } else if (fixedValue < 0) {
+        fixedValue = 255;
+      }
+      drawGraph();
+    }
+  }
+
+  function togglePause() {
+    isPaused = !isPaused;
+  }
+
+  function handleKeyPress(event) {
+    if (event.code === 'Space' || event.type === 'click') {
+      togglePause();
+    } else if (event.code === 'ArrowRight' || event.type === 'swiperight') {
+      if (isPaused) {
+        fixedValue += 16;
+        if (        fixedValue > 255) {
+          fixedValue = 0;
+        }
+        drawGraph();
+      }
+    } else if (event.code === 'ArrowLeft' || event.type === 'swipeleft') {
+      if (isPaused) {
+        fixedValue -= 16;
+        if (fixedValue < 0) {
+          fixedValue = 255;
+        }
+        drawGraph();
+      }
+    }
+  }
+
+  document.addEventListener('keydown', handleKeyPress);
+  document.addEventListener('click', handleKeyPress);
+
+  // Add touch events for mobile devices
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  canvas.addEventListener('touchstart', function (event) {
+    touchStartX = event.touches[0].clientX;
+  });
+
+  canvas.addEventListener('touchend', function (event) {
+    touchEndX = event.changedTouches[0].clientX;
+    handleSwipe();
+  });
+
+  function handleSwipe() {
+    const threshold = 50;
+    const distance = touchEndX - touchStartX;
+    if (distance > threshold) {
+      handleKeyPress({ type: 'swiperight' });
+    } else if (distance < -threshold) {
+      handleKeyPress({ type: 'swipeleft' });
+    }
+  }
+
+  // Initial graph drawing and start updating fixedValue
+  drawGraph();
+  setInterval(updatefixedValue, intervalMiliiSec);
+</script>
+</body>
+</html>
+
