@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+<head>
+  <title>Color Graph</title>
+  <style>
+    html,body {
+     overflow: hidden
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      color: white;
+      background-color: #000;
+      margin-left: 10px;
+      font-family: sans-serif;
+    }
+    .y-text {
+      display: inline-block;
+      text-align: right;
+      line-height: 16px;
+      font-size: 12px;
+    }
+    .x-text {
+      text-align: left;
+      line-height: 16px;
+      font-size: 12px;
+    }
+    canvas {
+      margin-top: 10px;
+      display: inline-block;
+    }
+    #fixedValue {
+      font-size: 16px;
+      text-align: left;
+
+    }
+
+    .slider-container {
+      width: 80%;
+      margin: 0px;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      width: 210px;
+      height: 5px;
+      border-radius: 5px;
+      background: #ccc;
+      outline: none;
+      /* opacity: 0.7; */
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: rgb(255, 255, 255);
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: rgb(255, 255, 255);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h2>YUVカラーダイヤグラム</h2>
+<div>あるYの時の(U,V)の色を描出します(8bit full-scale YUV)</div>
+<hr size="1">
+<div>
+  <span class="slider-container"> 
+    <span>
+      <form name="form1" style="display:inline">
+        <select name="select1" onChange="if(document.form1.select1.value){location.href=document.form1.select1.value;}">
+          <option value="color_diagram_r.html">R</option>
+          <option value="color_diagram_g.html">G</option>
+          <option value="color_diagram_b.html">B</option>
+          <option value="color_diagram_h_hsl.html">H(HSL)</option>
+          <option value="color_diagram_s_hsl.html">S(HSL)</option>
+          <option value="color_diagram_l_hsl.html">L(HSL)</option>
+            <option value="color_diagram_yuv.html" selected >Y(YUV)</option>
+          <option value="color_diagram_ycbcr.html">Y(YCbCr)</option>
+        </select>
+      </form>
+    </span>
+    
+    <input type="range" value="0" class="slider" id="slider" min="0" max="255" step="1" >
+  </span>
+  <span id="fixedValue"></span>
+</div>
+<span class="y-text">V<br><br><br><br><br><br><br><br><br><br></span>
+<span class="y-text">255<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></span>
+<span id="canvasContainer"></span>
+<div class="x-text">　　0　　　　　　　　　　　　　　　　　　　　　　255</div>
+<div class="x-text">　　　　　　　　　　　　　　U</div>
+<hr size="1">
+Copyright &copy; <a href="https://ymd5022002.github.io/map-art-jp/">地図アート研究所</a>
+
+<script>
+  const dotSize = 16 ;
+  const step = 16 ;
+  const dotGap = 2;
+  const intervalMiliiSec = 120;
+  const canvas = document.createElement('canvas');
+  canvas.width = 272;
+  canvas.height = 272;
+  document.getElementById('canvasContainer').appendChild(canvas);
+  const context = canvas.getContext('2d');
+  const fixedValueElement = document.getElementById('fixedValue');
+  const slider = document.getElementById('slider');
+  let fixedValue = 0;
+  let isPaused = false;
+
+  function disableScroll(event) {
+    event.preventDefault();
+  }
+
+  // イベントと関数を紐付け
+
+  function drawGraph() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let x = 0; x <= 256; x += step) {
+      for (let y = 0; y <= 256; y += step) {
+        const u = x;
+        const v = 256 - y;
+        const yy = fixedValue;
+        const r = yy                 + 1.402*(v-128)
+        const g = yy - 0.344*(u-128) - 0.714*(v-128)
+        const b = yy + 1.772*(u-128)
+        context.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        context.fillRect(x + dotGap, y + dotGap, dotSize - dotGap, dotSize - dotGap);
+      }
+    }
+
+    // Update fixedValue display
+    fixedValueElement.textContent = ` ${fixedValue}`;
+  }
+
+  function updatefixedValue() {
+    if (!isPaused) {
+      fixedValue = parseInt(slider.value);
+      drawGraph();
+    }
+  }
+
+// Slider input event
+slider.addEventListener('input', function () {
+if (isPaused) {
+fixedValue = parseInt(slider.value);
+drawGraph();
+}
+});
+
+// Initial graph drawing and start updating fixedValue
+drawGraph();
+setInterval(updatefixedValue, intervalMiliiSec);
+
+</script>
+</body>
+</html>
+
