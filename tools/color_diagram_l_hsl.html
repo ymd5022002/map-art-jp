@@ -79,6 +79,11 @@
 <h2>HSLカラーダイヤグラム</h2>
 <div>あるLの時の(H,S)の色を描出します</div>
 <hr size="1">
+<span class="y-text">S<br><br><br><br><br><br><br><br><br><br></span>
+<span class="y-text">100<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></span>
+<span id="canvasContainer"></span>
+<div class="x-text">　　0　　　　　　　120　　　　　　　240　　　　　　　360</div>
+<div class="x-text">　　　　　　　　　　　　　　H</div>
 <div>
   <span class="slider-container"> 
     <span>
@@ -94,28 +99,22 @@
           <option value="color_diagram_ycbcr.html">Y(YCbCr)</option>
         </select>
       </form>
-    </span>
-    
+    </span>   
     <input type="range" value="50" class="slider" id="slider" min="0" max="100" step="1" >
   </span>
   <span id="fixedValue"></span>
 </div>
-<span class="y-text">S<br><br><br><br><br><br><br><br><br><br></span>
-<span class="y-text">100<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></span>
-<span id="canvasContainer"></span>
-<div class="x-text">　　0　　　　　　　 120　　　　　　　 240　　　　　　　 360</div>
-<div class="x-text">　　　　　　　　　　　　　　　H</div>
 <hr size="1">
 Copyright &copy; <a href="https://ymd5022002.github.io/map-art-jp/">地図アート研究所</a>
 
 <script>
-  const dotSize = 13 ;
+  const dotSize = 12 ;
   const step_x = 15 ;
   const step_y = 5 ;
   const dotGap = 2;
   const intervalMiliiSec = 120;
   const canvas = document.createElement('canvas');
-  canvas.width = 949;
+  canvas.width = 300;
   canvas.height = 273;
   document.getElementById('canvasContainer').appendChild(canvas);
   const context = canvas.getContext('2d');
@@ -179,7 +178,7 @@ Copyright &copy; <a href="https://ymd5022002.github.io/map-art-jp/">地図アー
 
         const rgb = hslToRgb(h, s, l);
         context.fillStyle = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-        context.fillRect(x*2.6/3 + dotGap, y*2.6 + dotGap, dotSize - dotGap, dotSize - dotGap);
+        context.fillRect(x*2.4/3 + dotGap, y*2.4 + dotGap, dotSize - dotGap, dotSize - dotGap);
       }
     }
 
