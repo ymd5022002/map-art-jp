@@ -8,16 +8,22 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <style>
-    html, body, #leafletmap {height: 99.5%; width: 99.5%;}
-    .leaflet-control {
-        font-size: 20px;
+    html, body, #leafletmap {
+        height: 99.5%; width: 99.5%;
+        .leaflet-control-attribution {
+            margin-left: 100px;
+            margin-right: 5px;
         }
-    @media (max-width: 767px) {
-        .leaflet-control {font-size: 40px;}
-        .leaflet-control-scale { font-size: 40px; } /* スケールのフォントサイズを調整 */
-        .leaflet-control-attribution { font-size: 30px; } /* 出典のフォントサイズを調整 */
     }
 </style>
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<script>
+/* ピッチインピッチアウトによる拡大縮小を禁止 */
+document.documentElement.addEventListener('touchstart', function (e) {
+    if (e.touches.length >= 2) { e.preventDefault(); }
+}, { passive: false });
+</script>
 
 </head>
 </html>
