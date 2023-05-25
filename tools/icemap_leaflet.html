@@ -13,12 +13,13 @@
         width: 99.5%;
     }
 
-    .leaflet-control-attribution {
-        margin-left: 25%;
-    }
     .leaflet-control-scale {
-        margin-bottom: 100px;
-    }
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    margin-bottom: 30px !important;
+    margin-left: 0 !important;
+  }
 </style>
 
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
@@ -138,7 +139,7 @@ document.documentElement.addEventListener('touchstart', function (e) {
     }).addTo(map);
     //
     //スケールコントロールを追加（オプションはフィート単位を非表示）
-    L.control.scale({imperial: false}).addTo(map);
+    L.control.scale({imperial: false}).setPosition('bottomleft').addTo(map);
 </script>
 </div>
 </body>
