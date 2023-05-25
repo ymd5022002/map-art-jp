@@ -7,7 +7,17 @@
 <head>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<style>html, body, #leafletmap {height: 100%; width: 100%;}</style>
+<style>
+    html, body, #leafletmap {height: 99.5%; width: 99.5%;}
+    .leaflet-control {
+        font-size: 20px;
+        }
+    @media (max-width: 767px) {
+        .leaflet-control {font-size: 40px;}
+        .leaflet-control-scale { font-size: 40px; } /* スケールのフォントサイズを調整 */
+        .leaflet-control-attribution { font-size: 30px; } /* 出典のフォントサイズを調整 */
+    }
+</style>
 
 </head>
 </html>
