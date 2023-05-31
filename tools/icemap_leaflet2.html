@@ -9,8 +9,8 @@
             height: 100%;
             width: 100%;
             font-family: sans-serif;
-            background-color: #000;
-            color: #fff;
+            background-color: #fff;
+            color: #000;
         }
     </style>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
@@ -19,9 +19,9 @@
 <table width=100% height=100%>
 <tr>
 <td height=23pt>
-<div style="font-size:12pt;font-weight:900">超微地形用 干渉色標高図</div>
+<div style="font-size:12pt;font-weight:900">干渉色標高図(Leaflet版)</div>
 
-<span style="font-size:11pt">色周期(m)：0
+<span style="font-size:11pt">色周期(m)：1
     <input id="slider1" type="range" min="1" max="25" step="1" value="13" oninput="updateValue()" onmouseup="updateMap()" />
     <span id="maxValueText">
         <select id="maxValueSelect" onchange="changeMaxValue()">
@@ -45,9 +45,9 @@
 </td></tr>
 <tr><td height=30pt>
     <div style="font-size:9pt;line-height:9pt"><hr size="1"></div>
-    <div style="font-size:9pt;line-height:9pt">出典：地理院タイル</div>
-    <span style="font-size:9pt;line-height:9pt">地図アート研究所×Code for History｜干渉色標高図</span>
-</td</tr>
+    <div style="font-size:9pt;line-height:9pt">出典：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank">地理院タイル</a> </div>
+    <span style="font-size:9pt;line-height:9pt"><a href="https://ymd5022002.github.io/map-art-jp/" target="_blank">地図アート研究所</a> × <a href="https://code4history.dev/index_ja.html" target="_blank">Code for History</a>｜干渉色標高図</span>
+</td></tr>
 </table>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
     <script>
@@ -61,12 +61,12 @@
         }).addTo(map);
         
         function changeMaxValue() {
-            let selectElement = document.getElementById('maxValueSelect');
-            let selectedValue = selectElement.value;
-            let value = parseFloat(selectedValue) / 2.0 ;
-            let sliderElement = document.getElementById('slider1');
+            var selectElement = document.getElementById('maxValueSelect');
+            var selectedValue = selectElement.value;
+            var sliderElement = document.getElementById('slider1');
             sliderElement.setAttribute('max', selectedValue);
-            sliderElement.setAttribute('value', String(value));
+            sliderElement.setAttribute('value', selectedValue);
+            updateValue()
             updateMap();
         }        
 
