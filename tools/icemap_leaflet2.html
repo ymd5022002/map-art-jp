@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <title>Leaflet Map</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-    <style>
+	<style>
         html,body,#map {
-            height: 600px;
-            width: 600px;
+            height: 100%;
+            width: 100%;
             font-family: sans-serif;
             background-color: #000;
             color: #fff;
@@ -15,24 +15,44 @@
     </style>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 </head>
-<body>
-    <h2>超微地形用 干渉色標高図</h2>
-    <span>色周期(m)：1<input id="slider1" type="range" id="slider" min="1" max="25" step="0.5" value="12.5" onchange="updateMap(); updateValue()" />25</span>
-    　　<span id="cc">12.5</span>
-    <hr size="1">
-    <!-- 25<input id="slider2" type="range" width="10" id="slider" min="25" max="200" step="5" value="25" onchange="updateMap(); updateValue()" />200   
-    200<input id="slider3" type="range" width="10" id="slider" min="200" max="1000" step="10" value="200" onchange="updateMap(); updateValue()" />1000   
-    1000<input id="slider4" type="range" width="10" id="slider" min="1000" max="5000" step="25" value="1000" onchange="updateMap(); updateValue()" />5000    -->
-    
+<body style="margin:0">
+<table width=100% height=100%>
+<tr>
+<td height=23pt>
+<div style="font-size:12pt;font-weight:900">超微地形用 干渉色標高図</div>
 
+<span style="font-size:11pt">色周期(m)：0
+    <input id="slider1" type="range" min="1" max="25" step="1" value="13" oninput="updateValue()" onmouseup="updateMap()" />
+    <span id="maxValueText">
+        <select id="maxValueSelect" onchange="changeMaxValue()">
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="2000">2000</option>
+            <option value="5000">5000</option>
+        </select>
+    　</span>
+</span>
+
+<span id="cc" style="font-size:11pt font-weight:900">13</span>
+</tr>
+<tr><td width=100%>
+<div style="font-size:9pt;line-height:9pt"><hr size="1"></div>
     <div id="map"></div>
-    <hr size="1">
-    出典：地理院タイル<br>
-    地図アート研究所×Code for History｜干渉色標高図
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+</td></tr>
+<tr><td height=30pt>
+    <div style="font-size:9pt;line-height:9pt"><hr size="1"></div>
+    <div style="font-size:9pt;line-height:9pt">出典：地理院タイル</div>
+    <span style="font-size:9pt;line-height:9pt">地図アート研究所×Code for History｜干渉色標高図</span>
+</td</tr>
+</table>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
     <script>
         var map = L.map('map').setView([35.6895, 139.6917], 10);
-        var initialC = 100; // 初期のcの値
+        var initialC = 13; // 初期のcの値
         var tileUrl = 'https://grt.code4history.dev/tile/{c}/{z}/{x}/{y}';
         var tileLayer = L.tileLayer(tileUrl.replace('{c}', initialC), {
             minZoom: 0,
@@ -40,6 +60,16 @@
             tileSize: 256
         }).addTo(map);
         
+        function changeMaxValue() {
+            let selectElement = document.getElementById('maxValueSelect');
+            let selectedValue = selectElement.value;
+            let value = parseFloat(selectedValue) / 2.0 ;
+            let sliderElement = document.getElementById('slider1');
+            sliderElement.setAttribute('max', selectedValue);
+            sliderElement.setAttribute('value', String(value));
+            updateMap();
+        }        
+
         function updateMap() {
             var sliderValue = document.getElementById('slider1').value;
             tileLayer.setUrl(tileUrl.replace('{c}', sliderValue));
@@ -49,36 +79,7 @@
             var sliderValue = document.getElementById('slider1').value;
             document.getElementById('cc').innerText = sliderValue;
         }
-
-        // function updateMap() {
-        //     var sliderValue = document.getElementById('slider2').value;
-        //     tileLayer.setUrl(tileUrl.replace('{c}', sliderValue));
-        // }
-        
-        // function updateValue() {
-        //     var sliderValue = document.getElementById('slider2').value;
-        //     document.getElementById('cc').innerText = sliderValue;
-        // }
-
-        // function updateMap() {
-        //     var sliderValue = document.getElementById('slider3').value;
-        //     tileLayer.setUrl(tileUrl.replace('{c}', sliderValue));
-        // }
-        
-        // function updateValue() {
-        //     var sliderValue = document.getElementById('slider3').value;
-        //     document.getElementById('cc').innerText = sliderValue;
-        // }
-
-        // function updateMap() {
-        //     var sliderValue = document.getElementById('slider4').value;
-        //     tileLayer.setUrl(tileUrl.replace('{c}', sliderValue));
-        // }
-        
-        // function updateValue() {
-        //     var sliderValue = document.getElementById('slider4').value;
-        //     document.getElementById('cc').innerText = sliderValue;
-        // }
     </script>
 </body>
 </html>
+
