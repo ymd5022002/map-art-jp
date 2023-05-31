@@ -22,7 +22,7 @@
 <div style="font-size:12pt;font-weight:900">干渉色標高図 (Leafletテスト2)</div>
 
 <span style="font-size:11pt">色周期(m)：1
-    <input id="slider1" type="range" min="1" max="25" step="1" value="13" oninput="updateValue()" onmouseup="updateMap()" />
+    <input id="slider1" type="range" min="1" max="25" step="1" value="13" oninput="updateValue()" onmouseup="updateMap()" ontouchend="updateMap()" />
     <span id="maxValueText">
         <select id="maxValueSelect" onchange="changeMaxValue()">
             <option value="25">25</option>
