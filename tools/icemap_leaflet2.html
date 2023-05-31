@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>Leaflet Map</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-	<style>
+    <style>
         html,body,#map {
             height: 100%;
             width: 100%;
@@ -19,10 +19,10 @@
 <table width=100% height=100%>
 <tr>
 <td height=23pt>
-<div style="font-size:12pt;font-weight:900">干渉色標高図(Leafletテスト2)</div>
+<div style="font-size:12pt;font-weight:900">干渉色標高図 (Leafletテスト2)</div>
 
 <span style="font-size:11pt">色周期(m)：1
-    <input id="slider1" type="range" min="1" max="25" step="1" value="13" oninput="updateValue()" onmouseup="updateMap()" ontouchend="updateMap()"/>
+    <input id="slider1" type="range" min="1" max="25" step="1" value="13" oninput="updateValue()" onmouseup="updateMap()" />
     <span id="maxValueText">
         <select id="maxValueSelect" onchange="changeMaxValue()">
             <option value="25">25</option>
@@ -49,37 +49,93 @@
     <span style="font-size:9pt;line-height:9pt"><a href="https://ymd5022002.github.io/map-art-jp/" target="_blank">地図アート研究所</a> × <a href="https://code4history.dev/index_ja.html" target="_blank">Code for History</a>｜干渉色標高図</span>
 </td></tr>
 </table>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([35.6895, 139.6917], 10);
-        var initialC = 13; // 初期のcの値
-        var tileUrl = 'https://grt.code4history.dev/tile/{c}/{z}/{x}/{y}';
-        var tileLayer = L.tileLayer(tileUrl.replace('{c}', initialC), {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+
+<script>
+    var map;
+    var initialC = 13; // 初期のcの値
+    var tileUrl = 'https://grt.code4history.dev/tile/{c}/{z}/{x}/{y}';
+
+    function getUrlParams() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var lat = parseFloat(urlParams.get("lat"));
+        var lng = parseFloat(urlParams.get("lng"));
+        var zoom = parseInt(urlParams.get("zoom"));
+        if (isNaN(lat) || isNaN(lng) || isNaN(zoom)) {
+            return null;
+        } else {
+            return {
+                lat: lat,
+                lng: lng,
+                zoom: zoom
+            };
+        }
+    }
+
+    function setUrlParams(lat, lng, zoom) {
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("lat", lat);
+        urlParams.set("lng", lng);
+        urlParams.set("zoom", zoom);
+        var newUrl = window.location.pathname + "?" + urlParams.toString();
+        window.history.replaceState({}, '', newUrl);
+    }
+
+    function initializeMap() {
+        var urlParams = getUrlParams();
+        if (urlParams) {
+            map = L.map('map').setView([urlParams.lat, urlParams.lng], urlParams.zoom);
+        } else {
+            map = L.map('map').setView([35.6895, 139.6917], 10);
+        }
+
+        tileLayer = L.tileLayer(tileUrl.replace('{c}', initialC), {
             minZoom: 0,
             maxZoom: 18,
             tileSize: 256
         }).addTo(map);
-        
-        function changeMaxValue() {
-            var selectElement = document.getElementById('maxValueSelect');
-            var selectedValue = selectElement.value;
-            var sliderElement = document.getElementById('slider1');
-            sliderElement.setAttribute('max', selectedValue);
-            sliderElement.setAttribute('value', selectedValue);
-            updateValue()
-            updateMap();
-        }        
 
-        function updateMap() {
-            var sliderValue = document.getElementById('slider1').value;
-            tileLayer.setUrl(tileUrl.replace('{c}', sliderValue));
+        map.on('moveend', function () {
+            var center = map.getCenter();
+            var zoom = map.getZoom();
+            setUrlParams(center.lat, center.lng, zoom);
+        });
+
+        // URLのクエリパラメータが存在する場合、地図の表示位置とズームレベルを設定します
+        var urlParams = getUrlParams();
+        if (urlParams) {
+            map.setView([urlParams.lat, urlParams.lng], urlParams.zoom);
         }
-        
-        function updateValue() {
-            var sliderValue = document.getElementById('slider1').value;
-            document.getElementById('cc').innerText = sliderValue;
-        }
-    </script>
+
+        // URLのクエリパラメータから緯度、経度、ズームレベルを取得して設定します
+        var lat = urlParams ? urlParams.lat : 35.6895;
+        var lng = urlParams ? urlParams.lng : 139.6917;
+        var zoom = urlParams ? urlParams.zoom : 10;
+
+        map.setView([lat, lng], zoom);
+    }
+
+    function changeMaxValue() {
+        var selectElement = document.getElementById('maxValueSelect');
+        var selectedValue = selectElement.value;
+        var sliderElement = document.getElementById('slider1');
+        sliderElement.setAttribute('max', selectedValue);
+        sliderElement.setAttribute('value', selectedValue);
+        updateValue();
+        updateMap();
+    }
+
+    function updateMap() {
+        var sliderValue = document.getElementById('slider1').value;
+        tileLayer.setUrl(tileUrl.replace('{c}', sliderValue));
+    }
+
+    function updateValue() {
+        var sliderValue = document.getElementById('slider1').value;
+        document.getElementById('cc').innerText = sliderValue;
+    }
+
+    initializeMap();
+</script>
 </body>
 </html>
-
