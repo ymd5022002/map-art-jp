@@ -120,11 +120,11 @@
     L.control.layers({
         '干渉色標高図': icemap,
     }, {
-        '地理院タイル（標準地図）': std,
-        '地理院タイル（写真）': ort,
-        '地理院タイル（白地図）': blk,
-        '地理院タイル（陰影起伏図）': hillshade,
-        '地理院タイル（傾斜量図）': slope,
+        '標準地図（地理院タイル）': std,
+        '写真（地理院タイル）': ort,
+        '白地図（地理院タイル）': blk,
+        '陰影起伏図（地理院タイル）': hillshade,
+        '傾斜量図（地理院タイル）': slope,
         //'明治期迅速測図': rapid
         'OpenStreetMap': osm
     }, {
@@ -177,12 +177,13 @@
         // URLのクエリパラメータが存在する場合、地図の表示位置とズームレベルを設定します
         var urlParams = getUrlParams();
         if (urlParams) {
-            map.setView([urlParams.lat, urlParams.lng], urlParams.zoom);
             var selectElement = document.getElementById('maxValueSelect');
             var selectedValue = selectElement.value;
             var sliderElement = document.getElementById('slider1');
-            selectElement.value = urlParams.cm
-            sliderElement.value = urlParams.cc
+            document.getElementById('cc').innerText = urlParams.cc;
+            sliderElement.value = urlParams.cc;
+            selectElement.value = urlParams.cm;
+            map.setView([urlParams.lat, urlParams.lng], urlParams.zoom);
             updateMap();
         }else{
         //URLのクエリパラメータから緯度、経度、ズームレベルを取得して設定します
