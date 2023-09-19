@@ -67,6 +67,11 @@ colorCode = colorCode_A
 
 blackFlag = false;
 
+topoMapFlag = false;
+grayMapSettings = '/&base_grayscale=1&ls=std%7Cslopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=011&disp=0111&lcd=slopemap&vs=c0g1j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2';
+topoMapSettings = '/&base=std&base_grayscale=1&ls=std%7Cslopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=011&disp=1111&lcd=slopemap&vs=c0g1j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2';
+mapSettings = grayMapSettings;
+
 colorBar1 = document.getElementById("colorBar1");
 
 document.getElementById("bColorCheckbox").addEventListener("change",function() {
@@ -86,7 +91,19 @@ document.getElementById("bColorCheckbox").addEventListener("change",function() {
         document.getElementById( "cycleTone" ).value = "25"
         str_cycleTone = 25;
     }
+    mapDrawing();
 });
+
+document.getElementById("topoMapCheckbox").addEventListener("change",function() {
+    topoMapFlag = !topoMapFlag;
+    if (topoMapFlag == true){
+        mapSettings = topoMapSettings;
+    }else{
+        mapSettings = grayMapSettings;
+    }
+    mapDrawing();
+});
+
 
 document.getElementById('mapFrame')[0].contentDocument.location.reload(true);
 
@@ -235,7 +252,7 @@ function mapDrawing() {  //干渉色標高図の描画
     document.getElementById("output_cycleHeight_2nd").innerHTML   = str_cycleHeight_2nd; 
 
     //地理院地図の書き換え
-    document.getElementById('mapFrame1').contentWindow.location.replace('https://maps.gsi.go.jp/?hc=hic'+ str_zoomPosition +'/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2'+g__id);
+    document.getElementById('mapFrame1').contentWindow.location.replace('https://maps.gsi.go.jp/?hc=hc'+ str_zoomPosition + mapSettings + g__id);
 
     //地理院地図の倍率緯度経度値からGoogleマップのURLを生成
     var index1 = str_zoomPosition.indexOf('/');
@@ -251,7 +268,7 @@ function mapDrawing() {  //干渉色標高図の描画
 
     n++;
 
-    gsiURL='https://maps.gsi.go.jp/'+ str_zoomPosition +'/&base_grayscale=1&ls=std%2C0.71%7Cslopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=111&disp=0111&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2'+g__id
+    gsiURL='https://maps.gsi.go.jp/'+ str_zoomPosition + mapSettings +g__id
 
 }
 
