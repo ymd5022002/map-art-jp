@@ -270,6 +270,16 @@ function mapDrawing() {  //干渉色標高図の描画
 
     gsiURL='https://maps.gsi.go.jp/'+ str_zoomPosition + mapSettings +g__id
 
+    var imgElements = document.querySelectorAll('.cycleHeight_button img');
+    for (var i=0;i<imgElements.length;i++){
+        if(imgElements[i].getAttribute("alt")==str_cycleHeight){
+        imgElements[i].style.border="2px solid #5480C8";
+        imgElements[i].style.borderRadius = "5px";
+        }else{
+        imgElements[i].style.border="2px solid #FCFDFE";
+        imgElements[i].style.borderRadius = "5px";
+        }
+    }
 }
 
 function zoomPositionPaste(){       //地図URLから倍率緯度経度を貼りつける関数
