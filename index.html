@@ -111,14 +111,16 @@
                         src="img/button100.svg" alt="100" width="40" height="40" onclick="changeCycleHeight(100)" style="border: 2px solid #FCFDFE;"><img
                         src="img/button200.svg" alt="200" width="40" height="40" onclick="changeCycleHeight(200)" style="border: 2px solid #FCFDFE;"><img
                         src="img/button500.svg" alt="500" width="40" height="40" onclick="changeCycleHeight(500)" style="border: 2px solid #FCFDFE;"><img
-                        src="img/button_draw.svg" alt="draw" width="60" height="40" onclick="mapDrawing();" style="border: 2px solid #FCFDFE;"><img
-                        src="img/button_fullscreen.svg" alt="fullscren" width="60" height="40" onclick="jumpToGSIMap();" style="border: 2px solid #FCFDFE;"
-                        id="url">
+                        src="img/button_fullscreen.svg" alt="fullscren" width="60" height="40" onclick="jumpToGSIMap();" style="border: 2px solid #FCFDFE;" id="url">
+                        <br>
+                        <img src="img/button_draw.svg" alt="draw" width="60" height="40" onclick="mapDrawing();" style="border: 2px solid #FCFDFE;">
+                        <input type="checkbox" id="topoMapCheckbox"><span>地形図</span>
+                        <input type="checkbox" id="bColorCheckbox"><span>黒 </span>
                 </span>
             </div>
 
             <label class="accented">
-                <span style="font-size:x-small">　<br></span>
+                <span style="font-size:x-small"></span>
                 <span>色周期(ｍ)</span
                     ><input id="cycleHeight" value="100" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
                     type="range" id="slider" value="100" min="25" max="2000" step="25"
@@ -146,9 +148,6 @@
                 <br>
                 <span>└ <input type="button" onclick="zoomPositionPaste();" value="変換貼付"> <input id="mapsURL"
                         placeholder="地理院地図URLを貼付け"><br></span>
-                        <input type="checkbox" id="topoMapCheckbox"><span>地形図</span>
-                        <input type="checkbox" id="bColorCheckbox"><span>黒 </span>
-                        <br>
             </label>
             <br>
 
