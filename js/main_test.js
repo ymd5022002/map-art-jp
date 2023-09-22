@@ -123,17 +123,12 @@ function mapDrawing() {  //干渉色標高図の描画
     str_originHeight = document.getElementById( "originHeight" ).value;
     str_cycleHeight = document.getElementById( "cycleHeight" ).value;
     str_cycleTone = document.getElementById( "cycleTone" ).value;
-    str_zoomPosition = document.getElementById( "zoomPosition" ).value;
 
     //現在表示している地理院地図のURLと緯度経度を取得
     iframe = document.getElementById("mapFrame1");
     currentURL=iframe.contentWindow.location.href;
     var match = currentURL.match(/#([\d.]+)\/([\d.]+)\/([\d.]+)/);
-    var str_currentZoomPosition = "#" + match[1] + "/" + match[2] + "/" + match[3];
-    if (str_zoomPosition != str_currentZoomPosition) {
-        str_zoomPosition = str_currentZoomPosition
-    }
-    console.log("zoom/緯度/経度は" + str_zoomPosition)
+    var str_ZoomPosition = "#" + match[1] + "/" + match[2] + "/" + match[3];
 
     //文字列を数値に変換
     minHeight = Number(str_minHeight);
