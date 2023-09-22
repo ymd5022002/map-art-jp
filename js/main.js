@@ -252,7 +252,7 @@ function mapDrawing() {  //干渉色標高図の描画
     document.getElementById("output_cycleHeight_2nd").innerHTML   = str_cycleHeight_2nd; 
 
     //地理院地図の書き換え
-    document.getElementById('mapFrame1').contentWindow.location.replace('https://maps.gsi.go.jp/?hc=hc'+ str_zoomPosition + mapSettings + g__id);
+    document.getElementById('mapFrame1').contentWindow.location.replace('https://ymd5022002.github.io/map-art-jp/gsi/?hc=hc'+ str_zoomPosition + mapSettings + g__id);
 
     //地理院地図の倍率緯度経度値からGoogleマップのURLを生成
     var index1 = str_zoomPosition.indexOf('/');
