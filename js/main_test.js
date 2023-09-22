@@ -35,7 +35,6 @@ var str_cycleTone;          //色階調　文字列
 var str_originHeight;       //色基準高　文字列
 var str_zoomPosition = "#8/35.715370/139.840268";
                             //倍率緯度経度
-var iframe;                 //iframe変数
 var currentURL;             //表示中の地理院地図のURL
 
 var str_colorShift;         //色シフト　文字列
@@ -128,7 +127,7 @@ function mapDrawing() {  //干渉色標高図の描画
     iframe = document.getElementById("mapFrame1");
     currentURL=iframe.contentWindow.location.href;
     var match = currentURL.match(/#([\d.]+)\/([\d.]+)\/([\d.]+)/);
-    var str_ZoomPosition = "#" + match[1] + "/" + match[2] + "/" + match[3];
+    var str_zoomPosition = "#" + match[1] + "/" + match[2] + "/" + match[3];
 
     //文字列を数値に変換
     minHeight = Number(str_minHeight);
