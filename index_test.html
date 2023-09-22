@@ -1,7 +1,10 @@
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja">
 
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/ fb# website: http://ogp.me/ns/ website#">
-    <title>地図アート研究所</title>
+    <title>地図アート研究所(テストサイト)</title>
     <meta property="og:url" content="https://ymd5022002.github.io/map-art-jp/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="【地図アート研究所】" />
@@ -24,7 +27,6 @@
         }, { passive: false });
     </script>
     <link rel="stylesheet" href="./css/style.css">
-
 </head>
 
 <body>
@@ -142,13 +144,7 @@
                     type="range" value="25" min="0" max="100" step="5" oninput="this.previousSibling.value = this.value" /
                     ><span style="font-size:small">1周期色数</span>
                 <br>
-                <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268"></span>
-                <br>
-                <span>└ <input type="button" onclick="zoomPositionPaste();" value="変換貼付"> <input id="mapsURL"
-                        placeholder="地理院地図URLを貼付け"><br></span>
             </label>
-            <br>
-
             <br>
             地理院地図のURLが長すぎてSNSで共有が出来ない場合は、下記の方法をお試しください
             <ol>
@@ -172,8 +168,6 @@
         <ul>
             <li>干渉色標高図ではカラースケールとして、シャボン玉に見られるような薄膜光干渉による「1次の白色」から「3次の緑色」までのカラーグラデーションを周期的に繰返して使っています</li>
             <li>色周期：小さくすると細かい凸凹が可視化できます(推奨最小値25)。色周期とは、同じ色が次に現れるまでの標高差のことです。</li>
-            <li>倍率緯度経度：拡大縮小移動用。地理院地図のURLのzoom倍率(#XX)と緯度経度を、間の「/」も含めて貼付けると、倍率・緯度・経度を変更できます。全世界対応で、南極まで見れます</li>
-            <li>変換貼付：貼付け用便利ツール。地理院地図URLを貼付けた後、このボタンを押すと倍率緯度経度が自動的に貼りつきます</li>
             <li>最高：着色したい最高の標高を入力します。それ以上は同じ色になります</li>
             <li>最低：着色したい最低の標高を入力します。それ以下は同じ色になります</li>
             <li>基準高：色をシフトするのに使います。入力した標高が1次の白色で着色され、着色の基準の標高になります</li>
@@ -198,11 +192,6 @@
         <h3>報告されているバグなど</h3>
         <p style="font-size:small">
         <ul>
-            <li>地図内を移動した後に「描画更新」ボタンを押すと、表示場所が動いてしまう仕様になっています</li>
-            <li>2つの地図と倍率緯度経度の設定値は連動しない仕様になっています</li>
-            <li>いずれも使いづらくて申し訳ござません。改善方法をご存知でしたら教えていただけると嬉しいです ⇒ <a
-                    href="https://ymd5022002.github.io/map-art-jp/contact/index.html"
-                    target="_blank">こちら</a></li>
             <li>標高設定の正確性は検証できておりません、「地図アート」のツールとしてお使いください</li>
             <li>通信状況などにより動作が重くなる場合がございます、予めご了承ください</li>
             <li>バグなどを発見されましたら、お知らせいただけると幸いです ⇒ <a
@@ -223,7 +212,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.4/css/all.css">
         <div id="page_top"><a href="#"></a></div>
     </footer>
-    <script src="./js/main.js"></script>
+    <script src="./js/main_test.js"></script>
 </body>
 
 </html>
