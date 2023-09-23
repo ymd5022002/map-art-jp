@@ -109,12 +109,16 @@ document.getElementById("topoMapCheckbox").addEventListener("change",function() 
 
 document.getElementById('mapFrame')[0].contentDocument.location.reload(true);
 
-// 地理院地図の表示の変更の監視
+// 地理院地図の更新があったときの処理
+document.getElementById('mapFrame1').addEventListener('load', function() {
+    console.log('Child page has been loaded.');
+});
+
 document.getElementById('mapFrame1').onload = function() {
     iframe = document.getElementById("mapFrame1");
     var previousURL="";
     setInterval(function() {
-        console.log("setIntervalが動作中");
+        // console.log("setIntervalが動作中");
         // currentURL=iframe.contentWindow.location.href;
         // if (currentURL!==previousURL){
         //     previousURL=currentURL;
