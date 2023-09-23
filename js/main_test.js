@@ -33,7 +33,7 @@ var str_maxHeight;          //最大標高　文字列
 var str_cycleHeight;        //色周期　文字列
 var str_cycleTone;          //色階調　文字列
 var str_originHeight;       //色基準高　文字列
-var str_zoomPosition = "#8/35.715370/139.840268";
+var str_zoomPosition = "#9/35.68/139.83";
                             //倍率緯度経度
 var currentURL;             //表示中の地理院地図のURL
 
