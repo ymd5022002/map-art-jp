@@ -135,6 +135,7 @@ document.getElementById('mapFrame1').onload = function() {
             var google_zoom = Math.round(135175518.4397690*(2**(-2-str_zoom)) * 10000000) / 1000000 ; //*(2**(1-str_zoom))
         
             document.getElementById('mapFrame2').contentWindow.location.replace("https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d"+google_zoom+"!2d"+str_long+"!3d"+str_lat+"!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sja!2sjp!4v1598550150171!5m2!1sja!2sjp");
+            gsiURL=currentURL;
         }
     },500);
 };
@@ -362,8 +363,8 @@ function zoomPositionPaste(){       //地図URLから倍率緯度経度を貼り
 }
 
 function jumpToGSIMap(){        //干渉色の拡大地図を表示する関数
-    console.log("大画面URL: " + currentURL);
-    window.open( currentURL,'_blank');
+    console.log("大画面URL: " + gsiURL);
+    window.open( gsiURL,'_blank');
 }
 
 function mod(i,j) {   //Javascript は　負の剰余が負の値になる(例：(−5) %　2 = -1 )定義なので、正になる剰余関数を定義する。
