@@ -110,33 +110,34 @@ document.getElementById("topoMapCheckbox").addEventListener("change",function() 
 document.getElementById('mapFrame')[0].contentDocument.location.reload(true);
 
 // 地理院地図の表示の変更の監視
-iframe = document.getElementById("mapFrame1");
-var previousURL="";
-setInterval(function() {
-    currentURL=iframe.contentWindow.location.href;
-    if (currentURL!==previousURL){
-        previousURL=currentURL;
-        console.log(currentURL);
-        var hashIka = currentURL.split('#')[1]; //ハッシュ以下を取得
-        console.log("#以下: " + hashIka);
-        var hashIkaParts=hashIka.split('/'); // ハッシュ以下を/で分割
-        var zoom = hashIkaParts[0]; // ズームレベル
-        var ido = hashIkaParts[1]; // 緯度
-        var keido = hashIkaParts[2]; // 経度
-        console.log("ズームレベル: " + zoom);
-        console.log("緯度: " + ido);
-        console.log("経度: " + keido);
-
-        //Googleマップの書き換え
-        var str_zoom = String(zoom);
-        var str_lat = String(ido);  //lat-->緯度、long-->経度
-        var str_long = String(keido);
-        var google_zoom = Math.round(135175518.4397690*(2**(-2-str_zoom)) * 10000000) / 1000000 ; //*(2**(1-str_zoom))
+document.getElementById('mapFrame1').onload = function() {
+    iframe = document.getElementById("mapFrame1");
+    var previousURL="";
+    setInterval(function() {
+        currentURL=iframe.contentWindow.location.href;
+        if (currentURL!==previousURL){
+            previousURL=currentURL;
+            console.log(currentURL);
+            var hashIka = currentURL.split('#')[1]; //ハッシュ以下を取得
+            console.log("#以下: " + hashIka);
+            var hashIkaParts=hashIka.split('/'); // ハッシュ以下を/で分割
+            var zoom = hashIkaParts[0]; // ズームレベル
+            var ido = hashIkaParts[1]; // 緯度
+            var keido = hashIkaParts[2]; // 経度
+            console.log("ズームレベル: " + zoom);
+            console.log("緯度: " + ido);
+            console.log("経度: " + keido);
     
-        document.getElementById('mapFrame2').contentWindow.location.replace("https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d"+google_zoom+"!2d"+str_long+"!3d"+str_lat+"!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sja!2sjp!4v1598550150171!5m2!1sja!2sjp");
-    }
-},500);
-
+            //Googleマップの書き換え
+            var str_zoom = String(zoom);
+            var str_lat = String(ido);  //lat-->緯度、long-->経度
+            var str_long = String(keido);
+            var google_zoom = Math.round(135175518.4397690*(2**(-2-str_zoom)) * 10000000) / 1000000 ; //*(2**(1-str_zoom))
+        
+            document.getElementById('mapFrame2').contentWindow.location.replace("https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d"+google_zoom+"!2d"+str_long+"!3d"+str_lat+"!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sja!2sjp!4v1598550150171!5m2!1sja!2sjp");
+        }
+    },500);
+};
 
 function mapDrawing() {  //干渉色標高図の描画
 
