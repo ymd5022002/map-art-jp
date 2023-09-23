@@ -362,6 +362,7 @@ function zoomPositionPaste(){       //地図URLから倍率緯度経度を貼り
 }
 
 function jumpToGSIMap(){        //干渉色の拡大地図を表示する関数
+    console.log("大画面URL: " + currentURL);
     window.open( currentURL,'_blank');
 }
 
