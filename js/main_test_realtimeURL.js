@@ -45,7 +45,7 @@ var str_endSubdeg;          //最大時副次数　文字列
 var str_minHeightModefied;  //修正最小高　文字列
 var str_maxHeightModefied;  //修正最大高　文字列
 var str_totalTone;          //総色階調　文字列
-//var gsiURL                  //地理院地図URL 【削除予定】
+var gsiURL                  //地理院地図URL
 var mapsURL                 //ペースト用地図URL
 var str_cycleHeight_0th; //0次色周期
 var str_cycleHeight_1st;    //1次色周期
@@ -310,7 +310,7 @@ function mapDrawing() {  //干渉色標高図の描画
 
     n++;
 
-    //gsiURL='https://maps.gsi.go.jp/'+ str_zoomPosition + mapSettings +g__id　// 【削除予定】
+    gsiURL='https://maps.gsi.go.jp/'+ str_zoomPosition + mapSettings +g__id　// 【削除予定】
 
     var imgElements = document.querySelectorAll('.cycleHeight_button img');
     for (var i=0;i<imgElements.length;i++){
