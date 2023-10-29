@@ -1,3 +1,7 @@
+// ver 2023-10-29 10:16
+//    jsのstr_zoomPosition絡みの記述を消そうとしたが、全て消すと描画できないので、残してある
+//    htmlファイルではZoom緯度経度の欄をhiddenにして、非表示化してあるだけ
+//    ゆくゆくはこれらを整理したい
 //const input = document.querySelector('input');
 //input.addEventListener('change',mapDrawing());
 
@@ -33,8 +37,11 @@ var str_maxHeight;          //最大標高　文字列
 var str_cycleHeight;        //色周期　文字列
 var str_cycleTone;          //色階調　文字列
 var str_originHeight;       //色基準高　文字列
-var str_zoomPosition = "#8/35.715298/139.840851";
+var str_zoomPosition = "#8/35.715370/139.840268";
                             //倍率緯度経度
+var iframe;                 //iframe変数
+var currentURL;             //表示中の地理院地図のURL
+
 var str_colorShift;         //色シフト　文字列
 var str_minDeg;             //最小次数　文字列
 var str_maxDeg;             //最大次数　文字列
@@ -121,6 +128,16 @@ function mapDrawing() {  //干渉色標高図の描画
     str_cycleHeight = document.getElementById( "cycleHeight" ).value;
     str_cycleTone = document.getElementById( "cycleTone" ).value;
     str_zoomPosition = document.getElementById( "zoomPosition" ).value;
+
+    //現在表示している地理院地図のURLと緯度経度を取得
+    iframe = document.getElementById("mapFrame1");
+    currentURL=iframe.contentWindow.location.href;
+    var match = currentURL.match(/#([\d.]+)\/([\d.]+)\/([\d.]+)/);
+    var str_currentZoomPosition = "#" + match[1] + "/" + match[2] + "/" + match[3];
+    if (str_zoomPosition != str_currentZoomPosition) {
+        str_zoomPosition = str_currentZoomPosition
+    }
+    console.log("zoom/緯度/経度は" + str_zoomPosition)
 
     //文字列を数値に変換
     minHeight = Number(str_minHeight);
