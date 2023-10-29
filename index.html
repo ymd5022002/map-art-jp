@@ -74,7 +74,7 @@
 
         <figure>
             <div class="iframe-window" style="font-size: small;">
-                <iframe id="mapFrame1" frameborder="3" scrolling="yes" marginheight="0" marginwidth="100" Width="500" height="500" src="https://ymd5022002.github.io/map-art-jp/gsi/?hc=hc#8/35.715370/139.840268/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2-16GCCCCCCG0GCCCCCCGGCCCCCC"></iframe>                <br>
+                <iframe id="mapFrame1" frameborder="3" scrolling="yes" marginheight="0" marginwidth="100" Width="500" height="500" src="https://www7a.biglobe.ne.jp/~syukugawara-yama/map-art-jp_test/gsi/?hc=hc#8/35.715370/139.840268/&base_grayscale=1&ls=slopemap%2C0.37%7Chillshademap%2C0.58%7Crelief_free&blend=11&disp=011&lcd=slopemap&vs=c0j0h0k0l0u0t0z0r0s0m0f1&reliefdata=2-16GCCCCCCG0GCCCCCCGGCCCCCC"></iframe>                <br>
             </div>
             <figcaption style="font-size:small">
                 <div>
@@ -143,10 +143,10 @@
                     ><input id="cycleTone" value="25" type="text" size="4" onkeyup="this.nextSibling.value = this.value" /><input
                     type="range" value="25" min="0" max="100" step="5" oninput="this.previousSibling.value = this.value" /
                     ><span style="font-size:small">1周期色数</span>
-                <br>
-                <span>倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268"></span>
-                <br>
-                <span>└ <input type="button" onclick="zoomPositionPaste();" value="変換貼付"> <input id="mapsURL"
+                <br hidden="hidden">
+                <span hidden="hidden">倍率緯度経度<input id="zoomPosition" value="#8/35.715370/139.840268"></span>
+                <br hidden="hidden">
+                <span hidden="hidden">└ <input type="button" onclick="zoomPositionPaste();" value="変換貼付"> <input id="mapsURL"
                         placeholder="地理院地図URLを貼付け"><br></span>
             </label>
             <br>
@@ -174,8 +174,8 @@
         <ul>
             <li>干渉色標高図ではカラースケールとして、シャボン玉に見られるような薄膜光干渉による「1次の白色」から「3次の緑色」までのカラーグラデーションを周期的に繰返して使っています</li>
             <li>色周期：小さくすると細かい凸凹が可視化できます(推奨最小値25)。色周期とは、同じ色が次に現れるまでの標高差のことです。</li>
-            <li>倍率緯度経度：拡大縮小移動用。地理院地図のURLのzoom倍率(#XX)と緯度経度を、間の「/」も含めて貼付けると、倍率・緯度・経度を変更できます。全世界対応で、南極まで見れます</li>
-            <li>変換貼付：貼付け用便利ツール。地理院地図URLを貼付けた後、このボタンを押すと倍率緯度経度が自動的に貼りつきます</li>
+            <!-- <li>倍率緯度経度：拡大縮小移動用。地理院地図のURLのzoom倍率(#XX)と緯度経度を、間の「/」も含めて貼付けると、倍率・緯度・経度を変更できます。全世界対応で、南極まで見れます</li>
+            <li>変換貼付：貼付け用便利ツール。地理院地図URLを貼付けた後、このボタンを押すと倍率緯度経度が自動的に貼りつきます</li> -->
             <li>最高：着色したい最高の標高を入力します。それ以上は同じ色になります</li>
             <li>最低：着色したい最低の標高を入力します。それ以下は同じ色になります</li>
             <li>基準高：色をシフトするのに使います。入力した標高が1次の白色で着色され、着色の基準の標高になります</li>
@@ -200,9 +200,9 @@
         <h3>報告されているバグなど</h3>
         <p style="font-size:small">
         <ul>
-            <li>地図内を移動した後に「描画更新」ボタンを押すと、表示場所が動いてしまう仕様になっています</li>
-            <li>2つの地図と倍率緯度経度の設定値は連動しない仕様になっています</li>
-            <li>いずれも使いづらくて申し訳ござません。改善方法をご存知でしたら教えていただけると嬉しいです ⇒ <a
+            <!-- <li>地図内を移動した後に「描画更新」ボタンを押すと、表示場所が動いてしまう仕様になっています</li>
+            <li>2つの地図と倍率緯度経度の設定値は連動しない仕様になっています</li> -->
+            <li>使いづらくて申し訳ござません。改善方法をご存知でしたら教えていただけると嬉しいです ⇒ <a
                     href="https://ymd5022002.github.io/map-art-jp/contact/index.html"
                     target="_blank">こちら</a></li>
             <li>標高設定の正確性は検証できておりません、「地図アート」のツールとしてお使いください</li>
