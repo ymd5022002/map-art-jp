@@ -204,10 +204,10 @@
             const context = canvas.getContext('2d');
             const imageData = context.getImageData(x, y, 1, 1);
             const [r, g, b] = [imageData.data[0], imageData.data[1], imageData.data[2]];
-
-            const [r0, g0, b0] = [Math.pow(r, 1/2.2), Math.pow(g, 1/2.2), Math.pow(b, 1/2.2)]; //逆ガンマ補正
-            const grayscale = 0.2126 * r + 0.7152 * g + 0.0722 * b; //CIE XYZ の Y  sRGB  https://qiita.com/yoya/items/96c36b069e74398796f3
-            grayscale = Math.pow(grayscale, 2.2); //ガンマ補正
+            const grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
+            //const [r0, g0, b0] = [Math.pow(r, 1/2.2), Math.pow(g, 1/2.2), Math.pow(b, 1/2.2)]; //逆ガンマ補正
+            //const grayscale = 0.2126 * r0 + 0.7152 * g0 + 0.0722 * b0; //CIE XYZ の Y  sRGB  https://qiita.com/yoya/items/96c36b069e74398796f3
+            //grayscale = Math.pow(grayscale, 2.2); //ガンマ補正
 
             return grayscale / 255;
         }
