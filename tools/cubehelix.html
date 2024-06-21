@@ -186,7 +186,7 @@
 
             for (let x = 0; x < bandCanvas.width; x++) {
                 const grayscaleValue = getGrayscaleValueFromCanvas(gradientCanvas, x, 0);
-                const grayscale = Math.round(grayscaleValue * 255);
+                const grayscale = Math.round(grayscaleValue);
 
                 for (let y = 0; y < bandCanvas.height; y++) {
                     const index = (y * bandCanvas.width + x) * 4;
@@ -199,17 +199,18 @@
 
             bandContext.putImageData(imageData, 0, 0);
         }
-
+        
         function getGrayscaleValueFromCanvas(canvas, x, y) {
             const context = canvas.getContext('2d');
             const imageData = context.getImageData(x, y, 1, 1);
             const [r, g, b] = [imageData.data[0], imageData.data[1], imageData.data[2]];
-            const grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
-            //const [r0, g0, b0] = [Math.pow(r, 1/2.2), Math.pow(g, 1/2.2), Math.pow(b, 1/2.2)]; //逆ガンマ補正
-            //const grayscale = 0.2126 * r0 + 0.7152 * g0 + 0.0722 * b0; //CIE XYZ の Y  sRGB  https://qiita.com/yoya/items/96c36b069e74398796f3
-            //grayscale = Math.pow(grayscale, 2.2); //ガンマ補正
 
-            return grayscale / 255;
+            // 逆ガンマ補正
+            const [r0, g0, b0] = [Math.pow(r / 255, 2.2), Math.pow(g / 255, 2.2), Math.pow(b / 255, 2.2)];
+            const grayscale = 0.2126 * r0 + 0.7152 * g0 + 0.0722 * b0;
+            
+            // ガンマ補正
+            return Math.pow(grayscale, 1 / 2.2) * 255;
         }
 
         function cubehelix(t, start, rotations, hue) {
