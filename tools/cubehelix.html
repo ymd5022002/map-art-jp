@@ -1,0 +1,311 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/ fb# website: http://ogp.me/ns/ website#">
+    <title>地図アート研究所</title>
+    <meta property="og:url" content="https://ymd5022002.github.io/map-art-jp/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="【地図アート研究所】" />
+    <meta property="og:description" content="誰でも簡単！微地形が見える虹色の地図が作れます" />
+    <meta property="og:site_name" content="干渉色標高地図作成ツール" />
+    <meta property="og:image" content="https://ymd5022002.github.io/map-art-jp/img/thumnail01_ogp_fb_mar.jpg" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--ブラウザのアイコンの設定
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/android-chrome-256x256.png">
+    -->
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script>
+        /* ピッチインピッチアウトによる拡大縮小を禁止 */
+        document.documentElement.addEventListener('touchstart', function (e) {
+            if (e.touches.length >= 2) { e.preventDefault(); }
+        }, { passive: false });
+    </script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>
+            <a href="../index.html">地図アート研究所</a>
+        </h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li class="current"><a href="../tools/index.html">Tools</a></li>
+                <li><a href="../gallery/index.html">Gallery</a></li>
+                <li><a href="../contact/index.html">Contact</a></li>
+                <li><a href="../about/index.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>スライダーと入力ボックス</title>
+        <style>
+            .control {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .control label {
+                width: 100px;
+            }
+
+            .control input[type="range"] {
+                flex: 1;
+            }
+
+            canvas {
+                border: 1px solid #000;
+                margin-top: 20px;
+            }
+        </style>
+
+        <h2>cubehelix色テスト</h2>
+            <div class="control">
+                <label for="start">Start</label>
+                <input type="number" id="startInput" step="0.1" value="0.5" min="0" max="3">
+                <input type="range" id="start" min="0" max="3" step="0.1" value="0.5">
+            </div>
+            <div class="control">
+                <label for="rotations">Rotations</label>
+                <input type="number" id="rotationsInput" step="0.1" value="-1.5" min="-10" max="10">
+                <input type="range" id="rotations" min="-10" max="5" step="0.1" value="-1.5">
+            </div>
+            <div class="control">
+                <label for="hue">Hue</label>
+                <input type="number" id="hueInput" step="0.1" value="1" min="0" max="10">
+                <input type="range" id="hue" min="0" max="10" step="0.1" value="1">
+            </div>
+            <div class="control">
+                <label for="gamma">Gamma</label>
+                <input type="number" id="gammaInput" step="0.1" value="1" min="0" max="3">
+                <input type="range" id="gamma" min="0" max="3" step="0.1" value="1">
+            </div>
+            <canvas id="gradientCanvas" width="512" height="50"></canvas>
+            <canvas id="bandCanvas" width="512" height="50"></canvas>
+            <canvas id="graphCanvas" width="400" height="400"></canvas>
+            <div>
+                <br>
+                <b>Source</b><br>
+                Green, D. A., 2011, <a href="http://astron-soc.in/bulletin/11June/289392011.pdf"><i>&lsquo;A colour
+                        scheme for the display of astronomical intensity images&rsquo;</i></a>,
+                Bulletin of the Astronomical Society of India, 39, 289.<br>
+            </div>
+    </main>
+    <footer>
+        <p class="copyright">Copyright &copy; Map Art Labo (地図アート研究所) All Rights Reserved.</p>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.4/css/all.css">
+        <div id="page_top"><a href="#"></a></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        window.onload = function () {
+            const controls = [
+                { id: 'start', inputId: 'startInput', initial: 0.5, min: 0, max: 3, step: 0.1 },
+                { id: 'rotations', inputId: 'rotationsInput', initial: -1.5, min: -5, max: 5, step: 0.1 },
+                { id: 'hue', inputId: 'hueInput', initial: 1, min: 0, max: 3, step: 0.1 },
+                { id: 'gamma', inputId: 'gammaInput', initial: 1, min: 0, max: 3, step: 0.1 }
+            ];
+
+            controls.forEach(control => {
+                const slider = document.getElementById(control.id);
+                const inputBox = document.getElementById(control.inputId);
+
+                slider.value = control.initial;
+                inputBox.value = control.initial;
+
+                slider.addEventListener('input', function () {
+                    inputBox.value = slider.value;
+                    drawGradient();
+                    drawBand();
+                    drawGraph();
+                });
+
+                inputBox.addEventListener('input', function () {
+                    slider.value = inputBox.value;
+                    drawGradient();
+                    drawBand();
+                    drawGraph();
+                });
+            });
+
+            drawGradient();
+            drawBand();
+            drawGraph();
+        };
+
+        function drawGradient() {
+            const canvas = document.getElementById('gradientCanvas');
+            const context = canvas.getContext('2d');
+
+            const start = parseFloat(document.getElementById('start').value);
+            const rotations = parseFloat(document.getElementById('rotations').value);
+            const hue = parseFloat(document.getElementById('hue').value);
+            const gamma = parseFloat(document.getElementById('gamma').value);
+
+            const imageData = context.createImageData(canvas.width, canvas.height);
+
+            for (let x = 0; x < canvas.width; x++) {
+                const t = x / (canvas.width - 1);
+                const brightness = Math.pow(t, gamma);
+
+                const [r, g, b] = cubehelix(brightness, start, rotations, hue);
+
+                for (let y = 0; y < canvas.height; y++) {
+                    const index = (y * canvas.width + x) * 4;
+                    imageData.data[index] = r;
+                    imageData.data[index + 1] = g;
+                    imageData.data[index + 2] = b;
+                    imageData.data[index + 3] = 255;
+                }
+            }
+
+            context.putImageData(imageData, 0, 0);
+        }
+
+        function drawBand() {
+            const bandCanvas = document.getElementById('bandCanvas');
+            const bandContext = bandCanvas.getContext('2d');
+            const gradientCanvas = document.getElementById('gradientCanvas');
+
+            bandContext.clearRect(0, 0, bandCanvas.width, bandCanvas.height);
+            const imageData = bandContext.createImageData(bandCanvas.width, bandCanvas.height);
+
+            for (let x = 0; x < bandCanvas.width; x++) {
+                const grayscaleValue = getGrayscaleValueFromCanvas(gradientCanvas, x, 0);
+                const grayscale = Math.round(grayscaleValue * 255);
+
+                for (let y = 0; y < bandCanvas.height; y++) {
+                    const index = (y * bandCanvas.width + x) * 4;
+                    imageData.data[index] = grayscale;
+                    imageData.data[index + 1] = grayscale;
+                    imageData.data[index + 2] = grayscale;
+                    imageData.data[index + 3] = 255;
+                }
+            }
+
+            bandContext.putImageData(imageData, 0, 0);
+        }
+
+        function getGrayscaleValueFromCanvas(canvas, x, y) {
+            const context = canvas.getContext('2d');
+            const imageData = context.getImageData(x, y, 1, 1);
+            const [r, g, b] = [imageData.data[0], imageData.data[1], imageData.data[2]];
+            const grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
+            return grayscale / 255;
+        }
+
+        function cubehelix(t, start, rotations, hue) {
+            const angle = 2 * Math.PI * (start / 3 + rotations * t);
+            const amp = hue * t * (1 - t) / 2;
+
+            const r = Math.round(255 * (t + amp * (-0.14861 * Math.cos(angle) + 1.78277 * Math.sin(angle))));
+            const g = Math.round(255 * (t + amp * (-0.29227 * Math.cos(angle) - 0.90649 * Math.sin(angle))));
+            const b = Math.round(255 * (t + amp * (1.97294 * Math.cos(angle))));
+
+            return [
+                Math.min(Math.max(r, 0), 255),
+                Math.min(Math.max(g, 0), 255),
+                Math.min(Math.max(b, 0), 255)
+            ];
+        }
+
+        function drawGraph() {
+            const canvas = document.getElementById('graphCanvas');
+            const context = canvas.getContext('2d');
+
+            const start = parseFloat(document.getElementById('start').value);
+            const rotations = parseFloat(document.getElementById('rotations').value);
+            const hue = parseFloat(document.getElementById('hue').value);
+            const gamma = parseFloat(document.getElementById('gamma').value);
+
+            const data = {
+                labels: Array.from({ length: 512 }, (_, i) => i / 511),
+                datasets: [
+                    {
+                        label: 'Red',
+                        data: [],
+                        borderColor: 'red',
+                        borderWidth: 1,
+                        fill: false
+                    },
+                    {
+                        label: 'Green',
+                        data: [],
+                        borderColor: 'green',
+                        borderWidth: 1,
+                        fill: false
+                    },
+                    {
+                        label: 'Blue',
+                        data: [],
+                        borderColor: 'blue',
+                        borderWidth: 1,
+                        fill: false
+                    },
+                    {
+                        label: 'Grayscale',
+                        data: [],
+                        borderColor: 'gray',
+                        borderWidth: 1,
+                        fill: false
+                    }
+                ]
+            };
+
+            for (let x = 0; x < 512; x++) {
+                const t = x / 511;
+                const brightness = Math.pow(t, gamma);
+
+                const [r, g, b] = cubehelix(brightness, start, rotations, hue);
+                const grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
+
+                data.datasets[0].data.push(r / 255);
+                data.datasets[1].data.push(g / 255);
+                data.datasets[2].data.push(b / 255);
+                data.datasets[3].data.push(grayscale / 255);
+            }
+
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(context, {
+                type: 'line',
+                data: data,
+                options: {
+                    animation: false, // 描画アクションをオフにする
+                    aspectRatio: 1, // グラフを正方形にする
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            min: 0,
+                            max: 1,
+                            title: {
+                                display: true,
+                                text: 'Pixel Position (normalized)'
+                            }
+                        },
+                        y: {
+                            min: 0,
+                            max: 1,
+                            title: {
+                                display: true,
+                                text: 'Value (normalized)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
