@@ -61,6 +61,8 @@
             }
 
             canvas {
+                width: 100%;
+                height: auto;
                 border: 1px solid #000;
                 margin-top: 20px;
             }
@@ -107,6 +109,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        
         window.onload = function () {
             const controls = [
                 { id: 'start', inputId: 'startInput', initial: 0.5, min: 0, max: 3, step: 0.1 },
@@ -146,6 +149,7 @@
             const canvas = document.getElementById('gradientCanvas');
             const context = canvas.getContext('2d');
 
+            canvas.width = canvas.parentElement.clientWidth;
             const start = parseFloat(document.getElementById('start').value);
             const rotations = parseFloat(document.getElementById('rotations').value);
             const hue = parseFloat(document.getElementById('hue').value);
@@ -176,6 +180,7 @@
             const bandContext = bandCanvas.getContext('2d');
             const gradientCanvas = document.getElementById('gradientCanvas');
 
+            bandCanvas.width = bandCanvas.parentElement.clientWidth;
             bandContext.clearRect(0, 0, bandCanvas.width, bandCanvas.height);
             const imageData = bandContext.createImageData(bandCanvas.width, bandCanvas.height);
 
@@ -222,6 +227,7 @@
             const canvas = document.getElementById('graphCanvas');
             const context = canvas.getContext('2d');
 
+            canvas.width = canvas.parentElement.clientWidth
             const start = parseFloat(document.getElementById('start').value);
             const rotations = parseFloat(document.getElementById('rotations').value);
             const hue = parseFloat(document.getElementById('hue').value);
