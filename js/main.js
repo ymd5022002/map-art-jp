@@ -331,7 +331,7 @@ function zoomPositionPaste(){       //地図URLから倍率緯度経度を貼り
     }
 
     //倍率緯度経度の貼り付け
-    //document.getElementById( "zoomPosition" ).value = str_zoomPosition;
+    document.getElementById( "zoomPosition" ).value = str_zoomPosition;
     document.getElementById( "mapsURL" ).value = "";
     mapsURL = "";
 
