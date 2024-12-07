@@ -8,12 +8,12 @@
 var g__id ="";          //URL付加文字列
 var n = 0;              //試行回数
 
-var maxTotalTone = 2200;//最大総色階調
+var maxTotalTone;       //最大総色階調
 var minHeight;          //最小標高
 var maxHeight;          //最大標高
 var cycleHeight;        //色周期
-var cycleTone;          //色階調
-var originHeight;       //色基準高
+var cycleTone;     //色階調
+var originHeight;   //色基準高
 var shiftColor;         //色シフト
 var shiftColor;         //色シフト
 var cycleHeight_1st;    //1次色周期
@@ -32,11 +32,11 @@ var colorNumber;        //色番号
 var i;                  //次数
 var j;                  //副次数
 
-var str_minHeight;          //最小標高　文字列
-var str_maxHeight;          //最大標高　文字列
-var str_cycleHeight;        //色周期　文字列
-var str_cycleTone;          //色階調　文字列
-var str_originHeight;       //色基準高　文字列
+var str_minHeight;      //最小標高　文字列
+var str_maxHeight;      //最大標高　文字列
+var str_cycleHeight;    //色周期　文字列
+var str_cycleTone;      //色階調　文字列
+var str_originHeight;   //色基準高　文字列
 var str_zoomPosition = "#8/35.715370/139.840268";
                             //倍率緯度経度
 var iframe;                 //iframe変数
@@ -52,7 +52,7 @@ var str_maxHeightModefied;  //修正最大高　文字列
 var str_totalTone;          //総色階調　文字列
 var gsiURL                  //地理院地図URL
 var mapsURL                 //ペースト用地図URL
-var str_cycleHeight_0th; //0次色周期
+var str_cycleHeight_0th;    //0次色周期
 var str_cycleHeight_1st;    //1次色周期
 var str_cycleHeight_2nd;    //2次色周期
 var str_cycleHeight_3rd;    //3次色周期
