@@ -1,0 +1,280 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/ fb# website: http://ogp.me/ns/ website#">
+    <title>地図アート研究所</title>
+    <meta property="og:url" content="https://ymd5022002.github.io/map-art-jp/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="【地図アート研究所】" />
+    <meta property="og:description" content="誰でも簡単！微地形が見える虹色の地図が作れます" />
+    <meta property="og:site_name" content="干渉色標高地図作成ツール" />
+    <meta property="og:image" content="https://ymd5022002.github.io/map-art-jp/img/thumnail01_ogp_fb_mar.jpg" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--ブラウザのアイコンの設定
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/android-chrome-256x256.png">
+    -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script>
+        /* ピッチインピッチアウトによる拡大縮小を禁止 */
+        document.documentElement.addEventListener('touchstart', function (e) {
+        if (e.touches.length >= 2) {e.preventDefault();}
+        }, {passive: false});
+    </script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="../index.html">地図アート研究所</a>
+        </h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li class="current"><a href="../tools/index.html">Tools</a></li>
+                <li><a href="../gallery/index.html">Gallery</a></li>
+                <li><a href="../contact/index.html">Contact</a></li>
+                <li><a href="../about/index.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>斜交するリップルマークの干渉色描画</h2>
+        振幅と波数ベクトルの異なる3つの波の和として描画します<br>
+        
+        　z = A<sub>1</sub>cos(<B>k<sub>1</sub></B>・<B>r</B>)
+         + A<sub>2</sub>cos(<B>k<sub>2</sub></B>・<B>r</B>)
+         + A<sub>3</sub>cos(<B>k<sub>3</sub></B>・<B>r</B>)
+         <br>
+        　　A<sub>1</sub>,A<sub>2</sub>,A<sub>3</sub>：振幅,　<B>k<sub>1</sub></B>,<b>k<sub>2</sub></b>,<b>k<sub>3</sub></b>：波数ベクトル,　<B>r</B>=(x, y)<br>
+        <span>　　<input id="wave1" type="checkbox" checked>波1：</span>
+        振幅   
+        <input id="aa" value="3" style="width: 40px;" type="number">
+         , 波数 
+        <input id="bb" value="20" style="width: 40px;" type="number" step="1" >
+        , 進行方向
+        <input id="cc" value="90" style="width: 40px;" type="number" step="5" >度  
+        <br>
+        <span>　　<input id="wave2" type="checkbox" checked>波2：</span>
+        振幅
+        <input id="dd" value="2.3" style="width: 40px;" type="number" step="0.1" > 
+        , 波数
+        <input id="ee" value="3.5" style="width: 40px;" type="number" step="0.1" >
+        , 進行方向
+        <input id="ff" value="50" style="width: 40px;" type="number" step="1" >度
+        <br>
+        <span>　　<input id="wave3" type="checkbox" checked>波3：</span>
+        振幅
+        <input id="gg" value="2.8" style="width: 40px;" type="number" step="0.1" > 
+        , 波数
+        <input id="hh" value="2.1" style="width: 40px;" type="number" step="0.1" >
+        , 進行方向
+        <input id="ii" value="35" style="width: 40px;" type="number" step="1" >度
+        <br>　　<span><input id="monochrome" type="checkbox" >グレースケール</span><br>
+        <span>色繰返し<input id="cycle" value="1" style="width: 40px;" type="number" step="0.1"/>回　</span>
+        <span>X：<input id="Xmin" value="-1" style="width: 40px;" type="number" step="0.5">pi</span>
+        <span>～<input id="Xmax" value="1" style="width: 40px;" type="number" step="0.5">pi</span>
+        <span>　Y：<input id="Ymin" value="-1" style="width: 40px;" type="number" step="0.5">pi</span>
+        <span>～<input id="Ymax" value="1" style="width: 40px;" type="number" step="0.5">pi</span><br>
+        <canvas id="canvas2" width="512" height="512"></canvas><br>
+        </span>
+    </main>
+
+    <footer>
+        <p class="copyright">Copyright &copy; Map Art Labo (地図アート研究所) All Rights Reserved.</p>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.4/css/all.css">
+        <div id="page_top"><a href="#"></a></div>
+    </footer>
+
+</body>
+
+
+<script>
+    function face(X,Y,a,b,c,d,e,f,g,h,i){　//曲線の関数を定義
+        var Z =  a * Math.cos(b * X + c * Y) + d * Math.cos(e * X + f * Y ) + g * Math.cos(h * X + i * Y );  
+        return Z;
+    }
+    function drawMap () {
+        //干渉色のcanvasの準備
+        var canvas2 = document.getElementById('canvas2');
+        var context2 = canvas2.getContext('2d');
+
+        // キャンバス全体のピクセル情報を取得
+        var imageData_iceMap = context2.getImageData(0, 0, canvas2.width, canvas2.height);
+        var width_iceMap = imageData_iceMap.width, height_iceMap = imageData_iceMap.height;
+        var pixels_iceMap = imageData_iceMap.data;  // ピクセル配列：RGBA4要素で1ピクセル
+
+        //各入力値(文字列)を取得
+        var wave1 = document.getElementById( "wave1" ).checked;
+        var str_aa = document.getElementById( "aa" ).value;
+        var str_bb = document.getElementById( "bb" ).value;
+        var str_cc = document.getElementById( "cc" ).value;
+        var wave2 = document.getElementById( "wave2" ).checked;
+        var str_dd = document.getElementById( "dd" ).value;        
+        var str_ee = document.getElementById( "ee" ).value;
+        var str_ff = document.getElementById( "ff" ).value;
+        var wave3 = document.getElementById( "wave3" ).checked;
+        var str_gg = document.getElementById( "gg" ).value;        
+        var str_hh = document.getElementById( "hh" ).value;
+        var str_ii = document.getElementById( "ii" ).value;
+        var monochrome = document.getElementById( "monochrome" ).checked;
+        var str_cycleHeight = document.getElementById( "cycle" ).value;
+        var str_Xmin = document.getElementById( "Xmin" ).value;
+        var str_Xmax = document.getElementById( "Xmax" ).value;
+        var str_Ymin = document.getElementById( "Ymin" ).value;
+        var str_Ymax = document.getElementById( "Ymax" ).value;
+
+        //文字列を数値に変換
+        var aa  = Number(str_aa);
+        var bb  = Number(str_bb);
+        var cc  = Number(str_cc);
+        var k1x = bb*Math.cos(Math.PI/180*cc);
+        var k1y = bb*Math.sin(Math.PI/180*cc);
+        var dd  = Number(str_dd);
+        var ee  = Number(str_ee);
+        var ff  = Number(str_ff);
+        var k2x = ee*Math.cos(Math.PI/180*ff);
+        var k2y = ee*Math.sin(Math.PI/180*ff);
+        var gg  = Number(str_gg);
+        var hh  = Number(str_hh);
+        var ii  = Number(str_ii);
+        var k3x = hh*Math.cos(Math.PI/180*ii);
+        var k3y = hh*Math.sin(Math.PI/180*ii);
+        var cycle  = Number(str_cycleHeight); 
+        var Xmin = Number(str_Xmin) * Math.PI;         
+        var Xmax = Number(str_Xmax) * Math.PI;        
+        var Ymin = Number(str_Ymin) * Math.PI;        
+        var Ymax = Number(str_Ymax) * Math.PI;
+
+        if (wave1 == false ){
+            aa = 0;
+        }
+        if (wave2 == false ){
+            dd = 0;
+        }      
+        if (wave3 == false ){
+            gg = 0;
+        }      
+
+        //フィッテイングパラメータ (R,G,Bそれぞれの値)
+        var rgb_iC  = [ 0.0 , 0.0 , 0.0 ];           //色の値
+        //干渉色
+        var t_iC = [ 0.64 , 0.35 , 0.355];     //振幅　amplitude
+        var c_iC = [ 0.5 , 0.5 , 0.5];         //中心値
+        var u_iC = [ 0.5 , 0.52 , 0.5];        //位相率
+        var k_iC = [ 2.98 , 3.71 , 4.35];         //波数
+        var s_iC = [ 0.105 , 0 , 0];           //波長増加率
+        var alpha_iC = [ 0.2 , 0.53 , 0.5];    //包絡振幅
+        var delta_iC = [ 0.5 , 0.1 , 0.042];   //包絡位相率
+        var beta_iC  = [ 0.7 , 0.45 , 0.35];   //包絡波数
+        var n_iC = 0;                          //色一周期の何番目か
+        var Num_iC = 1/cycle*1000;              //色１周期で何メートルか
+        var r_iC = 0.15; //0.15;               //不使用階調率
+        var dots = 1; 
+        var h = 0;                      　　//干渉色の描画時のドット数
+        var hmin = 0;
+        var hmax = 0;
+        var scale = 1;
+        var Y = 0;
+        var X = 0;
+
+        for (var y = 0; y < canvas2.height ; ++y) {         //最大値を見る時は一番端の「canvas2.height」も含める
+            for (var x = 0; x < canvas2.width ; ++x) {　　　 //最大値を見る時は一番端の「canvas2.width」も含める
+
+                X = Xmin + ( x / canvas2.width  ) * ( Xmax - Xmin ) 
+                Y = Ymax - ( y / canvas2.height ) * ( Ymax - Ymin )
+                h =  face(X,Y,aa,k1x,k1y,dd,k2x,k2y,gg,k3x,k3y)
+
+                if (( x == 0 ) * ( y == 0 )){
+                    hmin = h;
+                    hmax = h;
+                    }
+                if (h > hmax ) hmax = h ;
+                if (h < hmin ) hmin = h ;
+            }
+        }
+        scale  = 1000 / (hmax - hmin) ; //hの幅を1000に規格化する係数 
+        var Num_iC = 1000 / cycle  ; 
+        console.log(hmax, hmin ,scale , Num_iC);             //色１周期で何メートルか
+        console.log(monochrome); 
+        for (var y = 0; y < canvas2.height; ++y) {
+            for (var x = 0; x < canvas2.width; ++x) {
+                X = Xmin + ( x / canvas2.width  ) * ( Xmax - Xmin )  
+                Y = Ymax - ( y / canvas2.height ) * ( Ymax - Ymin )
+                h =  face(X,Y,aa,k1x,k1y,dd,k2x,k2y,gg,k3x,k3y)
+                h =  ( h - hmin ) * scale
+                var base = (y * canvas2.width + x) * 4;
+                    for (let i = 0; i < 3; i++ ) {
+                        n_iC = h  % Num_iC ;
+                        //console.log(h,Num_iC,n_iC);
+                        
+                        if (monochrome == false){
+                            //干渉色計算（cos近似式)
+                            rgb_iC[i] = c_iC[i] + t_iC[i] * ( 1 + alpha_iC[i] * Math.cos ( 2 * Math.PI * beta_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * delta_iC[i] ) )
+                                    * Math.cos ( 2 * Math.PI * ( 1 + s_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) ) * k_iC[i] * ( n_iC/Num_iC + r_iC ) / ( 1 + r_iC ) - 2 * Math.PI * u_iC[i] );
+                        }else{
+                            //モノクロ
+                            rgb_iC[i] = h / 1000.0; 
+                        }
+                        if ( rgb_iC[i] > 0.0031308 ) {
+                            rgb_iC[i] = 1.055 * ( rgb_iC[i] ** (1/2.4) ) - 0.055;
+                        }
+                        else{
+                            rgb_iC[i] = 12.92 * rgb_iC[i];
+                        }
+                        rgb_iC[i] = Math.round(255 * Math.max( 0 , Math.min(1, rgb_iC[i]) ) ) ;
+                    }
+                    // なんかピクセルに書き込む
+                for ( let j = 0 ; j < dots + 1 ; j++){
+                    pixels_iceMap[base + 0 + j*4 ] = rgb_iC[0];  // Red
+                    pixels_iceMap[base + 1 + j*4 ] = rgb_iC[1];  // Green
+                    pixels_iceMap[base + 2 + j*4 ] = rgb_iC[2];  // Blue
+                    pixels_iceMap[base + 3 + j*4 ] = 255;  // Alpha
+                }
+            }
+        }
+        // 変更した内容をキャンバスに書き戻す
+        context2.putImageData(imageData_iceMap, 0, 0); 
+    };
+    window.onload = ()=>{
+        //設定値入力時の地図再描画待受け
+        const inputElem0 = document.getElementById('wave1');
+        inputElem0.addEventListener('input', drawMap);        
+        const inputElem1 = document.getElementById('aa');
+        inputElem1.addEventListener('input', drawMap);
+        const inputElem2 = document.getElementById('bb');
+        inputElem2.addEventListener('input', drawMap); 
+        const inputElem3 = document.getElementById('cc');
+        inputElem3.addEventListener('input', drawMap); 
+        const inputElem4 = document.getElementById('wave2');
+        inputElem4.addEventListener('input', drawMap);        
+        const inputElem5 = document.getElementById('dd');
+        inputElem5.addEventListener('input', drawMap); 
+        const inputElem6 = document.getElementById('ee');
+        inputElem6.addEventListener('input', drawMap); 
+        const inputElem7 = document.getElementById('ff');
+        inputElem7.addEventListener('input', drawMap); 
+        const inputElem8 = document.getElementById('wave3');
+        inputElem8.addEventListener('input', drawMap);        
+        const inputElem9 = document.getElementById('gg');
+        inputElem9.addEventListener('input', drawMap); 
+        const inputElem10 = document.getElementById('hh');
+        inputElem10.addEventListener('input', drawMap); 
+        const inputElem11 = document.getElementById('ii');
+        inputElem11.addEventListener('input', drawMap);
+        const inputElem12 = document.getElementById('monochrome');
+        inputElem12.addEventListener('input', drawMap); 
+        const inputElem13 = document.getElementById('cycle');
+        inputElem13.addEventListener('input', drawMap); 
+        const inputElem14 = document.getElementById('Xmin');
+        inputElem14.addEventListener('input', drawMap); 
+        const inputElem15 = document.getElementById('Xmax');
+        inputElem15.addEventListener('input', drawMap); 
+        const inputElem16 = document.getElementById('Ymin');
+        inputElem16.addEventListener('input', drawMap); 
+        const inputElem17 = document.getElementById('Ymax');
+        inputElem17.addEventListener('input', drawMap); 
+        drawMap();
+    };
+</script>
