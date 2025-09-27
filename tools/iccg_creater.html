@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>干渉色の循環グラフ</title>
+    <link rel="stylesheet" href="css/iccg_creater.css">
+</head>
+<body>
+    <h2>干渉色の循環グラフ作成ツール</h2>
+
+    <div class="main-container">
+
+        <div class="controls">
+            <div class="top-controls-group">
+                <div class="input-group">
+                    <label>頂点数 N</label>
+                    <input type="number" id="vertexCount" value="51" min="3">
+                </div>
+
+                <div class="input-group">
+                    <label>ステップ数 X</label>
+                    <input type="number" id="stepCount" value="25" min="1">
+                </div>
+            </div>
+            
+            <div class="step-controls-group">
+                <div class="input-group">
+                    <label>01の間隔の値</label>
+                    <input type="number" id="startStep" value="1" min="1">
+                </div>
+                <div class="input-group">
+                    <label>間隔の増分</label>
+                    <input type="number" id="stepGap" value="1" min="0.1" step="0.1">
+                </div>
+            </div>
+
+            <div class="step-color-container">
+                <label class="step-color-header">ステップ / 間隔 / 色</label>
+                <div id="stepInputs" class="step-inputs-list"></div>
+            </div>
+        </div>
+
+        <div id="svgContainer"></div>
+
+    </div>
+
+    <script src="js/iccg_creater.js"></script>
+</body>
+</html>
