@@ -78,6 +78,7 @@ function angle(center, p) {
 
 /**
  * ステップ入力欄を新しいUIに合わせて生成します。
+ * (横並び、スクロール可能)
  */
 function generateStepInputs() {
     const stepCount = parseInt(document.getElementById("stepCount").value);
@@ -101,13 +102,14 @@ function generateStepInputs() {
 
     for (let i = 0; i < stepCount; i++) {
         const group = document.createElement("div");
-        group.className = "step-row";
+        group.className = "step-col"; // 縦の列を構成する新しいクラス
         
         // ステップ番号 (01, 02, ...)
         const indexText = (i + 1).toString().padStart(2, '0');
         
         // 計算された値の小数点以下1桁目を四捨五入して整数にする
         const calculatedValue = startStep + (i * stepGap);
+        // Math.roundを使用
         const defaultValue = Math.round(calculatedValue); 
         
         // 色を繰り返す
@@ -148,18 +150,23 @@ function drawGraph() {
         }
     }
 
-    // グラフサイズ 900x900
-    const width = 900, height = 900; 
+    // グラフサイズは、親コンテナのサイズに依存させるため、
+    // ここでは、描画に必要な頂点の計算のみ行います。
+    // SVGのwidth/heightはCSSで制御するため、ここでは大きめに設定 (例: 900x900)
+    const size = 900;
+    const width = size, height = size; 
     const cx = width / 2, cy = height / 2;
-    const radius = 420; 
+    // 画面いっぱいに表示するため、半径を大きめに設定
+    const radius = size * 0.45; 
 
     const svgContainer = document.getElementById("svgContainer");
     svgContainer.innerHTML = "";
 
     const svg = document.createElementNS(SVG_NS, "svg");
-    svg.setAttribute("width", width);
-    svg.setAttribute("height", height);
-
+    // viewBoxを使用して、SVGの内容をコンテナのサイズに自動調整させます
+    // width/heightはCSSで100%になるため、ここではviewBoxを設定します。
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    
     // 1. 頂点を計算・記録
     vertices = [];
     for (let i = 0; i < n; i++) {
@@ -202,24 +209,108 @@ function drawGraph() {
     svgContainer.appendChild(svg);
 }
 
+// =================================================================
+// +/- ボタンのオートリピート機能
+// =================================================================
+let intervalId;
+let timeoutId;
+const REPEAT_DELAY = 300; // 初回遅延 (ms)
+const REPEAT_INTERVAL = 100; // 繰り返し間隔 (ms)
+
+/**
+ * 入力値を増減させる共通関数
+ */
+function adjustValue(targetId, stepValue, isFloat) {
+    const input = document.getElementById(targetId);
+    if (!input) return;
+
+    let currentValue = parseFloat(input.value);
+    let newValue;
+    
+    if (isFloat) {
+        // 浮動小数点数の計算誤差を防ぐため、小数点以下の桁数を考慮して計算
+        const factor = 10; // stepが0.1なので、10倍して整数演算
+        newValue = (Math.round(currentValue * factor) + Math.round(stepValue * factor)) / factor;
+    } else {
+        newValue = currentValue + stepValue;
+    }
+
+    const min = parseFloat(input.min);
+    if (!isNaN(min) && newValue < min) {
+        newValue = min;
+    }
+
+    input.value = newValue;
+
+    // グラフを再描画
+    if (targetId === 'vertexCount' || targetId === 'startStep' || targetId === 'stepGap' || targetId === 'stepCount') {
+        // ステップ数や間隔が変わる場合は入力欄の再生成が必要
+        generateStepInputs();
+    } else {
+        // 頂点数のみ変わる場合はそのままグラフ再描画
+        drawGraph();
+    }
+}
+
+/**
+ * オートリピート開始処理
+ */
+function startRepeat(targetId, stepValue, isFloat) {
+    // 最初に一度実行
+    adjustValue(targetId, stepValue, isFloat);
+
+    // 長押しと判断するための遅延
+    timeoutId = setTimeout(() => {
+        intervalId = setInterval(() => {
+            adjustValue(targetId, stepValue, isFloat);
+        }, REPEAT_INTERVAL);
+    }, REPEAT_DELAY);
+}
+
+/**
+ * オートリピート停止処理
+ */
+function stopRepeat() {
+    clearTimeout(timeoutId);
+    clearInterval(intervalId);
+}
+
 /**
  * 頂点数とステップ数のインプットにイベントリスナーを設定します。
  */
 function setupEventListeners() {
     const vertexCountInput = document.getElementById("vertexCount");
     const stepCountInput = document.getElementById("stepCount");
-    
-    // 新しい入力欄
     const startStepInput = document.getElementById("startStep");
     const stepGapInput = document.getElementById("stepGap");
     
-    // 頂点数Nの変更時にグラフを再描画
+    // 通常の入力 (キーボードなど) での値変更時
     vertexCountInput.addEventListener('input', drawGraph);
-    
-    // ステップ数X、開始ステップ、ギャップの変更時は、まず入力欄を再生成し、その中でグラフを再描画
     stepCountInput.addEventListener('input', generateStepInputs);
     startStepInput.addEventListener('input', generateStepInputs);
     stepGapInput.addEventListener('input', generateStepInputs);
+
+    // +/- ボタンのイベントリスナーを設定
+    document.querySelectorAll('.control-button').forEach(button => {
+        const targetId = button.getAttribute('data-target');
+        const stepValue = parseFloat(button.getAttribute('data-step'));
+        const isFloat = button.hasAttribute('data-float');
+
+        // mousedown/touchstart でリピート開始
+        button.addEventListener('mousedown', (e) => {
+            e.preventDefault(); // テキスト選択を防ぐ
+            startRepeat(targetId, stepValue, isFloat);
+        });
+        button.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // デフォルトのタッチアクションを防ぐ
+            startRepeat(targetId, stepValue, isFloat);
+        }, { passive: false });
+        
+        // mouseup/mouseleave/touchend/touchcancel でリピート停止
+        ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(event => {
+            button.addEventListener(event, stopRepeat);
+        });
+    });
 }
 
 
