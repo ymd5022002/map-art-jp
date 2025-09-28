@@ -3,48 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>干渉色の循環グラフ</title>
-    <link rel="stylesheet" href="css/iccg_creater.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <link rel="stylesheet" href="css/iccg_creater.css">
 </head>
 <body>
-    <h2>干渉色の循環グラフ作成ツール</h2>
+    <h1 class="main-title">干渉色の循環グラフ作成ツール</h1>
 
-    <div class="main-container">
+    <div id="svgContainer" class="svg-full-width"></div>
 
-        <div class="controls">
-            <div class="top-controls-group">
-                <div class="input-group">
-                    <label>頂点数 N</label>
-                    <input type="number" id="vertexCount" value="51" min="3">
-                </div>
-
-                <div class="input-group">
-                    <label>ステップ数 X</label>
-                    <input type="number" id="stepCount" value="25" min="1">
-                </div>
-            </div>
-            
-            <div class="step-controls-group">
-                <div class="input-group">
-                    <label>01の間隔の値</label>
-                    <input type="number" id="startStep" value="1" min="1">
-                </div>
-                <div class="input-group">
-                    <label>間隔の増分</label>
-                    <input type="number" id="stepGap" value="1" min="0.1" step="0.1">
-                </div>
-            </div>
-
-            <div class="step-color-container">
-                <label class="step-color-header">ステップ / 間隔 / 色</label>
-                <div id="stepInputs" class="step-inputs-list"></div>
+    <div class="bottom-controls-container">
+        <div class="control-row">
+            <label class="control-label">頂点数 N</label>
+            <div class="input-with-buttons">
+                <button class="control-button minus-btn" data-target="vertexCount" data-step="-1">-</button>
+                <input type="number" id="vertexCount" value="51" min="3">
+                <button class="control-button plus-btn" data-target="vertexCount" data-step="1">+</button>
             </div>
         </div>
-        <div id="svgContainer"></div>
 
+        <div class="control-row">
+            <label class="control-label">ステップ数 X</label>
+            <div class="input-with-buttons">
+                <button class="control-button minus-btn" data-target="stepCount" data-step="-1">-</button>
+                <input type="number" id="stepCount" value="25" min="1">
+                <button class="control-button plus-btn" data-target="stepCount" data-step="1">+</button>
+            </div>
+        </div>
+        
+        <div class="control-row">
+            <label class="control-label">01の間隔の値</label>
+            <div class="input-with-buttons">
+                <button class="control-button minus-btn" data-target="startStep" data-step="-1">-</button>
+                <input type="number" id="startStep" value="1" min="1">
+                <button class="control-button plus-btn" data-target="startStep" data-step="1">+</button>
+            </div>
+        </div>
+        
+        <div class="control-row">
+            <label class="control-label">間隔の増分</label>
+            <div class="input-with-buttons">
+                <button class="control-button minus-btn" data-target="stepGap" data-step="-0.1" data-float="true">-</button>
+                <input type="number" id="stepGap" value="1" min="0.1" step="0.1">
+                <button class="control-button plus-btn" data-target="stepGap" data-step="0.1" data-float="true">+</button>
+            </div>
+        </div>
     </div>
-    <div>
-        <p><a href="https://bosailiteracy.org/2025/09/24/circulant/">巡回グラフと面の着色ツール</a>(防災リテラシー研究所 所長/太田敏一様 作)をベースに干渉色で線を描画できるようにUIとアルゴリズムを改変・実装しております</p>
-        <p>Copyright &copy;<a href="https://ymd5022002.github.io/map-art-jp/">地図アート研究所</a> &copy;<a href="https://bosailiteracy.org/">防災リテラシー研究所</a></p>
+
+    <div class="step-color-scroll-container">
+        <div class="step-color-header-row">
+            <span class="step-header">ステップ/間隔/色</span>
+        </div>
+        <div id="stepInputs" class="step-inputs-list-horizontal"></div>
+    </div>
+
+    <div class="copyright-container">
+       <p>Copyright &copy;<a href="https://ymd5022002.github.io/map-art-jp/">地図アート研究所</a> &copy;<a href="https://bosailiteracy.org/">防災リテラシー研究所</a></p>
+       <p><a href="https://bosailiteracy.org/2025/09/24/circulant/">巡回グラフと面の着色ツール</a>(防災リテラシー研究所 所長/太田敏一様 作)をベースに干渉色で線を描画できるようにUIとアルゴリズムを改変・実装しております</p>
     </div>
     <script src="js/iccg_creater.js"></script>
 </body>
