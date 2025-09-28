@@ -1,178 +1,242 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
-    background-color: #f0f2f5;
+    background-color: #fcfdfe;
     color: #333;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 3px 0; /* 左右のパディングを減らす */
+    margin: 0;
 }
 
-h2 {
-    color: #777;
-    margin-bottom: 20px;
+/* タイトルを大きく */
+.main-title {
+    color: #333;
+    margin: 1px 1px;
+    font-size: 1em; /* タイトルを大きく */
+    font-weight: 700;
 }
 
-/* メインコンテナ: コントロールとグラフを左右に配置 */
-.main-container {
-    display: flex;
-    flex-direction: row; 
-    gap: 30px; 
-    align-items: flex-start; 
-    width: 90%; 
-    max-width: 1200px; 
-    margin: 0 auto; 
-}
+/* 不要になった h2, .main-container, .controls, .top-controls-group, .step-controls-group のスタイルは削除・置換 */
 
-.controls {
-    display: flex;
-    flex-direction: column; 
-    gap: 15px; /* 全体の間隔を広めに */
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    /* 制御パネルの幅を固定 */
-    flex: 0 0 220px; 
-}
-
-/* 頂点数Nとステップ数Xのinput-groupを横に並べるためのコンテナ */
-.top-controls-group {
-    display: flex;
-    justify-content: space-between; /* 左右に配置 */
-    gap: 15px;
-}
-
-/* 開始ステップとギャップのインプットグループ */
-.step-controls-group {
-    display: flex;
-    justify-content: space-between; 
-    gap: 15px;
-    padding-bottom: 15px; /* 下に少しスペースを確保 */
-    border-bottom: 1px solid #eee;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-label {
-    font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 14px; /* ラベルを少し小さく */
-}
-
-input[type="number"] {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    width: 70px; /* UIに合わせて調整 */
-    text-align: center; /* 中央寄せ */
-}
-
-/* 線の色入力欄のスタイルを大きく調整 */
-input[type="color"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: transparent;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 60px; /* 小さめに調整 */
-    height: 30px;
-    padding: 0;
-    cursor: pointer;
-}
-
-input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 0;
-}
-input[type="color"]::-webkit-color-swatch {
-    border: none;
-    border-radius: 3px;
-}
-
-/* 不要になったボタン関連のスタイルは削除 */
-
-/* ステップ入力欄の新しいコンテナスタイル */
-.step-color-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-self: flex-start; 
-    width: 100%;
-}
-
-.step-color-header {
-    font-weight: 600;
-    text-align: left; 
-}
-
-/* ステップ入力のリストスタイル */
-.step-inputs-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px; 
-    border: 1px solid #eee;
-    padding: 10px;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-}
-
-/* 個々のステップの行 */
-.step-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-}
-
-.step-index {
-    font-weight: bold;
-    min-width: 20px; /* ステップ番号の幅を確保 */
-    text-align: right;
-}
-
-.step-row input[type="number"] {
-    width: 40px; /* 間隔入力欄をコンパクトに */
-    padding: 5px;
-}
-
-
+/* グラフコンテナのスタイル (画面幅に合わせる) */
 #svgContainer {
-    /* グラフコンテナは残りのスペースを占める */
-    flex-grow: 1; 
-    border: 2px solid #ddd;
+    width: 100%;
+    /* グラフが切れないように、paddingやmarginを調整 */
+    padding: 0;
+    margin: 0px 0 0px 0; /* 上下のマージン */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 背景色と枠は維持 */
+    border: 2px solid #000000;
     background-color: #000000;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-radius: 8px;
+    border-radius: 0px;
     overflow: hidden;
+    /* モバイルでの最大幅を定義 (例: 500px) */
+    max-width: 500px;
 }
 
 svg {
     display: block;
-    max-width: 100%; /* 親要素のサイズに合わせて縮小 */
+    width: 100%; /* 親要素(svgContainer)のサイズに合わせる */
     height: auto;
 }
 
-/* 画面幅が小さい場合のレイアウト調整（縦並びへ） */
-@media (max-width: 900px) {
-    .main-container {
-        flex-direction: column; 
-        align-items: center;
+/* --- ステップ/間隔/色の新しいUI --- */
+.step-color-scroll-container {
+    width: 95%;
+    max-width: 500px; /* PC/タブレット表示時でも広がりすぎないように制限 */
+    overflow-x: auto; /* 横スクロールを可能に */
+    white-space: nowrap; /* 子要素の折り返しを防ぐ */
+    margin:0px 0;
+    padding: 3px 5px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* ヘッダー行 */
+.step-color-header-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.8em;
+    padding: 0px 0;
+    border-bottom: 0px solid #eee;
+    margin-bottom: 0px;
+    min-width: 300px; /* スクロールに合わせてヘッダーの最小幅を設定 */
+}
+.step-header, .gap-header, .color-header {
+    width: 100%;
+    text-align: left;
+}
+
+
+/* ステップ入力のリスト全体を横並びにする */
+.step-inputs-list-horizontal {
+    display: flex;
+    flex-direction: row; /* 横並び */
+    gap: 1px; /* 個々のステップ間のスペース */
+    padding: 1px 0;
+}
+
+/* 個々のステップの列 */
+.step-col {
+    display: flex;
+    flex-direction: column; /* 縦並び */
+    align-items: center;
+    gap: 0px;
+    padding: 0 0px;
+    border-right: 0px solid #eee; /* ステップ間に区切り線 */
+}
+.step-col:last-child {
+    border-right: none;
+}
+
+.step-index {
+    font-weight: 600;
+    font-size: 0.9em;
+    margin-bottom: 0px;
+}
+
+/* 横並びのステップ入力欄 */
+.step-col input[type="number"] {
+    width: 30px; /* 間隔入力欄をコンパクトに */
+    padding: 0px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 横並びの色の入力欄 */
+.step-col input[type="color"] {
+    width: 30px; 
+    height: 30px;
+    border: none;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* --- 下部のコントロール群 --- */
+.bottom-controls-container {
+    width: 95%;
+    max-width: 500px;
+    margin: 3px auto;
+    background: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.control-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+    border-bottom: 0px solid #eee;
+}
+.control-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.control-label {
+    font-weight: 600;
+    font-size: 1.1em;
+    flex-basis: 45%;
+    text-align: left;
+}
+
+.input-with-buttons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-basis: 70%;
+
+}
+
+/* 入力ボックスを大きく */
+.input-with-buttons input[type="number"] {
+    padding: 5px 5px; /* 大きく */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 18px; /* 文字を大きく */
+    width: 50px; /* 幅を調整 */
+    text-align: center;
+    -moz-appearance: textfield; /* Firefoxで上下ボタンを非表示 */
+}
+/* Chrome/Safariで上下ボタンを非表示 */
+.input-with-buttons input::-webkit-outer-spin-button,
+.input-with-buttons input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* +/- ボタンのスタイル */
+.control-button {
+    background-color: #8d8d8d;
+    color: white;
+    border: none;
+    border-radius: 50%; /* 丸く */
+    width: 30px;
+    height:30px;
+    font-size: 1.5em;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+    font-weight: bold;
+}
+.control-button:hover {
+    background-color: #000000;
+}
+.control-button:active {
+    box-shadow: none;
+    transform: translateY(1px);
+}
+
+
+/* コピーライト部分 */
+.copyright-container {
+    width: 95%;
+    max-width: 500px;
+    margin: 1px 1px 3px 1px;
+    font-size: 0.8em;
+    color: #666;
+    text-align: left;
+}
+
+/* --- PC (デスクトップ) レイアウト (既存のスタイルを再定義) --- */
+@media (min-width: 768px) {
+    body {
+        padding: 20px;
     }
-    .controls, #svgContainer {
-        flex: auto; 
-        width: 100%; 
+    .main-title {
+        font-size: 2.2em;
     }
-    /* スマホなどでコントロールの左右配置が崩れないように調整 */
-    .top-controls-group, .step-controls-group {
+    
+    /* グラフとコントロールを左右に並べるコンテナをシミュレート */
+    .desktop-layout {
+        display: flex;
         flex-direction: row; 
-        justify-content: space-around;
-        gap: 10px;
+        gap: 30px; 
+        align-items: flex-start; 
+        width: 90%; 
+        max-width: 1200px; 
+        margin: 0 auto; 
+    }
+    
+    /* PCではステップ/間隔/色は縦並びに戻すか、またはそのまま横並びを維持するが、ここではスマホUIを基本とし、PCでは幅を広げるのみとする */
+    .step-color-scroll-container, #svgContainer, .bottom-controls-container {
+        max-width: 900px; /* PCでの最大幅 */
     }
 }
