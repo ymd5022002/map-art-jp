@@ -1,0 +1,1376 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>抽出色地図アート 作成ツール | 地図アート研究所</title>
+  <style>
+    :root{
+      --bg:#f6f4ee;
+      --card:#ffffff;
+      --line:#e6e6e6;
+      --text:#222;
+      --muted:#666;
+      --accent:#2b6cb0;
+      --accent2:#6b46c1;
+      --danger:#b83280;
+      --shadow:0 8px 22px rgba(0,0,0,.08);
+      --r:14px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      background:rgba(246,244,238,.92);
+      backdrop-filter: blur(8px);
+      border-bottom:1px solid var(--line);
+    }
+    .wrap{max-width:1180px; margin:0 auto; padding:14px 14px;}
+    h1{font-size:18px; margin:0 0 4px}
+    .sub{font-size:12px; color:var(--muted); margin:0}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .95fr;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:12px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .card .hd .title{font-weight:700; font-size:14px}
+    .card .bd{padding:12px}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    label{font-size:12px; color:var(--muted)}
+    input[type="number"], input[type="text"], select{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:8px 10px;
+      font-size:13px;
+      background:#fff;
+      outline:none;
+    }
+    input[type="file"]{
+      font-size:12px;
+      max-width:320px;
+    }
+    button{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:12px;
+      padding:9px 12px;
+      font-size:13px;
+      cursor:pointer;
+      transition: transform .04s ease, box-shadow .12s ease, border-color .12s ease;
+      box-shadow:0 2px 10px rgba(0,0,0,.04);
+    }
+    button:hover{border-color:#cfcfcf}
+    button:active{transform: translateY(1px)}
+    .btn-primary{background:var(--accent); border-color:transparent; color:#fff}
+    .btn-secondary{background:var(--accent2); border-color:transparent; color:#fff}
+    .btn-danger{background:#fff; border-color:#f2c7de; color:var(--danger)}
+    .btn-ghost{background:transparent; box-shadow:none}
+    .btn-small{padding:7px 10px; font-size:12px; border-radius:10px}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:var(--muted);
+      background:#fff;
+    }
+    .note{font-size:12px; color:var(--muted); line-height:1.6}
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:11px;
+      border:1px solid var(--line);
+      border-bottom-width:2px;
+      border-radius:8px;
+      padding:2px 6px;
+      background:#fff;
+      color:#333;
+    }
+    canvas{
+      width:100%;
+      height:auto;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      display:block;
+    }
+    .palettebar{
+      height:26px;
+      border-radius:12px;
+    }
+    .swatches{
+      display:grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap:8px;
+    }
+    @media (max-width: 520px){
+      .swatches{grid-template-columns: repeat(6, 1fr)}
+    }
+    .swatch{
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .swatch .c{
+      height:26px;
+    }
+    .swatch .t{
+      font-size:11px;
+      padding:6px 6px 7px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:6px;
+    }
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+    textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:12px;
+      min-height:86px;
+      resize:vertical;
+      outline:none;
+      background:#fff;
+    }
+    .hr{height:1px; background:var(--line); margin:12px 0}
+    .flex-col{display:flex; flex-direction:column; gap:10px}
+    .hint{font-size:12px; color:var(--muted)}
+    .ok{color:#1a7f37}
+    .warn{color:#b26a00}
+    .bad{color:#b00020}
+    .small{font-size:12px}
+    .tight{margin:0}
+    .toggle{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; color:var(--muted);
+      user-select:none;
+    }
+    .toggle input{transform: translateY(1px)}
+    .minibox{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 520px){ .minibox{grid-template-columns:1fr} }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <h1>抽出色地図アート 作成ツール</h1>
+    <hr>
+    <h1>画像 → パレット抽出 → 地理院URL / CLR 出力</h1>
+    <p class="sub">自動サンプリング（押すたび変化）／画像クリック手動サンプリング／カラーバー確認／確定→地理院表示（関東固定）／CLR（ColorMap 1 1 or Height）出力</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+
+    <!-- LEFT: Image + sampling -->
+    <section class="card">
+      <div class="hd">
+        <div class="title">1) 画像とサンプリング</div>
+        <div class="row">
+          <span class="pill">手動: 画像クリックで色追加</span>
+          <span class="pill">削除: 色チップを<span class="kbd">右クリック</span></span>
+        </div>
+      </div>
+      <div class="bd flex-col">
+        <div class="row">
+          <label>
+            画像ファイル：
+            <input id="fileInput" type="file" accept="image/*" />
+          </label>
+
+          <button id="btnLoadDemo" class="btn-small btn-ghost" title="画像がなくてもUIを試す">デモ画像</button>
+          <span id="imgStatus" class="small hint">画像未読込</span>
+        </div>
+
+        <canvas id="imgCanvas" width="900" height="520" title="クリックで色を拾います（手動サンプリング）"></canvas>
+
+        <div class="minibox">
+          <div class="card" style="box-shadow:none">
+            <div class="hd" style="border-bottom:none">
+              <div class="title">手動サンプリング</div>
+              <div class="row">
+                <button id="btnUndo" class="btn-small">1つ戻す</button>
+                <button id="btnClearManual" class="btn-small btn-danger">全部クリア</button>
+              </div>
+            </div>
+            <div class="bd" style="padding-top:0">
+              <div class="row">
+                <label class="toggle">
+                  <input type="checkbox" id="chkReverseManual" />
+                  追加方向を反転（高?低）
+                </label>
+              </div>
+              <p class="note tight">クリックした順にパレットへ追加します。反転ONなら先頭へ追加します。</p>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none">
+            <div class="hd" style="border-bottom:none">
+              <div class="title">自動生成（押すたび変化）</div>
+              <div class="row">
+                <button id="btnAutoFromImage" class="btn-small btn-secondary">画像から自動抽出</button>
+                <button id="btnRandomPalette" class="btn-small btn-secondary">Randomパレット</button>
+              </div>
+            </div>
+            <div class="bd" style="padding-top:0">
+              <div class="row">
+                <label>色数
+                  <input id="inpNColors" type="number" min="2" max="512" step="1" value="64" style="width:92px" />
+                </label>
+                <label>抽出点数
+                  <input id="inpSamples" type="number" min="200" max="30000" step="100" value="6000" style="width:110px" />
+                </label>
+              </div>
+              <div class="row">
+                <label>自動抽出モード
+                  <select id="selAutoMode">
+                    <option value="area" selected>面積比重視（頻度を反映）</option>
+                    <option value="range">レンジ重視（明度レンジを均等）</option>
+                  </select>
+                </label>
+                <label>量子化
+                  <select id="selQuant">
+                    <option value="12">細かめ（12）</option>
+                    <option value="16" selected>標準（16）</option>
+                    <option value="20">粗め（20）</option>
+                  </select>
+                </label>
+              </div>
+              <div class="row">
+                <label>ランダム（落ち着き）
+                  <select id="selRandomStyle">
+                    <option value="soft" selected>soft（彩度控えめ）</option>
+                    <option value="vivid">vivid（彩度強め）</option>
+                    <option value="mutate">mutate（今のパレットを少し変化）</option>
+                  </select>
+                </label>
+                <label class="toggle">
+                  <input type="checkbox" id="chkAutoSort" checked />
+                  自動抽出を「明度順」に整列
+                </label>
+              </div>
+
+              <div class="hr" style="margin:10px 0"></div>
+              <div class="row">
+                <label>グラデーション（補間後の色数）
+                  <input id="inpInterpN" type="number" min="16" max="2048" step="16" value="256" style="width:110px" />
+                </label>
+                <label>補間空間
+                  <select id="selInterpSpace">
+                    <option value="rgb" selected>RGB（直感的）</option>
+                    <option value="hsl">HSL（色相を保ちやすい）</option>
+                  </select>
+                </label>
+                <button id="btnInterp" class="btn-small">補間して置換</button>
+                <button id="btnRepeat" class="btn-small">×4 繰り返し</button>
+                <button id="btnInterpAndRepeat" class="btn-small btn-secondary">256→×4（1024）</button>
+              </div>
+              <p class="note tight">例: 自動抽出64色 → 補間256色 → ×4 で 1024色。地理院URL生成時も不足分は自動で繰り返しますが、ここで「美しい周期」を作ってから確定できます。</p>
+<p class="note tight">自動抽出は「画像内のランダム点群→色の代表値（簡易クラスタ）」です。重い場合は抽出点数を下げてください。</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RIGHT: Palette + export -->
+    <section class="card">
+      <div class="hd">
+        <div class="title">2) パレット確認 → 確定 → 出力</div>
+        <div class="row">
+          <button id="btnReverse" class="btn-small">パレット反転</button>
+          <button id="btnDedup" class="btn-small">近似色を間引き</button>
+          <button id="btnFinalize" class="btn-small btn-primary">この配色を確定</button>
+        </div>
+      </div>
+
+      <div class="bd flex-col">
+        <div>
+          <div class="row" style="justify-content:space-between">
+            <div class="row">
+              <span class="pill">現在 <b id="curCount">0</b> 色</span>
+              <span class="pill">確定 <b id="finalCount">0</b> 色</span>
+            </div>
+            <span id="toneStatus" class="small hint"></span>
+          </div>
+          <canvas id="paletteCanvas" class="palettebar" width="900" height="26"></canvas>
+          <p class="note">カラーバー上の色チップは下に一覧表示されます（右クリックで削除）。</p>
+        </div>
+
+        <div class="minibox">
+          <div>
+            <div class="row">
+              <label>最低標高
+                <input id="inpMinH" type="number" step="1" value="-50" style="width:110px" />
+              </label>
+              <label>ステップ
+                <input id="inpStepH" type="number" step="1" value="25" style="width:110px" />
+              </label>
+              <label>最高標高
+                <input id="inpMaxH" type="number" step="1" value="4000" style="width:110px" />
+              </label>
+              <label class="toggle">
+                <input type="checkbox" id="chkClamp1300" checked />
+                地理院: 総階調1300目安を超えたら自動間引き
+              </label>
+            </div>
+            <p class="note tight">内部仕様は「colors[] + minHeight + step」です。地理院URLはここから展開します。</p>
+          </div>
+
+          <div>
+            <div class="row">
+              <label>地理院（固定表示）
+                <select id="selKantoView">
+                  <option value="8,35.68,139.76" selected>Zoom 8 / 35.68 / 139.76（関東広域）</option>
+                  <option value="9,35.68,139.76">Zoom 9 / 35.68 / 139.76（東京湾周辺）</option>
+                  <option value="8,36.20,139.90">Zoom 8 / 36.20 / 139.90（関東北寄り）</option>
+                </select>
+              </label>
+            </div>
+            <p class="note tight">まずは関東平野で段彩の見え方を確認、という前提で固定プリセットにしています。</p>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <button id="btnOpenGsi" class="btn-primary">地理院地図で表示</button>
+          <button id="btnCopyGsi" class="btn-small">URLコピー</button>
+          <button id="btnShortenTiny" class="btn-small">TinyURL（別窓）</button>
+        </div>
+        <textarea id="outGsiUrl" spellcheck="false" placeholder="ここに地理院地図URLが出ます（確定パレットが優先。未確定なら現在パレットで生成）。"></textarea>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <label>CLR形式
+            <select id="selClrMode">
+              <option value="colormap" selected>ColorMap 1 1（0..100 正規化）</option>
+              <option value="height">Height（標高 値）</option>
+            </select>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="chkClrHeader" checked />
+            CLRにヘッダー行を付ける
+          </label>
+          <button id="btnExportClr" class="btn-secondary">CLR出力</button>
+          <button id="btnExportCsv" class="btn-small">CSV（height,r,g,b,a）</button>
+        </div>
+        <textarea id="outClr" spellcheck="false" placeholder="ここにCLR / CSV テキストが出ます。"></textarea>
+
+        <div class="hr"></div>
+
+        <div>
+          <div class="row" style="justify-content:space-between">
+            <div class="title" style="font-size:13px; font-weight:700;">色一覧（右クリックで削除）</div>
+            <span class="hint">左→右＝低→高（想定）</span>
+          </div>
+          <div id="swatches" class="swatches"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <p class="note" style="margin-top:14px">
+    Tips:
+    <span class="kbd">右クリック</span>で色を削除／
+    「近似色を間引き」は類似色を削って扱いやすくします／
+    地理院URLは <span class="kbd">reliefdata</span> を生成して開きます（地理院側の仕様変更があれば追随が必要です）。<br>
+    </p>
+    <hr>
+    <p class="note" style="margin-top:14px">
+    <a href="https://ymd5022002.github.io/map-art-jp/">地図アート研究所</a>　このツールは <a href="https://researchmap.jp/arukazan">千葉 達朗</a>様により制作いただきました。ver.20260112-0118 // imagepicgsimamap_fixed_areaweighted_complete.htm
+    
+  </p>
+</main>
+
+<script>
+/* =========================
+   State
+========================= */
+let img = null;
+let imgW = 0, imgH = 0;
+let paletteColors = [];   // current (editable)
+let finalPalette = null; // { colors:[] }
+let clickMarks = [];     // manual click marks {x,y,color}
+
+/* =========================
+   DOM refs
+========================= */
+const fileInput = document.getElementById('fileInput');
+const imgCanvas = document.getElementById('imgCanvas');
+const ctxImg = imgCanvas.getContext('2d');
+
+const paletteCanvas = document.getElementById('paletteCanvas');
+const ctxPal = paletteCanvas.getContext('2d');
+
+const swatchesEl = document.getElementById('swatches');
+
+const curCountEl = document.getElementById('curCount');
+const finalCountEl = document.getElementById('finalCount');
+const toneStatusEl = document.getElementById('toneStatus');
+
+const inpNColors = document.getElementById('inpNColors');
+const inpSamples = document.getElementById('inpSamples');
+const chkAutoSort = document.getElementById('chkAutoSort');
+
+const chkReverseManual = document.getElementById('chkReverseManual');
+
+const inpMinH = document.getElementById('inpMinH');
+const inpStepH = document.getElementById('inpStepH');
+const inpMaxH = document.getElementById('inpMaxH');
+const chkClamp1300 = document.getElementById('chkClamp1300');
+
+const selKantoView = document.getElementById('selKantoView');
+
+const outGsiUrl = document.getElementById('outGsiUrl');
+
+const selClrMode = document.getElementById('selClrMode');
+const chkClrHeader = document.getElementById('chkClrHeader');
+const outClr = document.getElementById('outClr');
+
+const imgStatus = document.getElementById('imgStatus');
+const selRandomStyle = document.getElementById('selRandomStyle');
+const selAutoMode = document.getElementById('selAutoMode');
+const selQuant = document.getElementById('selQuant');
+const inpInterpN = document.getElementById('inpInterpN');
+const selInterpSpace = document.getElementById('selInterpSpace');
+const btnInterp = document.getElementById('btnInterp');
+const btnRepeat = document.getElementById('btnRepeat');
+const btnInterpAndRepeat = document.getElementById('btnInterpAndRepeat');
+
+
+// update tone status when heights change
+[inpMinH, inpStepH, inpMaxH].forEach(el => el.addEventListener('input', () => {
+  setStatusTone();
+  // keep outGsiUrl in sync if already generated
+  if(outGsiUrl.value.trim().length){ outGsiUrl.value = makeGsiUrl(); }
+}));
+
+/* =========================
+   Helpers
+========================= */
+function clamp(v, lo, hi){ return Math.min(hi, Math.max(lo, v)); }
+
+function rgbToHex(r,g,b){
+  return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('').toUpperCase();
+}
+
+function hexToRgb(hex){
+  const h = hex.replace('#','').trim();
+  return {
+    r: parseInt(h.slice(0,2),16),
+    g: parseInt(h.slice(2,4),16),
+    b: parseInt(h.slice(4,6),16)
+  };
+}
+
+function luminance(hex){
+  const {r,g,b} = hexToRgb(hex);
+  // relative luminance approximation
+  return 0.2126*r + 0.7152*g + 0.0722*b;
+}
+
+function drawPaletteBar(colors){
+  const w = paletteCanvas.width, h = paletteCanvas.height;
+  ctxPal.clearRect(0,0,w,h);
+  if(!colors.length){
+    ctxPal.fillStyle = '#ffffff';
+    ctxPal.fillRect(0,0,w,h);
+    ctxPal.strokeStyle = '#e6e6e6';
+    ctxPal.strokeRect(0.5,0.5,w-1,h-1);
+    return;
+  }
+  const n = colors.length;
+  for(let i=0;i<n;i++){
+    const x0 = Math.floor(w*i/n);
+    const x1 = Math.floor(w*(i+1)/n);
+    ctxPal.fillStyle = colors[i];
+    ctxPal.fillRect(x0,0,x1-x0,h);
+  }
+  ctxPal.strokeStyle = '#e6e6e6';
+  ctxPal.strokeRect(0.5,0.5,w-1,h-1);
+}
+
+function updateSwatches(){
+  swatchesEl.innerHTML = '';
+  const colors = paletteColors;
+  colors.forEach((hex, idx) => {
+    const s = document.createElement('div');
+    s.className = 'swatch';
+    s.title = '右クリックで削除';
+    s.innerHTML = `
+      <div class="c" style="background:${hex}"></div>
+      <div class="t">
+        <span class="mono">${hex}</span>
+        <span class="mono">#${idx+1}</span>
+      </div>
+    `;
+    // right-click delete
+    s.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      paletteColors.splice(idx,1);
+      // finalPalette stays but we show counts; user can re-finalize
+      renderAll();
+    });
+    swatchesEl.appendChild(s);
+  });
+}
+
+
+function getTonePlan(minH, step, maxH){
+  // requested tones (entries) from min..max inclusive, with fixed pitch=step
+  let nReq = 0;
+  if(Number.isFinite(maxH) && Number.isFinite(minH) && Number.isFinite(step) && step !== 0){
+    nReq = Math.floor((maxH - minH) / step) + 1;
+  }
+  if(!Number.isFinite(nReq) || nReq < 2) nReq = 2;
+
+  let nUse = nReq;
+  let maxUse = minH + step*(nUse-1);
+
+  // 地理院は総階調が多すぎると不安定になりがちなので、チェックONなら「最大標高側」を縮めて安全側へ
+  if(chkClamp1300.checked && nUse > 1300){
+    nUse = 1300;
+    maxUse = minH + step*(nUse-1);
+  }
+  return { nReq, nUse, maxUse };
+}
+
+function expandPalette(colors, n){
+  if(!colors || !colors.length) return [];
+  const out = new Array(n);
+  for(let i=0;i<n;i++){
+    out[i] = colors[i % colors.length];
+  }
+  return out;
+}
+
+
+function setStatusTone(){
+  const baseN = (finalPalette?.colors?.length ?? paletteColors.length);
+  const minH = Number(inpMinH.value);
+  const step = Number(inpStepH.value);
+  const maxH = Number(inpMaxH.value);
+
+  const plan = getTonePlan(minH, step, maxH);
+  const totalToneReq = plan.nReq;
+  const totalToneUse = plan.nUse;
+
+  // 参考値: 現在/確定パレットの色数
+  const maxUse = plan.maxUse;
+
+  let msg = `min=${minH}, step=${step}, max=${maxH}, 総階調=${totalToneReq}`;
+  let cls = 'hint';
+
+  if(totalToneReq > 1300){
+    if(chkClamp1300.checked){
+      msg += ` → 1300へ抑制（max=${maxUse}）`;
+      cls = 'warn';
+    } else {
+      msg += '（>1300: 地理院で不安定になりがち）';
+      cls = 'warn';
+    }
+  } else {
+    msg += '（目安OK）';
+    cls = 'ok';
+  }
+
+  msg += ` / パレット色数=${baseN}`;
+  toneStatusEl.className = `small ${cls}`;
+  toneStatusEl.textContent = msg;
+}
+
+
+function renderAll(){
+  curCountEl.textContent = paletteColors.length;
+  finalCountEl.textContent = finalPalette ? finalPalette.colors.length : 0;
+  drawPaletteBar(paletteColors);
+  updateSwatches();
+  setStatusTone();
+}
+
+function safeCopyToClipboard(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).catch(()=>{});
+  } else {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    ta.remove();
+  }
+}
+
+/* =========================
+   Image handling
+========================= */
+function fitCanvasToImage(image){
+  // Fit image into canvas while keeping aspect; keep internal pixels for sampling
+  const maxW = 1000, maxH = 700;
+  let w = image.naturalWidth;
+  let h = image.naturalHeight;
+
+  const scale = Math.min(maxW/w, maxH/h, 1);
+  w = Math.round(w*scale);
+  h = Math.round(h*scale);
+
+  imgCanvas.width = w;
+  imgCanvas.height = h;
+  imgW = w; imgH = h;
+
+  ctxImg.clearRect(0,0,w,h);
+  ctxImg.drawImage(image,0,0,w,h);
+  clickMarks = [];
+  drawMarks();
+}
+
+function drawMarks(){
+  if(!img) return;
+  // redraw image then marks
+  ctxImg.clearRect(0,0,imgW,imgH);
+  ctxImg.drawImage(img,0,0,imgW,imgH);
+
+  // marks
+  ctxImg.save();
+  ctxImg.lineWidth = 2;
+  ctxImg.font = '12px ui-monospace, Menlo, Consolas, monospace';
+  ctxImg.textBaseline = 'middle';
+  clickMarks.forEach((m, i) => {
+    const r = 7;
+    ctxImg.strokeStyle = '#ffffff';
+    ctxImg.beginPath();
+    ctxImg.arc(m.x, m.y, r+1, 0, Math.PI*2);
+    ctxImg.stroke();
+
+    ctxImg.strokeStyle = '#111';
+    ctxImg.beginPath();
+    ctxImg.arc(m.x, m.y, r, 0, Math.PI*2);
+    ctxImg.stroke();
+
+    ctxImg.fillStyle = m.color;
+    ctxImg.beginPath();
+    ctxImg.arc(m.x, m.y, r-2, 0, Math.PI*2);
+    ctxImg.fill();
+
+    ctxImg.fillStyle = 'rgba(0,0,0,.65)';
+    ctxImg.fillText(String(i+1), m.x + 10, m.y);
+  });
+  ctxImg.restore();
+}
+
+function pickPixel(x,y){
+  const d = ctxImg.getImageData(x,y,1,1).data;
+  return rgbToHex(d[0],d[1],d[2]);
+}
+
+fileInput.addEventListener('change', async (e) => {
+  const f = e.target.files?.[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  const image = new Image();
+  image.onload = () => {
+    img = image;
+    fitCanvasToImage(image);
+    imgStatus.textContent = `画像読込: ${f.name}（${image.naturalWidth}×${image.naturalHeight} → ${imgW}×${imgH}）`;
+    imgStatus.className = 'small ok';
+    URL.revokeObjectURL(url);
+  };
+  image.src = url;
+});
+
+imgCanvas.addEventListener('click', (e) => {
+  if(!img){
+    alert('先に画像を読み込んでください。');
+    return;
+  }
+  const rect = imgCanvas.getBoundingClientRect();
+  const x = Math.round((e.clientX - rect.left) * (imgCanvas.width / rect.width));
+  const y = Math.round((e.clientY - rect.top) * (imgCanvas.height / rect.height));
+
+  const hex = pickPixel(x,y);
+  clickMarks.push({x,y,color:hex});
+  // add to palette
+  if(chkReverseManual.checked){
+    paletteColors.unshift(hex);
+  } else {
+    paletteColors.push(hex);
+  }
+  drawMarks();
+  renderAll();
+});
+
+// prevent context menu on canvas
+imgCanvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+document.getElementById('btnUndo').addEventListener('click', () => {
+  if(clickMarks.length){
+    clickMarks.pop();
+    // remove last added depending on reverse mode at that time is unknown,
+    // so we heuristically remove last (common case). Use clear if needed.
+    if(paletteColors.length) paletteColors.pop();
+    drawMarks();
+    renderAll();
+  }
+});
+
+document.getElementById('btnClearManual').addEventListener('click', () => {
+  clickMarks = [];
+  paletteColors = [];
+  finalPalette = null;
+  if(img) drawMarks();
+  renderAll();
+});
+
+document.getElementById('btnLoadDemo').addEventListener('click', () => {
+  // generate a simple procedural demo image (no external dependency)
+  const w = 900, h = 520;
+  imgCanvas.width = w; imgCanvas.height = h;
+  imgW = w; imgH = h;
+
+  const imgData = ctxImg.createImageData(w,h);
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const i = (y*w + x)*4;
+      const nx = x/(w-1);
+      const ny = y/(h-1);
+      // smooth-ish gradients + waves
+      const a = Math.sin(nx*10) * 0.5 + 0.5;
+      const b = Math.sin((nx+ny)*7) * 0.5 + 0.5;
+      const c = Math.cos(ny*8) * 0.5 + 0.5;
+      const r = Math.round(255 * clamp(0.25 + 0.55*a + 0.15*b, 0, 1));
+      const g = Math.round(255 * clamp(0.20 + 0.55*b + 0.15*c, 0, 1));
+      const bl= Math.round(255 * clamp(0.15 + 0.55*c + 0.15*a, 0, 1));
+      imgData.data[i+0]=r;
+      imgData.data[i+1]=g;
+      imgData.data[i+2]=bl;
+      imgData.data[i+3]=255;
+    }
+  }
+  ctxImg.putImageData(imgData,0,0);
+
+  // create an Image object for mark redraw
+  const dataUrl = imgCanvas.toDataURL('image/png');
+  const image = new Image();
+  image.onload = () => {
+    img = image;
+    clickMarks = [];
+    drawMarks();
+    imgStatus.textContent = `デモ画像（${w}×${h}）`;
+    imgStatus.className = 'small ok';
+  };
+  image.src = dataUrl;
+});
+
+/* =========================
+   Auto palette from image
+   (fast-ish representative colors)
+========================= */
+function buildBinsFromImage(nSamples, seed, qStep){
+  if(!img) throw new Error('image not loaded');
+  const w = imgCanvas.width, h = imgCanvas.height;
+  const imgData = ctxImg.getImageData(0,0,w,h).data;
+
+  // simple PRNG (LCG)
+  let s = (seed >>> 0) || 1;
+  const rnd = () => (s = (s*1664525 + 1013904223) >>> 0) / 4294967296;
+
+  const bins = new Map();
+  const q = clamp(parseInt(qStep||'16',10), 6, 64); // quantization step
+  for(let i=0;i<nSamples;i++){
+    const x = Math.floor(rnd()*w);
+    const y = Math.floor(rnd()*h);
+    const idx = (y*w + x)*4;
+    const r = imgData[idx], g = imgData[idx+1], b = imgData[idx+2];
+    const rq = Math.floor(r/q), gq = Math.floor(g/q), bq = Math.floor(b/q);
+    const key = (rq<<16) | (gq<<8) | bq;
+    const prev = bins.get(key);
+    if(prev){
+      prev.count++;
+      prev.r += r; prev.g += g; prev.b += b;
+    } else {
+      bins.set(key, {count:1, r:r, g:g, b:b});
+    }
+  }
+
+  const arr = Array.from(bins.values()).map(o => {
+    const r = Math.round(o.r/o.count);
+    const g = Math.round(o.g/o.count);
+    const b = Math.round(o.b/o.count);
+    const hex = rgbToHex(r,g,b);
+    return {count:o.count, r, g, b, hex, lum:luminance(hex)};
+  });
+
+  // If sampling is too small, bins may be few; keep as-is.
+  return arr;
+}
+
+function pickPaletteRangeMode(bins, nColors){
+  // "レンジ重視": 明度レンジを均等にカバー（面積ではなくレンジを優先）
+  const sorted = bins.slice().sort((a,b)=> a.lum - b.lum);
+  const uniq = uniqueColors(sorted.map(o=>o.hex));
+  if(uniq.length <= nColors){
+    // pad last if short
+    const out = uniq.slice();
+    while(out.length < nColors) out.push(out[out.length-1] || '#FFFFFF');
+    return out.slice(0,nColors);
+  }
+  const picked = [];
+  for(let i=0;i<nColors;i++){
+    const t = (nColors===1)?0:(i/(nColors-1));
+    const j = Math.round(t*(uniq.length-1));
+    picked.push(uniq[j]);
+  }
+  return uniqueColors(picked).slice(0,nColors);
+}
+
+function pickPaletteAreaMode(bins, nColors){
+  // "面積比重視": 出現頻度（面積比）で重み付けした分位点で色を選ぶ
+  const sorted = bins.slice().sort((a,b)=> a.lum - b.lum);
+  const total = sorted.reduce((acc,o)=> acc + o.count, 0) || 1;
+
+  // cumulative distribution
+  const cdf = [];
+  let c = 0;
+  for(const o of sorted){
+    c += o.count;
+    cdf.push(c);
+  }
+
+  const picked = [];
+  for(let i=0;i<nColors;i++){
+    const q = (nColors===1)?0:(i/(nColors-1));
+    const target = q * (total-1);
+    // find first cdf >= target
+    let lo=0, hi=cdf.length-1;
+    while(lo<hi){
+      const mid = (lo+hi)>>1;
+      if(cdf[mid] >= target) hi = mid; else lo = mid+1;
+    }
+    picked.push(sorted[lo].hex);
+  }
+  // keep order and allow duplicates to reflect weighting,
+  // but we still enforce at least 2 unique colors if possible.
+  let out = picked.map(s=>s.toUpperCase());
+
+  // If everything collapsed to one color but bins have diversity, sprinkle extremes.
+  const uniqOut = Array.from(new Set(out));
+  if(uniqOut.length === 1 && sorted.length >= 2){
+    out[0] = sorted[0].hex.toUpperCase();
+    out[out.length-1] = sorted[sorted.length-1].hex.toUpperCase();
+  }
+  return out;
+}
+
+function samplePaletteFromImage(nColors, nSamples, seed, mode, qStep){
+  const bins = buildBinsFromImage(nSamples, seed, qStep);
+
+  // safety: if bins are too few, fall back
+  if(!bins.length){
+    return Array.from({length:nColors}, ()=> '#FFFFFF');
+  }
+
+  // reduce bins a bit for speed: keep top by count (still preserves rare extremes through luminance sorting)
+  // keep more than needed to avoid flattening
+  const top = bins.slice().sort((a,b)=> b.count - a.count).slice(0, Math.max(200, nColors*12));
+
+  let colors;
+  if(mode === 'range'){
+    colors = pickPaletteRangeMode(top, nColors);
+  } else {
+    colors = pickPaletteAreaMode(top, nColors);
+  }
+
+  // optional sort
+  if(chkAutoSort.checked){
+    colors = colors.slice().sort((a,b)=> luminance(a)-luminance(b));
+  }
+
+  // Ensure length exactly nColors (area mode may keep duplicates; range mode may shrink after unique)
+  if(colors.length < nColors){
+    while(colors.length < nColors){
+      colors.push(colors[colors.length-1] || '#FFFFFF');
+    }
+  }
+  return colors.slice(0,nColors);
+}
+
+function uniqueColors(colors){
+  const seen = new Set();
+  const out = [];
+  for(const c of colors){
+    const cc = c.toUpperCase();
+    if(!seen.has(cc)){
+      seen.add(cc);
+      out.push(cc);
+    }
+  }
+  return out;
+}
+
+/* =========================
+   Random palette (HSL)
+========================= */
+function hslToHex(h,s,l){
+  s/=100; l/=100;
+  const k = n => (n + h/30) % 12;
+  const a = s * Math.min(l, 1-l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n)-3, Math.min(9-k(n), 1)));
+  const to255 = x => Math.round(255*x);
+  const r = to255(f(0)), g = to255(f(8)), b = to255(f(4));
+  return rgbToHex(r,g,b);
+}
+
+function rgbToHsl(r,g,b){
+  r/=255; g/=255; b/=255;
+  const max = Math.max(r,g,b), min = Math.min(r,g,b);
+  let h=0, s=0;
+  const l = (max+min)/2;
+  const d = max-min;
+  if(d !== 0){
+    s = d / (1 - Math.abs(2*l - 1));
+    switch(max){
+      case r: h = ((g-b)/d) % 6; break;
+      case g: h = (b-r)/d + 2; break;
+      case b: h = (r-g)/d + 4; break;
+    }
+    h *= 60;
+    if(h < 0) h += 360;
+  }
+  return {h, s, l}; // s,l in 0..1
+}
+function hslToRgb(h,s,l){
+  // h:0..360, s,l:0..1
+  const c = (1 - Math.abs(2*l - 1)) * s;
+  const hh = (h % 360) / 60;
+  const x = c * (1 - Math.abs((hh % 2) - 1));
+  let r1=0,g1=0,b1=0;
+  if(0<=hh && hh<1){ r1=c; g1=x; }
+  else if(1<=hh && hh<2){ r1=x; g1=c; }
+  else if(2<=hh && hh<3){ g1=c; b1=x; }
+  else if(3<=hh && hh<4){ g1=x; b1=c; }
+  else if(4<=hh && hh<5){ r1=x; b1=c; }
+  else { r1=c; b1=x; }
+  const m = l - c/2;
+  return { r: Math.round((r1+m)*255), g: Math.round((g1+m)*255), b: Math.round((b1+m)*255) };
+}
+
+function resamplePalette(colors, targetN, space='rgb'){
+  if(!colors || colors.length < 2) return colors ? colors.slice() : [];
+  const n = Math.max(2, Math.floor(targetN));
+  const src = colors.map(c => hexToRgb(c));
+  const m = src.length;
+  const out = [];
+  for(let i=0;i<n;i++){
+    const t = (m-1) * (i/(n-1));
+    const i0 = Math.floor(t);
+    const i1 = Math.min(m-1, i0+1);
+    const f = t - i0;
+    if(space === 'hsl'){
+      const a = rgbToHsl(src[i0].r, src[i0].g, src[i0].b);
+      const b = rgbToHsl(src[i1].r, src[i1].g, src[i1].b);
+      // hue shortest path
+      let dh = b.h - a.h;
+      if(dh > 180) dh -= 360;
+      if(dh < -180) dh += 360;
+      const h = (a.h + dh*f + 360) % 360;
+      const s = a.s + (b.s-a.s)*f;
+      const l = a.l + (b.l-a.l)*f;
+      const rgb = hslToRgb(h,s,l);
+      out.push(rgbToHex(rgb.r,rgb.g,rgb.b));
+    } else {
+      const r = Math.round(src[i0].r + (src[i1].r-src[i0].r)*f);
+      const g = Math.round(src[i0].g + (src[i1].g-src[i0].g)*f);
+      const b = Math.round(src[i0].b + (src[i1].b-src[i0].b)*f);
+      out.push(rgbToHex(r,g,b));
+    }
+  }
+  return out;
+}
+
+function repeatPalette(colors, times){
+  const t = Math.max(1, Math.floor(times));
+  const out = [];
+  for(let i=0;i<t;i++) out.push(...colors);
+  return out;
+}
+
+
+function randomPalette(n, style){
+  const colors=[];
+  for(let i=0;i<n;i++){
+    const h = Math.random()*360;
+    let s, l;
+    if(style === 'vivid'){
+      s = 60 + Math.random()*35; // 60-95
+      l = 20 + Math.random()*65; // 20-85
+    } else { // soft
+      s = 35 + Math.random()*45; // 35-80
+      l = 25 + Math.random()*60; // 25-85
+    }
+    colors.push(hslToHex(h,s,l));
+  }
+  return colors;
+}
+
+function mutatePalette(colors, strength=0.08){
+  // small random perturbation in RGB space
+  const out = colors.map(hex => {
+    const {r,g,b} = hexToRgb(hex);
+    const jitter = () => Math.round((Math.random()*2-1)*255*strength);
+    const rr = clamp(r + jitter(), 0, 255);
+    const gg = clamp(g + jitter(), 0, 255);
+    const bb = clamp(b + jitter(), 0, 255);
+    return rgbToHex(rr,gg,bb);
+  });
+  return out;
+}
+
+document.getElementById('btnAutoFromImage').addEventListener('click', () => {
+  if(!img){
+    alert('先に画像を読み込むか、デモ画像を押してください。');
+    return;
+  }
+  const n = clamp(parseInt(inpNColors.value||'64',10), 2, 512);
+  const m = clamp(parseInt(inpSamples.value||'6000',10), 200, 30000);
+  const seed = (Math.random()*1e9) >>> 0;
+  try{
+    const mode = (selAutoMode && selAutoMode.value) ? selAutoMode.value : 'area';
+    const qStep = (selQuant && selQuant.value) ? selQuant.value : '16';
+    paletteColors = samplePaletteFromImage(n, m, seed, mode, qStep);
+    finalPalette = null;
+    renderAll();
+  } catch(err){
+    alert('自動抽出に失敗: ' + err.message);
+  }
+});
+
+document.getElementById('btnRandomPalette').addEventListener('click', () => {
+  const n = clamp(parseInt(inpNColors.value||'64',10), 2, 512);
+  const style = selRandomStyle.value;
+  if(style === 'mutate' && paletteColors.length){
+    paletteColors = mutatePalette(paletteColors, 0.10);
+  } else {
+    paletteColors = randomPalette(n, style === 'vivid' ? 'vivid' : 'soft');
+  }
+  if(chkAutoSort.checked){
+    paletteColors.sort((a,b)=> luminance(a)-luminance(b));
+  }
+  finalPalette = null;
+  renderAll();
+});
+
+// 補間（グラデーション化）
+btnInterp.addEventListener('click', () => {
+  if(paletteColors.length < 2){
+    alert('補間には最低2色が必要です。');
+    return;
+  }
+  const n = clamp(parseInt(inpInterpN.value||'256',10), 16, 2048);
+  const space = selInterpSpace.value;
+  paletteColors = resamplePalette(paletteColors, n, space);
+  finalPalette = null;
+  renderAll();
+});
+
+// ×4 繰り返し（周期を明示的に作る）
+btnRepeat.addEventListener('click', () => {
+  if(!paletteColors.length){
+    alert('パレットが空です。');
+    return;
+  }
+  paletteColors = repeatPalette(paletteColors, 4);
+  finalPalette = null;
+  renderAll();
+});
+
+// 256に補間して ×4（=1024）
+btnInterpAndRepeat.addEventListener('click', () => {
+  if(paletteColors.length < 2){
+    alert('補間には最低2色が必要です。');
+    return;
+  }
+  const n = clamp(parseInt(inpInterpN.value||'256',10), 16, 2048);
+  const space = selInterpSpace.value;
+  paletteColors = repeatPalette(resamplePalette(paletteColors, n, space), 4);
+  finalPalette = null;
+  renderAll();
+});
+
+
+/* =========================
+   Palette ops
+========================= */
+document.getElementById('btnReverse').addEventListener('click', () => {
+  paletteColors.reverse();
+  finalPalette = null;
+  renderAll();
+});
+
+document.getElementById('btnDedup').addEventListener('click', () => {
+  // Remove near-duplicate colors in RGB distance
+  const threshold = 18; // tweakable
+  const out = [];
+  for(const hex of paletteColors){
+    const a = hexToRgb(hex);
+    let ok = true;
+    for(const kept of out){
+      const b = hexToRgb(kept);
+      const d = Math.sqrt((a.r-b.r)**2 + (a.g-b.g)**2 + (a.b-b.b)**2);
+      if(d < threshold){ ok = false; break; }
+    }
+    if(ok) out.push(hex);
+  }
+  paletteColors = out;
+  finalPalette = null;
+  renderAll();
+});
+
+document.getElementById('btnFinalize').addEventListener('click', () => {
+  const minH = Number(inpMinH.value);
+  const step = Number(inpStepH.value);
+  if(!paletteColors.length){
+    alert('パレットが空です。自動生成か手動クリックで色を追加してください。');
+    return;
+  }
+  finalPalette = { colors: paletteColors.slice() };
+  finalCountEl.textContent = finalPalette.colors.length;
+  setStatusTone();
+});
+
+/* =========================
+   GSI URL generation
+========================= */
+function paletteToReliefData(colors, minH, step){
+  // 地理院地図(reliefdata)のフォーマット:
+  // 先頭は '2'、以降は「<標高(16進/符号付き)>G<RRGGBB>」を 'G' で連結
+  // 例: 2-34GCB0AEFG-30G4675FBG...
+  const entries = [];
+  for(let i=0;i<colors.length;i++){
+    const hDec = Math.round(minH + step * i);
+    const hHex = (hDec < 0)
+      ? ('-' + Math.abs(hDec).toString(16).toUpperCase())
+      : (hDec.toString(16).toUpperCase());
+    const rgb = colors[i].slice(1).toUpperCase(); // '#RRGGBB' -> 'RRGGBB'
+    entries.push(`${hHex}G${rgb}`);
+  }
+  return '2' + entries.join('G');
+}
+
+function maybeClampForGsi(colors){
+  if(!chkClamp1300.checked) return colors;
+  // Very simple: if >1300, thin to 1300 by picking evenly.
+  const maxN = 1300;
+  if(colors.length <= maxN) return colors;
+  const out = [];
+  for(let i=0;i<maxN;i++){
+    const t = i/(maxN-1);
+    const j = Math.round(t*(colors.length-1));
+    out.push(colors[j]);
+  }
+  return uniqueColors(out);
+}
+
+
+
+function makeGsiUrl(){
+  const view = selKantoView.value.split(',').map(v => v.trim());
+  const zoom = view[0], lat = view[1], lon = view[2];
+
+  const colorsBase = finalPalette ? finalPalette.colors.slice() : paletteColors.slice();
+  const minH = Number(inpMinH.value);
+  const step = Number(inpStepH.value);
+  const maxH = Number(inpMaxH.value);
+
+  const plan = getTonePlan(minH, step, maxH);
+  const colorsExpanded = expandPalette(colorsBase, plan.nUse);
+
+  const reliefdata = paletteToReliefData(colorsExpanded, minH, step);
+
+  const LS = 'std|slopemap,0.37|hillshademap,0.58|relief_free';
+  const lsEncoded = encodeURIComponent(LS);
+  const VS = 'c0g1j0h0k0l0u0t0z0r0s0m0f1';
+
+  const url =
+    `https://maps.gsi.go.jp/#${zoom}/${lat}/${lon}/` +
+    `&base_grayscale=1` +
+    `&ls=${lsEncoded}` +
+    `&blend=011` +
+    `&disp=0111` +
+    `&lcd=slopemap` +
+    `&vs=${VS}` +
+    `&reliefdata=${reliefdata}`;
+
+  return url;
+}
+
+
+
+document.getElementById('btnOpenGsi').addEventListener('click', () => {
+  if(!(finalPalette || paletteColors.length)){
+    alert('パレットが空です。');
+    return;
+  }
+  const url = makeGsiUrl();
+  outGsiUrl.value = url;
+  window.open(url, '_blank', 'noopener');
+});
+
+document.getElementById('btnCopyGsi').addEventListener('click', () => {
+  const url = outGsiUrl.value || (finalPalette || paletteColors.length ? makeGsiUrl() : '');
+  if(!url){ alert('URLがありません。地理院地図で表示を押すか、パレットを作ってください。'); return; }
+  outGsiUrl.value = url;
+  safeCopyToClipboard(url);
+});
+
+document.getElementById('btnShortenTiny').addEventListener('click', () => {
+  const url = outGsiUrl.value || (finalPalette || paletteColors.length ? makeGsiUrl() : '');
+  if(!url){ alert('URLがありません。'); return; }
+  outGsiUrl.value = url;
+  const tiny = 'https://tinyurl.com/api-create.php?url=' + encodeURIComponent(url);
+  window.open(tiny, '_blank', 'noopener');
+});
+
+/* =========================
+   CLR / CSV export
+========================= */
+function toClrColorMap(colors, headerOn){
+  // "ColorMap 1 1" + t(0..100) R G B
+  const n = colors.length;
+  const lines = [];
+  if(headerOn) lines.push('ColorMap 1 1');
+  for(let i=0;i<n;i++){
+    const t = (100 * i) / (n - 1);
+    const {r,g,b} = hexToRgb(colors[i]);
+    lines.push(`${t.toFixed(6)} ${r} ${g} ${b}`);
+  }
+  return lines.join('\n');
+}
+
+function toClrHeight(colors, minH, step, headerOn){
+  // "height R G B"
+  const lines = [];
+  if(headerOn) lines.push('# height R G B');
+  for(let i=0;i<colors.length;i++){
+    const h = (minH + step*i);
+    const {r,g,b} = hexToRgb(colors[i]);
+    lines.push(`${h} ${r} ${g} ${b}`);
+  }
+  return lines.join('\n');
+}
+
+function toCsvHeightRGBA(colors, minH, step){
+  const lines = ['height,r,g,b,a'];
+  for(let i=0;i<colors.length;i++){
+    const h = (minH + step*i);
+    const {r,g,b} = hexToRgb(colors[i]);
+    lines.push(`${h},${r},${g},${b},255`);
+  }
+  return lines.join('\n');
+}
+
+function downloadText(text, filename){
+  const blob = new Blob([text], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+
+document.getElementById('btnExportClr').addEventListener('click', () => {
+  const colorsBase = finalPalette ? finalPalette.colors.slice() : paletteColors.slice();
+  const use = {
+    colors: colorsBase,
+    minH: Number(inpMinH.value),
+    step: Number(inpStepH.value),
+    maxH: Number(inpMaxH.value)
+  };
+  if(!use.colors.length){
+    alert('パレットが空です。');
+    return;
+  }
+  const mode = selClrMode.value;
+  const headerOn = chkClrHeader.checked;
+
+  let text, fname;
+  if(mode === 'colormap'){
+    // ColorMap doesn't need minH/step; uses 0..100
+    text = toClrColorMap(use.colors, headerOn);
+    fname = 'palette_colormap.clr';
+  } else {
+    const plan = getTonePlan(use.minH, use.step, use.maxH);
+    const colorsExpanded = expandPalette(use.colors, plan.nUse);
+    text = toClrHeight(colorsExpanded, use.minH, use.step, headerOn);
+    fname = 'palette_height.clr';
+  }
+  outClr.value = text;
+  downloadText(text, fname);
+});
+
+document.getElementById('btnExportCsv').addEventListener('click', () => {
+  const colorsBase = finalPalette ? finalPalette.colors.slice() : paletteColors.slice();
+  const use = {
+    colors: colorsBase,
+    minH: Number(inpMinH.value),
+    step: Number(inpStepH.value),
+    maxH: Number(inpMaxH.value)
+  };
+  if(!use.colors.length){
+    alert('パレットが空です。');
+    return;
+  }
+  const plan = getTonePlan(use.minH, use.step, use.maxH);
+  const colorsExpanded = expandPalette(use.colors, plan.nUse);
+  const csv = toCsvHeightRGBA(colorsExpanded, use.minH, use.step);
+  outClr.value = csv;
+  downloadText(csv, 'palette_gsi.csv');
+});
+
+/* =========================
+   Init
+========================= */
+renderAll();
+</script>
+</body>
+</html>
